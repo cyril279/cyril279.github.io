@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workstation:(Fedora:Gnome)</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="workstation-gnome">Workstation (Gnome)</h1>
+<p><a href="#make-it-useful">Make it useful:</a><br>
+<a href="#install-favorite-packages">Install favorite packages &amp; media codecs</a><br>
+<a href="#make-it-yours">Make it yours:</a><br>
+<a href="#extensions">Extensions</a><br>
+<a href="#themes">Themes</a></p>
+<h3 id="make-it-useful">Make it useful:</h3>
+<h4 id="enable-the-rpm-fusion-repos-for-multimedia-etc.">enable the rpm-fusion repos #for multimedia, etc.</h4>
+<pre><code>su -c 'dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm'
+</code></pre>
+<h4 id="install-favorite-packages">Install favorite packages</h4>
+<pre><code>su -c 'dnf -y install nano inkscape gnome-mpv gnome-tweak-tool chrome-gnome-shell paper-icon-theme adapta-gtk-theme breeze-cursor-theme pop-icon-theme tilix-nautilus pop-gtk-theme gthumb libdvdcss chromium freshplayerplugin'
+</code></pre>
+<h4 id="install-media-codecs">Install Media Codecs</h4>
+<pre><code>su -c 'dnf groupupdate Multimedia'
+</code></pre>
+<h4 id="start--enable-ssh-server">Start &amp; enable ssh server</h4>
+<pre><code>systemctl start sshd
+systemctl enable sshd
+</code></pre>
+<p><a href="https://fedoramagazine.org/configure-software-repositories-fedora/">manage repos</a></p>
+<h3 id="make-it-yours">Make it yours:</h3>
+<ul>
+<li><a href="https://extensions.gnome.org"><strong>Extensions</strong></a>
+<ul>
+<li><a href="https://extensions.gnome.org/extension/750/openweather/">open weather</a></li>
+<li><a href="https://extensions.gnome.org/extension/36/lock-keys/">lock keys</a></li>
+<li><a href="https://extensions.gnome.org/extension/1160/dash-to-panel/">dash to panel</a> / <a href="https://extensions.gnome.org/extension/307/dash-to-dock/">dash to dock</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="themes">Themes</h4>
+<p><strong>operation on theme folder:</strong></p>
+<pre><code>sudo cp -a /source/folder /dest/
+</code></pre>
+<p><strong>ex:</strong></p>
+<pre><code>sudo cp -a '/home/cyril/installers/Gnome-OSX-II-2-6-NT' '/usr/share/themes/Gnome-OSX-II-2-6-NT'
+</code></pre>
+<h3 id="issues">Issues?</h3>
+<p>If upgrade to newer Fedora release, check repositories referencing older releases:</p>
+<p><a href="https://fedoramagazine.org/configure-software-repositories-fedora/">https://fedoramagazine.org/configure-software-repositories-fedora/</a></p>
+<ul>
+<li>
+<p>Cutter software? :: <a href="http://libregraphicsworld.org/blog/entry/vinyl-cutting-on-linux-the-real-deal">ref_01</a></p>
+</li>
+<li>
+<p><a href="http://inkcut.sourceforge.net">inkcut</a> (inkscape extension)</p>
+</li>
+</ul>
+<h4 id="system-boots-but-not-to-gdmlogin-reboot-to-prompt--disable-wayland">system boots, but not to gdm/login? <a href="https://ask.fedoraproject.org/en/question/70961/fedora-22-will-not-boot-after-installation-vm/?answer=77048#post-id-77048">reboot to prompt, &amp; disable wayland</a></h4>
+<ol>
+<li>At the grub boot menu, press ‘e’ to edit the bootup settings.</li>
+<li>go down to the line starting with “linux16 /vmlinuz” (it will probably span multiple lines) and add a " 3" to the end (that is a space, then a ‘3’). This will tell the bootup scripts to load only the text console, and not attempt to start a graphical login screen.</li>
+<li>Press CTRL-X to boot the edited settings.</li>
+<li>login as root.</li>
+<li>“vi /etc/gdm/custom.conf” (or use your editor preference instead of vi), and delete the leading “#” from the line “#WaylandEnable=false”. Save the file.</li>
+<li>Reboot and enjoy :)<br>
+Note that I have heard that replacing step 5 with “dnf update” will also fix the issue (and update the rest of the system in the process). This would be preferable to just updating the file as per the above, but you can always follow my instructions and then run an update once you are able to graphically login.</li>
+</ol>
+<h2 id="harmonyflirckodi"><a href="HARMONY-FLIRC-KODI.html">Harmony/flirc/kodi</a></h2>
+<h1 id="android-7.1-compile-environment-f25">Android 7.1 compile environment (F25)</h1>
+<p><a href="https://forum.xda-developers.com/chef-central/android/guide-setting-android-compile-t3530696">(originally posted to xda)</a></p>
+<p>(package list is adapted from <a href="https://docs.omnirom.org/Setting_Up_A_Compile_Environment#Fedora_19_x64">Omni’s instructions for F19</a>, to compile Android 7.1 on F25)</p>
+<p><strong>From a clean installation of Fedora-25:</strong></p>
+<p>Update the installation</p>
+<pre><code>su -c 'dnf -y update'
+</code></pre>
+<p>Install additional packages that we need to compile AOSP</p>
+<pre><code>su -c 'dnf -y install zip curl gcc gcc-c++ flex bison gperf glibc-devel.{x86_64,i686} zlib-devel.{x86_64,i686} ncurses-devel.i686 libX11-devel.i686 libstdc++.i686 readline-devel.i686 libXrender.i686 libXrandr.i686 perl-Digest-MD5-File python-markdown mesa-libGL-devel.i686 git schedtool pngcrush [ncurses-compat-libs](https://ask.fedoraproject.org/en/question/89534/parrallel-install-ncurses-6-ncurses-5-on-fedora-24/)  [java-1.8.0-openjdk-devel](http://stackoverflow.com/questions/5407703/javac-command-not-found) xz-lzma-compat android-tools'
+</code></pre>
+<p>install &amp; configure repo</p>
+<pre><code>mkdir -p ~/bin
+curl http://commondatastorage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo
+chmod a+x ~/bin/repo
+</code></pre>
+<p>add line to end of ~/.bashrc</p>
+<pre><code>export PATH=~/bin:$PATH
+</code></pre>
+<p>configure git to identify you</p>
+<pre><code>git config --global user.email "your@email.address"
+git config --global user.name "Your Name"
+</code></pre>
+<p><a href="https://source.android.com/source/initializing.html#setting-up-ccache">setting up ccache</a> (for quicker rebuilds):</p>
+<p>Issue these commands in the root of the source tree:</p>
+<pre><code>export USE_CCACHE=1
+export CCACHE_DIR=/&lt;path_of_your_choice&gt;/.ccache
+</code></pre>
+<p>prebuilts/misc/linux-x86/ccache/ccache -M 50G<br>
+The suggested cache size is 50-100G.<br>
+The ccache size is stored in the CCACHE_DIR and is persistent.<br>
+For persistence, add <code>USE_CCHACHE’ snd ‘CCACHE_DIR</code> commands to .bashrc (or equivalent):</p>
+<p>Watch ccache being used:<br>
+watch -n1 -d prebuilts/misc/linux-x86/ccache/ccache -s</p>
+<h1 id="history">History</h1>
+<ul>
+<li>+<strong>Fedora (Server) 2017/09</strong> (installed on Optiplex 3010 as Media Server and DVR backend)</li>
+<li><strong>Fedora (Gnome) 2016/11</strong> (dnf,clean/simple/easy DE,PakAvl+,ComSup+,builds android,melikey)</li>
+<li><strong>Elementary(Pantheon)</strong> 2016/09 (Beautiful OS,lightweight,OBF+,UB,oversimplified/limited controls)</li>
+<li>+<strong>Opensuse(tumbleweed@KDE)</strong> 2016/09 (brilliant package management,rolling,ComSup+,PakAvl+, over-thinks &amp; duplicates other aspects,can’t get multimedia support right)</li>
+<li><strong>Manjaro(KDE)</strong> 2016/08 (OBF+,PakAvl+,ComSup+,rolling+,proprietary support+, KDE: pretty, but more menu-bars than it’s worth)</li>
+<li><strong>Mint(Cinnamon)</strong> 2016/03 (OBF++,UB, looks/feels dated)</li>
+<li><strong>Ubuntu(Unity)</strong> 2014/09 (OBF+,ComSup+,PakAvl+, but despise AptGet and Unity)</li>
+</ul>
+<p>OBF = Out of the Box Functionality<br>
+PakAvl = Package Availability<br>
+ComSup = Community support<br>
+UB = Ubuntu Based, so PakAvl+,ComSup+, but AptGet</p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+</div>
+</body>
+
+</html>
+

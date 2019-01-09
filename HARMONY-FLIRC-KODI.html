@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>topLevelFile.md</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="cross-platform-remote-effort">Cross-Platform Remote-Effort</h1>
+<p><strong>Goal:</strong><br>
+One Harmony activity, Same media-center software (kodi), two different Operating Systems.</p>
+<p><strong>Challenge:</strong><br>
+Kodi commands are the same across platforms, but sleep/suspend command is not the same.<br>
+A range of MCE-IR commands are not interpreted on linux without trickery.</p>
+<p><strong>Solution:</strong><br>
+Since sleep/suspend command is different for each platform, final interpretation of the sleep/suspend instruction must occur within each platform (remote and Flirc are common to both platforms).<br>
+<strong>FLIRC</strong> translates <strong>MCE-IR signals</strong> (some of which are not recognized by linux/kodi), into <strong>keystrokes</strong> that are readily interpreted by all.<br>
+This eliminates the need for unique harmony devices, and trickery.</p>
+<p>remote sends ir-command<br>
+flirc translates ir-command to keystroke<br>
+OS translates keystroke to os-specific suspend/sleep command<br>
+– OR –<br>
+kodi keymap translates keystroke to app-specific suspend/sleep command<br>
+Proof of concept:<br>
+<a href="http://forum.flirc.tv/index.php?/topic/1997-flirc-harmony-kodi-and-suspend/">Kodi harmony flirc power issue (2015)</a></p>
+<h3 id="suspend">Suspend</h3>
+<p><strong>Definitions:</strong></p>
+<pre><code>[keystroke] := alt+backslash
+[suspend command, linux] := systemctl suspend
+[suspend command, windows] := %windir%\System32\rundll32.exe powrprof.dll,SetSuspendState 0,1,0
+</code></pre>
+<p>FLIRC sends keystroke, os interprets keystroke appropriately<br>
+This suspends the system without regard for what app is focused, and is therefore the preferred method.</p>
+<h3 id="assign-suspend-command-to-keystroke">Assign [suspend command] to [keystroke]</h3>
+<p><strong>Gnome:</strong><br>
+settings &gt; devices &gt; keyboard<br>
+[keystroke] := [suspend command, linux]<br>
+<strong>Windows:</strong><br>
+create shortcut in user’s desktop<br>
+enter [suspend command, windows] as location of item<br>
+assign [keystroke] to ‘shortcut key’ of shortcut<br>
+<strong>kodi:</strong><br>
+This will only suspend a system if kodi is the focused application, but is cross-platform functional.<br>
+create entry in keymap.xml, assigning [keystroke] to (kodi’s) sleep function:<br>
+<strong>userdata\keymaps\keymap.xml</strong></p>
+<pre class=" language-sh"><code class="prism  language-sh">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;keymap&gt;
+  &lt;global&gt;
+	&lt;keyboard&gt;
+  	&lt;backslash mod="alt"&gt;Suspend()&lt;/backslash&gt;
+  	&lt;t mod="shift,alt"&gt;PlayPvrTV&lt;/t&gt;
+	&lt;/keyboard&gt;
+  &lt;/global&gt;
+&lt;/keymap&gt;
+</code></pre>
+<h3 id="flirc--harmony">Flirc &amp; Harmony</h3>
+<p><strong>Harmony software:</strong><br>
+Setup activity to use Flirc,TV,&amp; AVR<br>
+ensure that flirc-power-off command has been assigned to a button<br>
+devices &gt; FLIRC Media player &gt; Settings &gt; adjust power settings &gt;<br>
+[ I want to turn off this device when it’s not in use ]<br>
+[ One button on the remote for turning it both On and Off ]<br>
+[ I don’t have the original remote, but I know the command that is used: PowerOff ]<br>
+<strong>Flirc:</strong><br>
+link Flirc’s [power-off] signal to [keystroke]</p>
+<h3 id="un-explored">Un-explored:</h3>
+<p><strong>power_mce:</strong><br>
+If existing MCE remote power button works with mce-ir receiver:<br>
+harmony software: assign new power step [mce po<br>
+Determine what the keyboard power button is outputting (using ‘xev’?)<br>
+xev -event keyboard<br>
+<strong>power_keyboard:</strong><br>
+Determine what the keyboard (logitech k400) power button is outputting (using ‘xev’?)<br>
+xev -event keyboard<br>
+link the command to a keystroke via kodi keymap file.<br>
+<strong>Notes:</strong><br>
+Flirc, 2nd gen user guide<br>
+kodi shortcuts to use</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">keystroke</th>
+<th align="center">function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">p</td>
+<td align="center">play</td>
+</tr>
+<tr>
+<td align="center">space</td>
+<td align="center">play/pause</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">stop</td>
+</tr>
+<tr>
+<td align="center">e</td>
+<td align="center">epg</td>
+</tr>
+<tr>
+<td align="center">ctrl+r</td>
+<td align="center">record</td>
+</tr>
+<tr>
+<td align="center">h</td>
+<td align="center">channel list</td>
+</tr>
+<tr>
+<td align="center">c</td>
+<td align="center">context menu</td>
+</tr>
+<tr>
+<td align="center">i</td>
+<td align="center">info</td>
+</tr>
+<tr>
+<td align="center">k</td>
+<td align="center">pvr</td>
+</tr>
+<tr>
+<td align="center">0 (zero)</td>
+<td align="center">toggle last two channels</td>
+</tr>
+<tr>
+<td align="center">f</td>
+<td align="center">fast forward</td>
+</tr>
+<tr>
+<td align="center">r</td>
+<td align="center">rewind</td>
+</tr>
+<tr>
+<td align="center">backspace</td>
+<td align="center">back</td>
+</tr>
+</tbody>
+</table><p><strong>find usb keyboard id’s</strong><br>
+<a href="https://superuser.com/a/552026">https://superuser.com/a/552026</a><br>
+<strong>WMC shortcuts</strong><br>
+<a href="https://technet.microsoft.com/en-us/library/ff404226.aspx">https://technet.microsoft.com/en-us/library/ff404226.aspx</a><br>
+<a href="http://tweaks.com/windows/39108/windows-media-center-keyboard-shortcuts/">http://tweaks.com/windows/39108/windows-media-center-keyboard-shortcuts/</a><br>
+<a href="https://www.simplehelp.net/2008/06/18/42-keyboard-shortcuts-for-controlling-windows-media-center/">https://www.simplehelp.net/2008/06/18/42-keyboard-shortcuts-for-controlling-windows-media-center/</a><br>
+<strong>Devices to use with Harmony</strong><br>
+anyware:gp-ir02bk (mce remote)<br>
+Flirc:kodi</p>
+<h3 id="other">Other:</h3>
+<p>kodi doesn’t respond to some rc6 commands because they are broadcast beyond kodi’s ir spectrum.<br>
+The easy route is <a href="https://flirc.tv/downloads">FLIRC</a>, which internally translates the ir codes, and output’s them to the PC as standard keyboard codes (super universal). Also, with Flirc &amp; harmony remote, I am freed from rc6/kodi/linux incompatibilities.<br>
+Regarding Windows, getting Kodi to see the missing rc6 codes directly involves a registry hack, and some <a href="https://forum.kodi.tv/showthread.php?tid=164252">old un-supported software</a> “Advanced MCE Remote Mapper Tool”.<br>
+*<a href="https://forum.kodi.tv/showthread.php?tid=285623&amp;pid=2388566#pid2388566">other list of hacky options</a><br>
+Regarding Linux, there’s a <a href="https://forum.kodi.tv/showthread.php?tid=255465&amp;pid=2221301#pid2221301">dance with ir-keytables and some services.</a></p>
+<ul>
+<li>using keyboard.xml
+<ul>
+<li><a href="https://kodi.wiki/view/keymap#Remotes">keyboard.xml with remotes</a></li>
+<li><a href="https://kodi.wiki/view/keymap">keymap.xml</a></li>
+<li><a href="https://kodi.wiki/view/Sample_MCE_remote_keyboard.xml">sample</a></li>
+<li><a href="https://kodi.wiki/view/HOW-TO:Modify_keymaps#Where_to_find_keyboard.xml">how-to walk-through</a></li>
+<li><a href="https://kodi.wiki/view/Alternative_keymaps_for_most_remotes">keymaps for most remotes</a><br>
+<strong>OR</strong></li>
+</ul>
+</li>
+<li>FLIRC
+<ul>
+<li><a href="https://flirc.tv/downloads">https://flirc.tv/downloads</a></li>
+<li><a href="https://support.myharmony.com/en-in/harmony-experience-with-kodi">Harmony</a> :: mfg: Flirc model: Kodi</li>
+<li>power-off :: <a href="https://support.flirc.tv/hc/en-us/articles/200904676-Getting-flirc-to-wake-up-your-computer">source1</a> :: <a href="https://community.logitech.com/s/question/0D53100005r8PXhCAM/harmony-650-and-flirckodi-media-pc-cant-switch-pc-onoff">source2</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</body>
+
+</html>
+
