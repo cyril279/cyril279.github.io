@@ -1,10 +1,11 @@
 # Workstation (Gnome)
 
-[Make it useful:](#make-it-useful)
-[Install favorite packages & media codecs](#install-favorite-packages)
-[Make it yours:](#make-it-yours)
-[Extensions](#extensions)
-[Themes](#themes)
+[Make it useful](#make-it-useful)  
+[Install favorite packages & media codecs](#install-favorite-packages)  
+[Make it yours](#make-it-yours)  
+[Extensions](#extensions)  
+[Themes](#themes)  
+[--Pantheon--](#pantheon)  
 
 ### Make it useful:
 
@@ -104,6 +105,88 @@ For persistence, add `USE_CCHACHE’ snd ‘CCACHE_DIR` commands to .bashrc (or 
 Watch ccache being used:
     watch -n1 -d prebuilts/misc/linux-x86/ccache/ccache -s
 
+# Pantheon
+**Workstation:Pantheon@Fedora ← working, limited selection of usable icons**  
+
+1.  install Fedora gnome (for preferred apps & full gtk3-workstation functionality)
+2.  install pantheon session (& few extras) but not elementary-apps
+3.  swap lightdm for gdm
+4.  tweak & profit
+   
+**Once gnome workstation installed:**
+
+    dnf copr enable decathorpe/elementary-nightly
+    dnf in pantheon-session-settings switchboard elementary-*theme htop lightdm-gtk-greeter-settings
+
+    systemctl disable gdm
+    systemctl enable lightdm
+
+Cleanup…  
+**apply preferences system-wide:**  
+/usr/share/glib-2.0/schemas/  
+[global customization via overrides](http://www.techytalk.info/customize-default-desktop-environment-settings-gnome-centric-linux-distributions/)  
+
+60_fedora.pantheon.gschema.override  
+```
+#/usr/share/glib-2.0/schemas/60_fedora.pantheon.gschema.override
+
+[io.elementary.files.preferences]
+single-click=false
+
+[org.pantheon.desktop.gala.appearance]
+
+[org.pantheon.desktop.gala.behavior]
+overlay-action='wingpanel --toggle-indicator=app-launcher'
+
+[org.gnome.desktop.wm.preferences]
+button-layout='menu:close'
+mouse-button-modifier='<Super>'
+resize-with-right-button=true
+theme='elementary'
+titlebar-font='Open Sans Bold 9'
+titlebar-uses-system-font=false
+
+[org.gnome.desktop.interface]
+cursor-theme='elementary'
+gtk-theme='elementary'
+icon-theme='elementary'
+#icon-theme='ePapirus'
+document-font-name='Open Sans 10'
+font-name='Open Sans 9'
+monospace-font-name='Roboto Mono 10'
+show-unicode-menu=false
+toolbar-style='icons'
+
+[org.gnome.desktop.peripherals.touchpad]
+tap-to-click=true
+
+[org.gnome.Terminal.Legacy.Settings]
+menu-accelerator-enabled=false
+default-show-menubar=false
+```
+rm -r ~/.config/dconf
+
+reboot
+
+**Decathorpe recommended installation:**
+
+    install gnome workstation
+    dnf copr enable decathorpe/elementary-nightly
+
+    dnf in pantheon-desktop-settings switchboard lightdm-gtk-greeter-settings elementary-icon-theme elementary-sound-theme elementary-theme*
+
+    systemctl disable gdm
+    systemctl enable lightdm
+
+apply gschema override file
+delete .config/dconf  
+
+reboot
+
+extras?  
+[https://github.com/btd1337/urutau-icons](https://github.com/btd1337/urutau-icons)  
+[https://github.com/btd1337/Newaita](https://github.com/btd1337/Newaita)
+
 # History
 - +**Fedora (Server) 2017/09** (installed on Optiplex 3010 as Media Server and DVR backend)
 - **Fedora (Gnome) 2016/11** (dnf,clean/simple/easy DE,PakAvl+,ComSup+,builds android,melikey)
@@ -119,4 +202,3 @@ ComSup = Community support
  UB = Ubuntu Based, so PakAvl+,ComSup+, but AptGet
 
 > Written with [StackEdit](https://stackedit.io/).
-
