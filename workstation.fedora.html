@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workstation:(Fedora:Gnome)</title>
+  <title>workstation.fedora</title>
   <link rel="stylesheet" href="https://stackedit.io/style.css" />
 </head>
 
@@ -14,7 +14,8 @@
 <a href="#install-favorite-packages">Install favorite packages &amp; media codecs</a><br>
 <a href="#make-it-yours">Make it yours:</a><br>
 <a href="#extensions">Extensions</a><br>
-<a href="#themes">Themes</a></p>
+<a href="#themes">Themes</a><br>
+<a href="#pantheon">–Pantheon–</a></p>
 <h3 id="make-it-useful">Make it useful:</h3>
 <h4 id="enable-the-rpm-fusion-repos-for-multimedia-etc.">enable the rpm-fusion repos #for multimedia, etc.</h4>
 <pre><code>su -c 'dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm'
@@ -72,7 +73,7 @@ Note that I have heard that replacing step 5 with “dnf update” will also fix
 <h1 id="android-7.1-compile-environment-f25">Android 7.1 compile environment (F25)</h1>
 <p><a href="https://forum.xda-developers.com/chef-central/android/guide-setting-android-compile-t3530696">(originally posted to xda)</a></p>
 <p>(package list is adapted from <a href="https://docs.omnirom.org/Setting_Up_A_Compile_Environment#Fedora_19_x64">Omni’s instructions for F19</a>, to compile Android 7.1 on F25)</p>
-<p><strong>From a clean installation of Fedora-25:</strong></p>
+<p>From a clean installation of Fedora-25:</p>
 <p>Update the installation</p>
 <pre><code>su -c 'dnf -y update'
 </code></pre>
@@ -102,6 +103,79 @@ The ccache size is stored in the CCACHE_DIR and is persistent.<br>
 For persistence, add <code>USE_CCHACHE’ snd ‘CCACHE_DIR</code> commands to .bashrc (or equivalent):</p>
 <p>Watch ccache being used:<br>
 watch -n1 -d prebuilts/misc/linux-x86/ccache/ccache -s</p>
+<h1 id="pantheon">Pantheon</h1>
+<p><strong>Workstation:Pantheon@Fedora ← working, limited selection of usable icons</strong></p>
+<ol>
+<li>install Fedora gnome (for preferred apps &amp; full gtk3-workstation functionality)</li>
+<li>install pantheon session (&amp; few extras) but not elementary-apps</li>
+<li>swap lightdm for gdm</li>
+<li>tweak &amp; profit</li>
+</ol>
+<p><strong>Once gnome workstation installed:</strong></p>
+<pre><code>dnf copr enable decathorpe/elementary-nightly
+dnf in pantheon-session-settings switchboard elementary-*theme htop lightdm-gtk-greeter-settings
+
+systemctl disable gdm
+systemctl enable lightdm
+</code></pre>
+<p>Cleanup…<br>
+<strong>apply preferences system-wide:</strong><br>
+/usr/share/glib-2.0/schemas/</p>
+<p><a href="http://www.techytalk.info/customize-default-desktop-environment-settings-gnome-centric-linux-distributions/">global customization via overrides</a></p>
+<p>60_fedora.pantheon.gschema.override</p>
+<pre><code>#/usr/share/glib-2.0/schemas/60_fedora.pantheon.gschema.override
+
+[io.elementary.files.preferences]
+single-click=false
+
+[org.pantheon.desktop.gala.appearance]
+
+[org.pantheon.desktop.gala.behavior]
+overlay-action='wingpanel --toggle-indicator=app-launcher'
+
+[org.gnome.desktop.wm.preferences]
+button-layout='menu:close'
+mouse-button-modifier='&lt;Super&gt;'
+resize-with-right-button=true
+theme='elementary'
+titlebar-font='Open Sans Bold 9'
+titlebar-uses-system-font=false
+
+[org.gnome.desktop.interface]
+cursor-theme='elementary'
+gtk-theme='elementary'
+icon-theme='elementary'
+#icon-theme='ePapirus'
+document-font-name='Open Sans 10'
+font-name='Open Sans 9'
+monospace-font-name='Roboto Mono 10'
+show-unicode-menu=false
+toolbar-style='icons'
+
+[org.gnome.desktop.peripherals.touchpad]
+tap-to-click=true
+
+[org.gnome.Terminal.Legacy.Settings]  
+menu-accelerator-enabled=false  
+default-show-menubar=false  
+</code></pre>
+<p>rm -r ~/.config/dconf</p>
+<p>reboot</p>
+<p><strong>Decathorpe recommended installation:</strong></p>
+<pre><code>dnf copr enable decathorpe/elementary-nightly
+
+dnf in pantheon-desktop-settings switchboard lightdm-gtk-greeter-settings elementary-icon-theme elementary-sound-theme elementary-theme*
+
+systemctl disable gdm
+systemctl enable lightdm
+</code></pre>
+<p>apply gschema override file<br>
+delete <code>.config/dconf</code></p>
+<p>reboot, profit.</p>
+<hr>
+<p>extras?</p>
+<p><a href="https://github.com/btd1337/urutau-icons">https://github.com/btd1337/urutau-icons</a><br>
+<a href="https://github.com/btd1337/Newaita">https://github.com/btd1337/Newaita</a></p>
 <h1 id="history">History</h1>
 <ul>
 <li>+<strong>Fedora (Server) 2017/09</strong> (installed on Optiplex 3010 as Media Server and DVR backend)</li>
@@ -123,4 +197,3 @@ UB = Ubuntu Based, so PakAvl+,ComSup+, but AptGet</p>
 </body>
 
 </html>
-
