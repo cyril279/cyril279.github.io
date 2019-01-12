@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mdadm.md</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="mdadmdubnet-2017">MDADM@dubnet (2017)</h1>
+<h3 id="a-guide-to-madam"><a href="https://raid.wiki.kernel.org/index.php/A_guide_to_mdadm">A guide to madam</a></h3>
+<h2 id="raid-1-mirror">Raid 1 (mirror)</h2>
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04">https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04</a><br>
+<a href="https://www.tecmint.com/create-raid1-in-linux/">how-to</a> , except <a href="https://askubuntu.com/a/463813">use parted (not fdisk) to gpt-format disk</a>(s) or gdisk.<br>
+<a href="http://www.ducea.com/2009/03/08/mdadm-cheat-sheet/">cheat-sheet</a><br>
+<a href="https://serverfault.com/questions/539293/how-to-get-email-alert-if-one-of-raid-1-disks-fails">email-alert</a></p>
+<h2 id="re-use-large-volume-existing-disk">Re-use (large volume) existing disk:</h2>
+<p><strong><a href="https://unix.stackexchange.com/a/63935">create (degraded) raid1, to transfer existing data</a></strong> :: <a href="https://zackreed.me/adding-an-extra-disk-to-an-mdadm-array/">ref_01</a></p>
+<ol>
+<li>create an empty (broken) mirror with the new disk</li>
+<li>copy the existing data onto it</li>
+<li>VERIFY USEABLE DATA</li>
+<li>create mountpoint</li>
+<li>edit fstab to use new array</li>
+<li>VERIFY USEABLE DATA</li>
+<li>format old drive</li>
+<li>add old drive to array</li>
+</ol>
+<p><strong>Tools</strong><br>
+<code>du -sh file_path</code><br>
+du command estimates file_path space usage<br>
+The options -sh are (from man du):</p>
+<pre><code>-s, --summarize  
+display only a total for each argument
+
+-h, --human-readable  
+print sizes in human readable format (e.g., 1K 234M 2G)
+</code></pre>
+<h3 id="prepare-disk">Prepare disk:</h3>
+<ol>
+<li>Install disk &amp;…
+<ol>
+<li>Identify the device names of your new hard drives<br>
+<code>sudo fdisk -l</code><br>
+or<br>
+<code>lsblk</code></li>
+<li>Determine whether there is any existing raid configuration<br>
+<code>mdadm -E /dev/sd[x,y]</code></li>
+</ol>
+</li>
+<li>Create partition.
+<ol>
+<li>The partition table needs to be GPT because desired volume &gt; 2TB; use parted, not fdisk.<br>
+<code>parted /dev/sd(x)</code></li>
+<li>At the (parted) prompt, create the partition table:<br>
+<code>mklabel gpt</code></li>
+<li>Check the free space on the drive by typing<br>
+<code>print free</code></li>
+<li>Create the partition<br>
+<code>mkpart primary 1M 3001GB</code><br>
+This starts the partition at 1M offset giving a 4096 byte alignment. This may or may not be necessary, but won’t hurt if its not.</li>
+<li>p #displays partition setup</li>
+<li>q #quit</li>
+</ol>
+</li>
+</ol>
+<h3 id="create-raid-array">Create Raid array:</h3>
+<ol start="11">
+<li>initialize array /dev/md(#) using /dev/sd(x#) and a missing disk<br>
+<code>sudo mdadm --create --verbose /dev/md0 --level=raid1 --raid-devices=2 /dev/sd(x#) missing</code></li>
+<li>Create a file system on the array:<br>
+<code>sudo mkfs.ext4 /dev/md0</code></li>
+<li>Create a mountpoint for the array, &amp; mount volumes<br>
+<code>sudo mkdir -p /storage/share</code><br>
+<code>mount /dev/md0 /mnt/zero</code></li>
+<li>&amp; copy old stuff to new /dev/md0 :: <a href="https://serverfault.com/a/505758">rsync_01</a> :: <a href="https://serverfault.com/a/43019">rsync_if_again</a><br>
+<code>rsync -avhW --progress --no-compress /src/ /dst/</code></li>
+</ol>
+<h3 id="use-the-degraded-array">USE the (degraded) array</h3>
+<ol start="15">
+<li>Mount it<br>
+<code>sudo mount /mnt/md0</code></li>
+<li>Next, save the raid configuration manually to ‘mdadm.conf‘ file using the below command.<br>
+<code>mdadm --detail --scan --verbose &gt;&gt; /etc/mdadm.conf</code></li>
+<li>All good? Add entry to /etc/fstab:<br>
+<code>/dev/md0 /storage/share auto defaults 0 0</code></li>
+<li>All good? Add entry to /etc/fstab:</li>
+<li>find device<br>
+<code>cat /proc/mdstat</code></li>
+<li>find uuid of device<br>
+<code>sudo blkid /dev/md0</code></li>
+<li>add entry to fstab<br>
+<code>UUID=4a2b3c6d-0ada-4228-8043-7a2f40a13d4a /storage/share auto defaults 0 0</code></li>
+</ol>
+<h3 id="data-verified">data verified?</h3>
+<p>perform 1a through 2f on the old (3tb wd black)</p>
+<ol start="22">
+<li>let’s add the other drive…<br>
+<code>mdadm /dev/md0 --add /dev/sd(y#)</code></li>
+<li>Save the raid configuration manually to ‘mdadm.conf‘<br>
+<code>mdadm --detail --scan --verbose &gt;&gt; /etc/mdadm.conf</code></li>
+<li>Now you can start using your array. Bear in mind, however, that before it is fully operational it will need to complete its initial sync.</li>
+<li>Track/Watch sync progress:<br>
+<code>watch -n1 sudo mdadm --detail /dev/md0</code><br>
+<code>cat /proc/mdstat</code></li>
+</ol>
+<h2 id="removal-of-disk-from-mdadm-array--disk-wipe">removal of disk from mdadm array (&amp; disk wipe):</h2>
+<ul>
+<li>fail disk<br>
+<code>sudo mdadm /dev/md0 --fail --remove /dev/sdb1</code></li>
+<li>stop array<br>
+<code>sudo mdadm --stop md0</code></li>
+<li>wipe the filesystem<br>
+<code>wipefs -a /dev/sd(x#)</code></li>
+</ul>
+<h2 id="shrink-intact-array--shrink-degraded-array-"><a href="https://www.howtoforge.com/how-to-resize-raid-partitions-shrink-and-grow-software-raid#-intact-array">shrink intact array</a> :: <a href="https://www.howtoforge.com/how-to-resize-raid-partitions-shrink-and-grow-software-raid-p2#-degraded-array">shrink degraded array</a> ::</h2>
+<p><a href="https://superuser.com/q/469117">shrink intact array:</a></p>
+<ol>
+<li>Shrink (Resize) filesystem to just larger than the space used by the content resize2fs /dev/md# [size]</li>
+<li>since intact, spends time rebuilding <code>watch -n1 cat /proc/mdstat</code></li>
+<li>Reshape RAID volume to just larger than than the (shrunken) filesystem<br>
+<code>mdadm --grow /dev/md# --size [size+]</code></li>
+<li>Modify partition(s) as needed</li>
+<li>Grow the RAID volume to fill the re-worked/new partition<br>
+<code>mdadm --grow /dev/md# -z max</code></li>
+<li>Resize filesystem to occupy entire RAID volume restore filesystem to full raid vol? <code>resize2fs /dev/md#</code></li>
+</ol>
+<p>shrink filesystem: resize2fs to-size<br>
+shrink (reshape) raid vol: mdadm --grow<br>
+shrink partition by delete/recreation: gdisk</p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+</div>
+</body>
+
+</html>
+
