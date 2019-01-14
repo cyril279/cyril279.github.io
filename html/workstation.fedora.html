@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -10,9 +10,9 @@
 
 <body class="stackedit">
   <div class="stackedit__html"><h1 id="workstation-gnome">Workstation (Gnome)</h1>
-<p><a href="#make-it-useful">Make it useful:</a><br>
+<p><a href="#make-it-useful">Make it useful</a><br>
 <a href="#install-favorite-packages">Install favorite packages &amp; media codecs</a><br>
-<a href="#make-it-yours">Make it yours:</a><br>
+<a href="#make-it-yours">Make it yours</a><br>
 <a href="#extensions">Extensions</a><br>
 <a href="#themes">Themes</a><br>
 <a href="#pantheon">–Pantheon–</a></p>
@@ -73,7 +73,7 @@ Note that I have heard that replacing step 5 with “dnf update” will also fix
 <h1 id="android-7.1-compile-environment-f25">Android 7.1 compile environment (F25)</h1>
 <p><a href="https://forum.xda-developers.com/chef-central/android/guide-setting-android-compile-t3530696">(originally posted to xda)</a></p>
 <p>(package list is adapted from <a href="https://docs.omnirom.org/Setting_Up_A_Compile_Environment#Fedora_19_x64">Omni’s instructions for F19</a>, to compile Android 7.1 on F25)</p>
-<p>From a clean installation of Fedora-25:</p>
+<p><strong>From a clean installation of Fedora-25:</strong></p>
 <p>Update the installation</p>
 <pre><code>su -c 'dnf -y update'
 </code></pre>
@@ -120,8 +120,8 @@ systemctl enable lightdm
 </code></pre>
 <p>Cleanup…<br>
 <strong>apply preferences system-wide:</strong><br>
-/usr/share/glib-2.0/schemas/</p>
-<p><a href="http://www.techytalk.info/customize-default-desktop-environment-settings-gnome-centric-linux-distributions/">global customization via overrides</a></p>
+/usr/share/glib-2.0/schemas/<br>
+<a href="http://www.techytalk.info/customize-default-desktop-environment-settings-gnome-centric-linux-distributions/">global customization via overrides</a></p>
 <p>60_fedora.pantheon.gschema.override</p>
 <pre><code>#/usr/share/glib-2.0/schemas/60_fedora.pantheon.gschema.override
 
@@ -155,14 +155,15 @@ toolbar-style='icons'
 [org.gnome.desktop.peripherals.touchpad]
 tap-to-click=true
 
-[org.gnome.Terminal.Legacy.Settings]  
-menu-accelerator-enabled=false  
-default-show-menubar=false  
+[org.gnome.Terminal.Legacy.Settings]
+menu-accelerator-enabled=false
+default-show-menubar=false
 </code></pre>
 <p>rm -r ~/.config/dconf</p>
 <p>reboot</p>
 <p><strong>Decathorpe recommended installation:</strong></p>
-<pre><code>dnf copr enable decathorpe/elementary-nightly
+<pre><code>install gnome workstation
+dnf copr enable decathorpe/elementary-nightly
 
 dnf in pantheon-desktop-settings switchboard lightdm-gtk-greeter-settings elementary-icon-theme elementary-sound-theme elementary-theme*
 
@@ -170,11 +171,10 @@ systemctl disable gdm
 systemctl enable lightdm
 </code></pre>
 <p>apply gschema override file<br>
-delete <code>.config/dconf</code></p>
-<p>reboot, profit.</p>
-<hr>
-<p>extras?</p>
-<p><a href="https://github.com/btd1337/urutau-icons">https://github.com/btd1337/urutau-icons</a><br>
+delete .config/dconf</p>
+<p>reboot</p>
+<p>extras?<br>
+<a href="https://github.com/btd1337/urutau-icons">https://github.com/btd1337/urutau-icons</a><br>
 <a href="https://github.com/btd1337/Newaita">https://github.com/btd1337/Newaita</a></p>
 <h1 id="history">History</h1>
 <ul>
