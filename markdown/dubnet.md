@@ -1,5 +1,5 @@
 [colorspace](../html/colorspace.html)  
-[kodi](../html/kodi.html)  
+[kodi (Fedora)](../html/kodi-fedora.html)  
 [mdadm](../html/mdadm.html)  
 [nvidia](../html/nvidia.html)  
 [fileshare](../html/fileshare.html)  
