@@ -60,6 +60,12 @@ devices > FLIRC > Change Device Settings > Power Settings >
 [ I want to turn off this device when it’s not in use ]  
 [ One button on the remote for turning it both On and Off ]  
 [ I don't have the original remote, but I know the command that is used: PowerOff ]  
+```
+reduce (eliminate) [command repeats](https://support.myharmony.com/en-us/adjusting-a-devices-command-repeats#myharmony) for FLIRC-device  
+```
+devices > FLIRC > Change Device Settings > Device command repeats > set to `0`  
+```
+[repeat-key-presses Method for other software](https://support.flirc.tv/hc/en-us/articles/203390449-Double-Key-Presses-with-Harmony-)  
 
 **FLIRC:**  
 link FLIRC’s [power-off] signal to [suspend-keystroke]  
