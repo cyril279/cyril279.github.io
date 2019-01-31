@@ -1,0 +1,382 @@
+# Server (Fedora)
+
+## Install (for headless operation)
+
+Install (& configure)  
+reboot  
+upgrade/update installation  
+`hostnamectl set-hostname dubserv.dubnet`
+
+#### _info:_
+```
+192.168.9.1 #nighthawk router
+192.168.9.0/24 #cidr notation
+255.255.255.0 #subnet mask
+```
+#### _/etc/hostname:_
+```
+192.168.9.11 attic11 attic11.dubnet  
+192.168.9.13 media13 media13.dubnet dubserv dubserv.dubnet  
+192.168.9.12 kodi12 kodi12.dubnet  
+192.168.9.14 kodi14 kodi14.dubnet  
+192.168.9.212 hp60504a envy212 envy212.dubnet
+```    
+
+### Gateway # changed?
+
+Adjust :
+1.  [static ip#]
+2.  /etc/hosts    
+3.  /etc/sysconfig/network-scripts/ifcfg-enp3s0    
+4.  /var/lib/tvheadend/config/acesscontrol/<each-entry>    
+5.  [/etc/samba/smb.conf](fileshare.md#anchor-name) :: hosts allow = 127.0.0.1 192.168.1.0/24 192.168.0.0/24    
+6.  [Transmission whitelist](https://docs.google.com/document/d/132OtnNEct4Tq5RttY6y-o7q-nbPIiA0URXFTSBOZFmc/edit#heading=h.nincxsovj0c4): /var/lib/transmission/.config/transmission-daemon/settings.json      
+7.  nfs config: /etc/exports
+
+### Netmask CIDR Notation
+
+-   [explanation](http://blog.michaelhamrah.com/2015/05/networking-basics-understanding-cidr-notation-and-subnets-whats-up-with-16-and-24/)
+-   [cheatsheet](https://oav.net/mirrors/cidr.html)
+
+## Torrent
+
+Transmission@server :: 192.168.9.13:9091 :: dubserv:9091 :: [ref_Fedora-spec](https://ask.fedoraproject.org/en/question/67980/how-do-i-use-transmission-from-server-21/) :: [ref_ubuntu-inst](https://help.ubuntu.com/community/TransmissionHowTo) ::
+
+dnf install transmission-cli transmission-daemon transmission-common
+systemctl start transmission-daemon
+### Configuration:
+**!! stop service before changing any files !!**  
+`systemctl stop transmission-daemon`  
+
+_**/var/lib/transmission/.config/transmission-daemon/settings.json:**_
+```
+"download-dir": "/storage/media/transmission/Downloads",
+"incomplete-dir": "/storage/media/transmission/Downloads",
+"rpc-host-whitelist": "dubserv",
+"rpc-host-whitelist-enabled": true,
+"rpc-whitelist": "127.0.0.1,192.168.9.*"
+```
+**firewall**
+`firewall-cmd --permanent --add-port=9091/tcp`
+`firewall-cmd --reload`
+`systemctl restart transmission-daemon`
+
+Transmission@client  
+server-ip:9091  
+server-hostname:9091  
+
+or use the remote client application:
+dnf install transmission-remote-gtk
+
+[Add & grow an array](https://superuser.com/questions/1061516/extending-raid-1-array-with-different-size-disks)
+
+## PVR (backend)
+
+### tvheadend
+
+tvheadend@server: 192.168.0.13:9981 :: [ref_01](https://www.linuxserver.io/2017/02/19/how-to-set-up-tvheadend-with-your-dvb-t2-receiver/) :: [ref_02](http://www.wetekforums.com/v/index.php?p=/discussion/27451/tutorial-how-to-install-tvheadend-and-scan-atsc-north-america-channels) :: [ref_03](https://forum.kodi.tv/showthread.php?tid=270385)
+
+-   ensure capture-card firmware files are in /lib/firmware  
+-   reboot & ( lspci or dmesg | grep dvb to check for presence/recognition of card)  
+
+#### installation :: [ref_04](http://tvheadend.org/projects/tvheadend/wiki/WikiStart)
+
+-   enable repo & install
+```
+dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+```
+`dnf install tvheadend`
+
+-   grant tcp access to tvheadend ports
+`firewall-cmd --permanent --add-port=9981/tcp`  
+`firewall-cmd --permanent --add-port=9982/tcp`  
+`systemctl enable tvheadend`  
+`systemctl restart tvheadend`  
+
+-   configure via web interface `hostname:9981` (let the wizard do its thing)
+    
+
+#### configuration
+-   running tvheadend from terminal:  
+-   see how the daemon runs tvheadend  
+
+_/etc/sysconfig/tvheadend_ 
+```
+#Configuration file for the tvheadend service.  
+MALLOC_ARENA_MAX=4
+
+OPTIONS="-c /var/lib/tvheadend/config -u tvheadend -g video -6 -C --http_port 9981 --htsp_port 9982"
+```
+#### Run and see realtime logging:  
+`systemctl stop tvheadend`  
+`tvheadend -c /var/lib/tvheadend/config -u tvheadend -g video -6 -C --http_port 9981 --htsp_port 9982`  
+
+#### system-specific:
+-   usermod -a -G smbgrp tvheadend #gives tvheadend access to alt storage path
+-   usermod -a -G video <username> #add tvheadend, cyril, & kodi to video group
+-   timeshift path: /storage/share/Video/.tv_timeshift
+-   recording path: /storage/share/Video/tv
+`systemctl restart tvheadend`
+
+#### Other:
+-   /var/lib/tvheadend/config/accesscontrol/<each-entry> #config file for each user
+-   /var/lib/tvheadend/config/epgdb.v2 #remove to clear epg database
+
+### epg data (other than ota)
+
+process:
+
+tvheadend looks at a ‘grab_file’ to determine where to get its epg data.
+
+The grab_file may:
+
+-   point directly to a specific site (sd_json)
+    
+-   point to a local epg-data file (ex: xmltv.xml)
+    
+-   activate a scan, to populate a local epg-data file
+    
+
+  
+
+tvheadend looks at a tv_grab_file, which points to another local file (xmltv.xml) containing epg data. That xml file is generated by a ‘scraper’ file that downloads the data from a tv-listing website (tv-guide.com, or zap2it.com, or titantv.com, etc).
+
+  
+
+looking at it from the other end: From the interwebs, a scraper file compiles epg data into a xmltv.xml file, which is referenced by the tv_grab_file that tvheadend is pointed to.
+
+  
+
+installation process:
+
+1.  setup & test scraper
+    
+2.  add tv_grab_file to /usr/bin and configure as needed
+    
+3.  systemctl restart tvheadend #to see new tv_grab_file
+    
+4.  enable tv_grab_file in tvheadend [ configuration > channel/epg > EPG Grabber Modules ]
+    
+
+  
+
+sudo crontab -u tvheadend -e
+
+[ins]
+
+04 00 * * * /home/tvheadend/.xmltv/zap2xml.sh >/dev/null 2>&1
+
+  
+
+tvheadend ::
+
+configuration > channel/epg > channels > “epg source” :: enter/select grab_file_channel
+
+re-run internal epg grabbers
+
+##### zap2epg
+
+[zap2epg setup/guide](https://github.com/edit4ever/script.module.zap2epg/wiki).
+
+  
+
+Following the recommended path in the wiki, I did initial setup through kodi (password is in the clear!), tells me access denied.
+
+[found github issue instructing to run http://YOUR.IP.ADDRESS:9981/api/mpegts/service/grid](https://github.com/edit4ever/script.module.zap2epg/issues/1#issuecomment-351146771)
+
+this request was denied until I used a tvheadend account with administrative privilege.
+
+  
+
+On the kodi device, a successful setup&scan generates settings & configuration files in a userdata folder under ~/.kodi/
+
+Migrating the setup to be managed by a (headless) tvheadend backend/server involves two steps:
+
+1.  Copying the kodi-configured (& tested) addon for tvheadend server usage
+    
+
+-   Copy the contents of .kodi/addons/script.module.zap2epg (core addon files) to user@serverip:/home/tvheadend/script.module.zap2epg
+    
+-   Copy the contents of .kodi/userdata/../addon_data/script.module.zap2epg (configuration and settings) to user@serverip:/home/tvheadend/script.module.zap2epg
+    
+
+3.  Setting up the tv_grab_file
+    
+
+-   settings.xml: change ip address to loopback address, to mitigate ip change woes.
+    
+-   script.module.zap2epg/bin/tv_grab_zap2epg:
+    
+
+-   ADDON_HOME & ADDON_DIR: Modify to the actual location of the addon files
+    
+-   copy to /usr/bin/
+    
+
+-   Systemctl restart tvheadend #make tvheadend notice grabber additions/changes
+    
+-   Enable tv_grab_zap2epg in tvheadend [ configuration > channel/epg > EPG Grabber Modules ]
+    
+-   Edit cron frequency [ configuration > channel/epg > EPG Grabber > Internal Grabber ]
+    
+
+  
+
+ssh -A -t kodi@kodibox scp -r /home/kodi/.kodi/addons/script.module.zap2epg cyril@192.168.0.13:/home/tvheadend/
+
+ssh -A -t kodi@kodibox scp -r /home/kodi/.kodi/userdata/profiles/kids/addon_data/script.module.zap2epg/* cyril@192.168.0.13:/home/tvheadend/script.module.zap2epg/
+
+userdata/profiles/kids/addon_data/script.module.zap2epg/*
+
+##### schedules direct. get an account.
+
+First, from web-interface:
+
+configuration > channel/epg > epg grabber modules
+
+on left side, lots of red circles, look for:
+
+internal: XMLTV: Schedules Direct JSON API
+
+  
+
+present? then check the parameters for the grab_file path, grab some terminal:
+
+sudo -u tvheadend /path/to/tv_grab_zz_sdjson --configure
+
+  
+
+follow the prompts, then restart tvheadend
+
+systemctl restart tvheadend
+
+  
+
+go back to the web-interface > modules menu, disable the OTA module, enable the appropriate schedules direct JSON, [save], profit.
+
+##### Icons?
+
+try the %C thing :: [ref_01](https://www.linuxserver.io/2017/02/19/how-to-set-up-tvheadend-with-your-dvb-t2-receiver/) :: [ref_02](https://github.com/rocky4546/script.xmltv.tvheadend/wiki/Guide:-How-to-Setup-XMLTV-for-TVHeadEnd#using-icons-with-xmltvxml) :: [ref_03](http://docs.tvheadend.org/webui/config_misc/#picons)
+
+  
+
+works:
+
+Configuration > General > Base
+
+-   Picon
+    
+
+-   Channel icon path: file:///home/tvheadend/.xmltv/icons/%C.png
+    
+-   Channel icon name scheme: Service name picons
+    
+-   Picon path: BLANK
+    
+-   Picon name scheme: Standard
+    
+
+-   Channel (re)name:
+    
+
+-   Channel_name : filename ? auto-fills-in
+    
+-   IconTest : icontest.png
+    
+-   Channel 1 : channel1.png
+    
+-   3.4 name : 34name.png
+
+## Backup
+
+Duplicity
+
+[ref_05](https://www.tecmint.com/create-encrypted-linux-file-system-backups-using-duplicity/2/) :: [ref_01](http://www.ifdattic.com/howto-encrypted-backup-with-duplicity/) :: [ref_02](https://www.vultr.com/docs/creating-incremental-and-encrypted-backups-with-duplicity) :: [ref_03](https://help.ubuntu.com/community/DuplicityBackupHowto) :: [ref_backblaze](https://help.backblaze.com/hc/en-us/articles/115001518354-How-to-configure-Backblaze-B2-with-Duplicity-on-Linux) :: [ref_06](https://fedoramagazine.org/taking-smart-backups-duplicity/)
+
+Backblaze b2
+
+[https://secure.backblaze.com/user_signin.htm](https://secure.backblaze.com/user_signin.htm)
+
+backup across network
+
+rsync -ave ssh user@server:/path/to/file /home/user/path/to/file
+
+rsync -avHe ssh cyril@192.168.0.13:/storage/share/Pictures /storage/backup/Pictures --delete
+
+[ssh hostname instead ip](https://askubuntu.com/a/487319)
+
+/etc/hosts
+
+ip# hostname
+
+# Client
+
+## Interface
+
+(from other networked PC)
+
+-   web interface
+    
+
+-   192.168.1.13:9090 #Cockpit server management
+    
+-   192.168.1.13:9091 #transmission torrent client
+    
+-   192.168.1.13:9981 #tvheadend pvr backend
+    
+
+  
+
+-   Terminal
+    
+
+-   ssh <user>@192.168.1.13 #ssh to terminal session
+    
+
+  
+
+-   File browser
+    
+
+-   smb://<hostname>/<share_name> #Linux Access samba share
+    
+-   smb://<ip_address>/<share_name> #Linux Access samba share
+    
+-   \\<hostname>\<share_name> #Windows browse to samba share
+    
+-   \\<ip_address>\<share_name> #Windows browse to samba share
+    
+
+
+## Windows to Samba
+
+-   [forcing windows to update samba login credentials](https://serverfault.com/a/268944)
+    
+
+-   Close all apps/windows using any shares
+    
+-   super-key “credentials” > edit or remove credentials as needed
+    
+-   nuke all shares (covers 192.168.1.13, 192.168.1.9, Dubserv, dubserv)
+    
+
+net use * /delete
+
+-   OR view connections on a specific server, then delete specific share
+    
+
+net view \\SERVERNAME
+
+net use \\SERVERNAME /delete
+
+-   establish desired share credentials
+    
+
+`net use \\SERVERNAME\SHARENAME /u:USERNAME`  
+
+-   log-off and back on (restarts services & dependencies)
+
+[another method](https://serverfault.com/questions/326255/how-can-i-clear-the-authentication-cache-in-windows-7-to-a-password-protected/500270#500270)  
+[thorough method](https://superuser.com/a/352272)    
+[Map drive letter to samba share](https://www.laptopmag.com/articles/map-network-drive-windows-10)  
+[Map a drive letter via CLI](https://www.howtogeek.com/118452/how-to-map-network-drives-from-the-command-prompt-in-windows/)  
