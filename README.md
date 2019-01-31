@@ -27,5 +27,6 @@ Distribution version | DE | Initial Date | notes
 **UB** = Ubuntu Based, so PakAvl+,ComSup+, but AptGet  
 
 ### Archive
+[fstab](fstab.md)  
 [colorspace](colorspace.md)  
 [nvidia](nvidia.md)  
