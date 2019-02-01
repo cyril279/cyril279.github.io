@@ -60,8 +60,6 @@ If upgrade to newer Fedora release, check repositories referencing older release
 6.  Reboot and enjoy :)
 Note that I have heard that replacing step 5 with "dnf update" will also fix the issue (and update the rest of the system in the process). This would be preferable to just updating the file as per the above, but you can always follow my instructions and then run an update once you are able to graphically login.
 
-## [Harmony/flirc/kodi](HARMONY-FLIRC-KODI.html)
-
 # Android 7.1 compile environment (F25)
 
 [(originally posted to xda)](https://forum.xda-developers.com/chef-central/android/guide-setting-android-compile-t3530696)
@@ -121,7 +119,6 @@ Watch ccache being used:
     systemctl disable gdm
     systemctl enable lightdm
 
-Cleanup…  
 **apply preferences system-wide:**  
 /usr/share/glib-2.0/schemas/  
 [global customization via overrides](http://www.techytalk.info/customize-default-desktop-environment-settings-gnome-centric-linux-distributions/)  
@@ -164,9 +161,10 @@ tap-to-click=true
 menu-accelerator-enabled=false
 default-show-menubar=false
 ```
-rm -r ~/.config/dconf
+**Cleanup…**  
 
-reboot
+    rm -r ~/.config/dconf
+    reboot
 
 **Decathorpe recommended installation:**
 
@@ -186,19 +184,3 @@ reboot
 extras?  
 [https://github.com/btd1337/urutau-icons](https://github.com/btd1337/urutau-icons)  
 [https://github.com/btd1337/Newaita](https://github.com/btd1337/Newaita)
-
-# History
-- +**Fedora (Server) 2017/09** (installed on Optiplex 3010 as Media Server and DVR backend)
-- **Fedora (Gnome) 2016/11** (dnf,clean/simple/easy DE,PakAvl+,ComSup+,builds android,melikey)
-- **Elementary(Pantheon)** 2016/09 (Beautiful OS,lightweight,OBF+,UB,oversimplified/limited controls)
-- +**Opensuse(tumbleweed@KDE)** 2016/09 (brilliant package management,rolling,ComSup+,PakAvl+, over-thinks & duplicates other aspects,can’t get multimedia support right)
-- **Manjaro(KDE)** 2016/08 (OBF+,PakAvl+,ComSup+,rolling+,proprietary support+, KDE: pretty, but more menu-bars than it's worth)
-- **Mint(Cinnamon)** 2016/03 (OBF++,UB, looks/feels dated)
-- **Ubuntu(Unity)** 2014/09 (OBF+,ComSup+,PakAvl+, but despise AptGet and Unity)
-
-OBF = Out of the Box Functionality
-PakAvl = Package Availability
-ComSup = Community support
- UB = Ubuntu Based, so PakAvl+,ComSup+, but AptGet
-
-> Written with [StackEdit](https://stackedit.io/).
