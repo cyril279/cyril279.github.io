@@ -38,6 +38,7 @@ libvdpau
 - disallows secure-boot (unless unwelcome signing ritual)
 - not wayland compatible
 
+[[ Installation Guide ]](https://www.if-not-true-then-false.com/2015/fedora-nvidia-guide/#before-installation)  
 I had previously blamed some audio issues on the proprietary drivers, but since then, I have found lightdm to be the culprit.
 
 ## Tweaks  
