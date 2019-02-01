@@ -315,68 +315,21 @@ ip# hostname
 
 (from other networked PC)
 
--   web interface
-    
+**Web interface:**  
+```
+192.168.1.13:9090 #Cockpit server management
+192.168.1.13:9091 #transmission torrent client
+192.168.1.13:9981 #tvheadend pvr backend
+```    
 
--   192.168.1.13:9090 #Cockpit server management
-    
--   192.168.1.13:9091 #transmission torrent client
-    
--   192.168.1.13:9981 #tvheadend pvr backend
-    
+**Terminal:**  
+    ssh <user>@192.168.1.13 #ssh to terminal session
 
-  
+**File browser**  
+```
+smb://<hostname>/<share_name> #Linux Access samba share
+smb://<ip_address>/<share_name> #Linux Access samba share
 
--   Terminal
-    
-
--   ssh <user>@192.168.1.13 #ssh to terminal session
-    
-
-  
-
--   File browser
-    
-
--   smb://<hostname>/<share_name> #Linux Access samba share
-    
--   smb://<ip_address>/<share_name> #Linux Access samba share
-    
--   \\<hostname>\<share_name> #Windows browse to samba share
-    
--   \\<ip_address>\<share_name> #Windows browse to samba share
-    
-
-
-## Windows to Samba
-
--   [forcing windows to update samba login credentials](https://serverfault.com/a/268944)
-    
-
--   Close all apps/windows using any shares
-    
--   super-key “credentials” > edit or remove credentials as needed
-    
--   nuke all shares (covers 192.168.1.13, 192.168.1.9, Dubserv, dubserv)
-    
-
-net use * /delete
-
--   OR view connections on a specific server, then delete specific share
-    
-
-net view \\SERVERNAME
-
-net use \\SERVERNAME /delete
-
--   establish desired share credentials
-    
-
-`net use \\SERVERNAME\SHARENAME /u:USERNAME`  
-
--   log-off and back on (restarts services & dependencies)
-
-[another method](https://serverfault.com/questions/326255/how-can-i-clear-the-authentication-cache-in-windows-7-to-a-password-protected/500270#500270)  
-[thorough method](https://superuser.com/a/352272)    
-[Map drive letter to samba share](https://www.laptopmag.com/articles/map-network-drive-windows-10)  
-[Map a drive letter via CLI](https://www.howtogeek.com/118452/how-to-map-network-drives-from-the-command-prompt-in-windows/)  
+\\<hostname>\<share_name> #Windows browse to samba share
+\\<ip_address>\<share_name> #Windows browse to samba share
+```

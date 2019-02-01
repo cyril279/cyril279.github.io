@@ -72,6 +72,25 @@ add/configure share entry(ies)
 `semodule -i my-nmbd.pp`  
 `systemctl restart nmb`  
 
+### Client: Windows:
+
+-   [forcing windows to update samba login credentials](https://serverfault.com/a/268944)
+-   Close all apps/windows using any shares
+-   [ super-key ] > “credentials” > edit or remove credentials as needed
+-   nuke all shares (covers 192.168.1.13, 192.168.1.9, Dubserv, dubserv)
+`net use * /delete`  
+-   OR view connections on a specific server, then delete specific share  
+`net view \\SERVERNAME`  
+`net use \\SERVERNAME /delete`  
+-   establish desired share credentials
+`net use \\SERVERNAME\SHARENAME /u:USERNAME`  
+-   log-off and back on (restarts services & dependencies)
+
+[another method](https://serverfault.com/questions/326255/how-can-i-clear-the-authentication-cache-in-windows-7-to-a-password-protected/500270#500270)  
+[thorough method](https://superuser.com/a/352272)    
+[Map drive letter to samba share](https://www.laptopmag.com/articles/map-network-drive-windows-10)  
+[Map a drive letter via CLI](https://www.howtogeek.com/118452/how-to-map-network-drives-from-the-command-prompt-in-windows/)  
+
 # NFS
 ### nix to *nix fileshare protocol
 #### nfs-share setup, Performed on Fedora 29 server & client
