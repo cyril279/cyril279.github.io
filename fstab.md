@@ -7,15 +7,16 @@ _/etc/hosts_
 ```
 192.168.x.y  alias alias2
 ```
+[[ Typical dubnet definitions ]](server-gen.md#-etc-hostname-)  
 
 `lsblk` lists information about all or the specified block devices.  
 The command prints all block devices (except RAM disks) in a tree-like format by default.  
 Typically used to list all available block devices, and their mount points.  
 
 `blkid` can determine the type of content (e.g. filesystem, swap) a block device holds, and also attributes (tokens, NAME=value pairs) from the content metadata (e.g. LABEL or UUID fields).  
-Typically used to list uuid’s for fstab entry  
+Typically used to list uuidâ€™s for fstab entry  
 
-`df -Th` display’s filesystem and lists mount points -T=filesystem type -h=human-readable filesystem size  
+`df -Th` displayâ€™s filesystem and lists mount points -T=filesystem type -h=human-readable filesystem size  
 
 [https://wiki.ubuntu.com/MountWindowsSharesPermanently](https://wiki.ubuntu.com/MountWindowsSharesPermanently)  
 << [for format](https://unix.stackexchange.com/a/276318) >>  
