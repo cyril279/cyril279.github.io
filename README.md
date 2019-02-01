@@ -1,12 +1,18 @@
 ### Method
-[fileshare](fileshare.md)  
-[HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
-[kodi (Fedora)](kodi-fedora.md)  
-[kodi (openSUSE)](kodi-opensuse.md)  
-[mdadm](mdadm.md)  
-### Machine
-[workstation (Fedora)](workstation-fedora.md)  
-[workstation (OpenSUSE)](workstation-opensuse.md)  
+- [fileshare](fileshare.md)  
+- [HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
+- [kodi (Fedora)](kodi-fedora.md)  
+- [kodi (openSUSE)](kodi-opensuse.md)  
+- [mdadm](mdadm.md)  
+
+### Distribution
+- [Fedora](fedora.md)  
+- [OpenSUSE](opensuse.md)  
+
+### Server
+- [General](server-gen.md)  
+- [Tvheadend](server-tvh.md)  
+- [Transmission](server-trans.md)  
 
 ### History
 
@@ -27,6 +33,6 @@ Distribution version | DE | Initial Date | notes
 **UB** = Ubuntu Based, so PakAvl+,ComSup+, but AptGet  
 
 ### Archive
-[fstab](fstab.md)  
-[colorspace](colorspace.md)  
-[nvidia](nvidia.md)  
+- [colorspace](colorspace.md)  
+- [fstab](fstab.md)  
+- [nvidia](nvidia.md)  
