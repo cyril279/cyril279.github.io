@@ -11,14 +11,15 @@
 **openSUSE** adds a gui/management layer in between the DE and the underlying OS.  
 
 **Upside(s):**  
-1) because openSUSE has intelligent, centralized, and fine grained control over all aspects, despite upstream of DE.  
-2) using the tools ensure that the process is done right/completely, despite what the end-user thinks they understand about unix/linux  
+1. because openSUSE has intelligent, centralized, and fine grained control over all aspects, despite upstream of DE.  
+2. using the tools ensure that the process is done right/completely, despite what the end-user thinks they understand about unix/linux  
 
 **Downside(s)**  
-1) tutorials are more limited than more standard distro (centos, redhat, fedora, arch)
-2) adds distro-specific stuff for the end-user to know about/learn 
-2) This layer is mostly gui  
+1. tutorials are more limited than more standard distro (centos, redhat, fedora, arch)  
+2. adds distro-specific stuff for the end-user to know about/learn  
+2. This layer is mostly gui  
 These aren't strong, but raise the flag of whether it is worth it for the (few) benefits.  
+
 ### Getting started:
 **packages (util):**  
 `zypper in hplip nfs4-acl-tools git htop`  
@@ -55,7 +56,6 @@ Domain = sameDomainNameHere
 #### NetworkManager vs. Wicked:  
 - for laptop? NetworkManager. full stop.  
 - I like the configurability of Wicked, but it lacks gnome integration (applet)  
-- Wicked (so far, for kodibox) shows no significant advantage over NM  
 **Service switch (to [Wicked])**  
 `systemctl status network` #show/verify which service is managing the network, and its status  
 `systemctl stop network` #stop the network (& assigned services)  
@@ -65,9 +65,25 @@ Domain = sameDomainNameHere
 `systemctl status network`  #show/verify which service is managing the network, and its status  
 
 #### static ip:
-Use gateway ip for dns server address, if needed.  
+Use gateway ip for dns server address (& routing).  
 
-CLI setup differs per service chosen"  
+CLI setup differs per service chosen  
+**If Wicked:**  
+_/etc/sysconfig/network/ifcfg-p4p1_  
+``` 
+BOOTPROTO='static'  
+STARTMODE='auto'  
+IPADDR='192.168.9.14/24'  
+```
+_/etc/sysconfig/network/routes_  
+``` 
+default 192.168.9.1 - -  
+```
+_/etc/sysconfig/network/config_  
+```
+NETCONFIG_DNS_STATIC_SERVERS="192.168.9.1"  
+```
+ 
 **If NetworkManager**, ~[three files need to be modified](https://forums.opensuse.org/showthread.php/431523-Configure-Static-Ip-using-the-Terminal?p=2109330#post2109330) if not done through the gui.  
 
 > You need to edit three files:  
@@ -90,7 +106,7 @@ CLI setup differs per service chosen"
 > nameserver 192.168.2.1  
 > ```
 
-And then this gem of advice:  
+This gem of advice:  
 > Another idea, not nearly as geeky or sexy, would be to enter "yast" at that terminal prompt, then use the arrow and tab keys to get to Network Devices -> Network Settings.  
 > 
 > If you insist on knowing how to do it manually, just look at the contents of the files named above *after* you use Yast to see what it did.  

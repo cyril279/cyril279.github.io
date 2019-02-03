@@ -1,9 +1,24 @@
-# Server (Generic config info)
-**Headless operation**
+# Gnu/Linux Generic bringup
 
-Install (& configure)  
-upgrade/update installation  
-`hostnamectl set-hostname dubserv.dubnet`
+**Display Attached** (Workstation):  
+- Install (& configure)  
+- upgrade/update installation  
+- Establish/verify ssh connectivity  
+  - no? firewall? mismatched host keys?
+  - `rm -f /etc/ssh/ssh_host_*` #hostkey cleanup  
+  - `firewall-cmd --add-port=22/tcp --zone=external --permanent`
+  - `firewall-cmd reload`
+- Server bringup? proceed to [Headless Management](#headless-management-).  
+Else, ...  
+
+#### Headless Management:
+- [filesharing](fileshare.md)
+  - Users/Groups
+  - ACL
+  - Samba
+  - NFS
+- [Tvheadend](server-tvh.md)
+- [Transmission](server-trans.md)
 
 #### _info:_
 ```
@@ -67,7 +82,8 @@ rsync -avHe ssh cyril@192.168.0.13:/storage/share/Pictures /storage/backup/Pictu
 ```
 
 **Terminal:**  
-    ssh <user>@192.168.1.13 #ssh to terminal session
+`ssh <userQ>@192.168.1.13` #ssh to terminal session as "userQ"  
+`ssh 192.168.x.y` #ssh as current user
 
 **File browser**  
 ```
