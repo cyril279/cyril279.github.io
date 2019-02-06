@@ -152,30 +152,43 @@ https://www.osc.edu/book/export/html/4523
 
 # NFS
 ### nix to *nix fileshare protocol
-#### nfs-share setup, Performed on Fedora 29 server & client
+**nfs-share setup, Performed on Fedora 29 server & client**  
 
-### Server:
-**Install**  
+## Server:
+### Fedora
+- Install  
 `dnf -y install nfs-utils rpcbind `  
-
-**find (or create) domain name, for use in /etc/idmap.conf**  
-`hostname -d` #returns domain name if present  
-`hostnamectl set-hostname frip.frop` #sets host-name to frip, and domain-name to frop  
-
-**/etc/idmapd.conf**
+- _/etc/idmapd.conf_  
 ```
 # line 5: uncomment and change to your domain name
 Domain = frop
 ```
+- start (& enable) the service(s)  
+`systemctl start nfs-server rpcbind rpc-statd nfs-idmapd`  
+`systemctl enable nfs-server rpcbind`  
+
+### openSUSE
+- [Suse docs:22.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.installation)
+>The NFS server is not part of the default installation  
+
+  `zypper in -t pattern file_server`  
+- [SUSE docs:22.3.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.export.manual)  
+  - >The configuration files for the NFS export service are:  
+_/etc/exports_  
+_/etc/sysconfig/nfs_  
+  - _/etc/idmapd.conf_  
+>The idmapd daemon is only required if Kerberos authentication is used, or if clients cannot work with numeric user names  
+
+- start/enable associated services  
+`systemctl restart nfsserver`  
+`systemctl enable nfsserver`  
+
+### Distro-agnostic
 **Configure what is exported, and with-whom to share**  
 
 **/etc/exports:**  
 `/storage/share 192.168.0.0/24(rw,sync,subtree_check)`  
 `/storage/share 192.168.1.0/24(rw,sync,subtree_check)`  
-
-**start (& enable) the service(s)**  
-`systemctl start nfs-server rpcbind rpc-statd nfs-idmapd`  
-`systemctl enable nfs-server rpcbind`  
 
 **Configure firewall to allow client servers to access NFS shares**  
 `firewall-cmd --permanent --add-service nfs`  
@@ -186,20 +199,29 @@ Domain = frop
 **see shares export correctly**  
 `exportfs -rav`  
 
-### Client:
-define server host-name&ip in /etc/hosts?  
-**install**  
-`dnf -y install nfs-utils rpcbind`  
-
-**/etc/idmapd.conf**  
+## Client:
+### Fedora
+- Install  
+`dnf -y install nfs-utils rpcbind `  
+- _/etc/idmapd.conf_  
 ```
 # line 5: uncomment and change to your domain name
-Domain = home
+Domain = frop
 ```
-**start (& enable) the service**  
+- start (& enable) the service  
 `systemctl start rpcbind`  
 `systemctl enable rpcbind`  
 
+### openSUSE
+- [SUSE docs:22.4](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.configuring-nfs-clients)  
+>To configure your host as an NFS client, you do not need to install additional software. All needed packages are installed by default.  
+- [SUSE docs:22.4.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.import)
+>The prerequisite for importing file systems manually from an NFS server is a running RPC port mapper. The nfs service takes care to start it properly  
+- options appended to fstab entry  
+`defaults,x-systemd.automount,x-systemd.requires=network-online.target`  
+[Arch wiki: Mount using /etc/fstab with systemd](https://wiki.archlinux.org/index.php/NFS#Mount_using_/etc/fstab_with_systemd)  
+
+### Distro-agnostic
 **show available mounts from server (must specify server)**  
 `showmount -e 192.168.0.13`  
 
@@ -225,8 +247,12 @@ nfs://dubserv.home:/storage/share
 # Samba
 ### Windows to *nix fileshare protocol
 ### Server:
-**Install**  
+**Fedora**  
 `dnf install samba samba-client samba-common`  
+
+**openSUSE**  
+[[ samba guide ](https://forums.opensuse.org/content.php/199-Configure-Samba-for-Local-Lan-Workgroup)]  
+[ https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.samba.html ]
 
 **Configure**  
 (backup original conf file)  
@@ -272,11 +298,12 @@ add/configure share entry(ies)
 `groupadd samba` #Create a new group  
 `usermod -a -G samba cyril` #add secondary group to existing user  
 `useradd cyril -G samba` #Create a new user & add to smbgrp  
-`smbpasswd -ae cyril` #Create (& enable) a Samba password for the user  
+`smbpasswd -a cyril` #Create a Samba password for the user  
+`smbpasswd -e cyril` #Enable Samba user  
 
 **Filesystem:**  
 `chmod -R 0770 /path/to/goods` #Change the permissions of the folder  
-`chown -R root:smbgrp /path/to/goods` #Change the ownership of the folder  
+`chown -R root:samba /path/to/goods` #Change the ownership of the folder  
 
 **Test the newly saved entry & restart samba services**  
 `testparm`  
