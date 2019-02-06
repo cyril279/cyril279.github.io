@@ -22,22 +22,6 @@ Typically used to list uuid’s for fstab entry
 << [for format](https://unix.stackexchange.com/a/276318) >>  
 [https://serverfault.com/a/815692](https://serverfault.com/a/815692)  
 [http://jensd.be/229/linux/mount-windows-cifs-shares-on-linux-with-credentials-in-a-secure-way](http://jensd.be/229/linux/mount-windows-cifs-shares-on-linux-with-credentials-in-a-secure-way)  
-### Adding samba share:
->It's good practice to avoid putting passwords directly in /etc/fstab (which is normally world-readable). Instead, put them into a file, and reference the file like:  
-`//w.x.y.z/Home$ /mnt/dir cifs credentials=/home/username/cifs.creds,sec=ntlmssp,file_mode=0700,dir_mode=0700`  
-_/home/username/cifs.creds_ is owned by a suitable user (either root, or a user that corresponds to the SMB user who owns the SMB share), and chmod og-rwx. It contains the credentials in the format
->
->domain=A username=B password=C
->
->A, B and C above must be literal - there's no shell-like parsing of quotes or backslashes.
-
-[Mount share at boot](https://www.hiroom2.com/2017/08/02/fedora-26-cifs-utils-en/#sec-4)
-
->Add mount entry to /etc/fstab.  
->For avoiding mounting SMB before network initialization, you need to add _netdev option.  
->For making x-systemd.automount to mount SMB, you need to add x-systemd.automount to option.  
-
-[more _netdev stuff](https://ervikrant06.wordpress.com/2014/09/30/what-happens-after-adding-_netdev-option-in-fstab/)  
 
 ### laptop fstab entries (unexplored)  
 append to mount options:  

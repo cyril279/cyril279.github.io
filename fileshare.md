@@ -72,6 +72,30 @@ add/configure share entry(ies)
 `semodule -i my-nmbd.pp`  
 `systemctl restart nmb`  
 
+#### fstab
+**Login credentials**  
+Should be kept in a separate, more secure file, so NOT world-readable:  
+
+_/ect/fstab_ example-entry:
+```
+//w.x.y.z/Home$ /mnt/dir cifs credentials=/root/cifs.creds,sec=ntlmssp,file_mode=0700,dir_mode=0700`  
+```
+_/root/cifs.creds_ | **owned by:** root:root | **permissions:** 0400  
+```
+domain=A
+username=B
+password=C
+```
+A, B and C above must be literal - there's no shell-like parsing of quotes or backslashes.  
+
+**other mounting info:**
+>Add mount entry to /etc/fstab.  
+>For avoiding mounting SMB before network initialization, you need to add _netdev option.  
+>For making x-systemd.automount to mount SMB, you need to add x-systemd.automount to option.  
+
+[more _netdev stuff](https://ervikrant06.wordpress.com/2014/09/30/what-happens-after-adding-_netdev-option-in-fstab/)  
+See [fstab archive] for examples that have been used in dubnet  
+
 ### Client: Windows:
 
 -   [forcing windows to update samba login credentials](https://serverfault.com/a/268944)
@@ -235,3 +259,4 @@ df -T showed me that the filesystem was mounted as nfs4 which apparently needs t
 decode this shit!
 https://www.osc.edu/book/export/html/4523
 
+[fstab archive]:fstab.md
