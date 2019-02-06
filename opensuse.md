@@ -22,7 +22,6 @@ These aren't strong, but raise the flag of whether it is worth it for the (few) 
 ### Getting started:
 **packages (util):**  
 `zypper in hplip nfs4-acl-tools git htop`  
-[markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)
 
 **packages (preference):**  
 `zypper in materia-gtk-theme paper-icon-theme`  
