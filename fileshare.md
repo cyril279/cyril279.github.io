@@ -46,8 +46,7 @@ keeper	| 1308 | x | - | -
 
 # posix + gid-bit
 
-- Each directory can only involve one group, so the **share-ability is managed only by appending groups to users**
-- 
+Each directory can only involve one group, so the **share-ability is managed only by appending groups to users**  
 
 ### Important:  
 umask must be changed so that newly created files can be writen by group.  
@@ -156,37 +155,36 @@ https://www.osc.edu/book/export/html/4523
 
 ## Server:
 ### Fedora
-- Install  
+**Install**  
 `dnf -y install nfs-utils rpcbind `  
-- _/etc/idmapd.conf_  
-```
-# line 5: uncomment and change to your domain name
-Domain = frop
-```
-- start (& enable) the service(s)  
+
+**start (& enable) the service(s)**  
 `systemctl start nfs-server rpcbind rpc-statd nfs-idmapd`  
 `systemctl enable nfs-server rpcbind`  
 
 ### openSUSE
-- [Suse docs:22.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.installation)
+**Install**  
+`zypper in -t pattern file_server`  
 >The NFS server is not part of the default installation  
+([Suse docs:22.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.installation))  
 
-  `zypper in -t pattern file_server`  
-- [SUSE docs:22.3.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.export.manual)  
-  - >The configuration files for the NFS export service are:  
+>The configuration files for the NFS export services:  
 _/etc/exports_  
 _/etc/sysconfig/nfs_  
-  - _/etc/idmapd.conf_  
->The idmapd daemon is only required if Kerberos authentication is used, or if clients cannot work with numeric user names  
+([SUSE docs:22.3.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.export.manual))  
 
-- start/enable associated services  
+**start/enable associated services**  
 `systemctl restart nfsserver`  
 `systemctl enable nfsserver`  
 
 ### Distro-agnostic
+_/etc/idmapd.conf_  
+**uncomment & enter domain-name** <- same name as used in server idmapd.conf  
+```
+Domain = sameDomainNameHere
+```
 **Configure what is exported, and with-whom to share**  
-
-**/etc/exports:**  
+_/etc/exports_  
 `/storage/share 192.168.0.0/24(rw,sync,subtree_check)`  
 `/storage/share 192.168.1.0/24(rw,sync,subtree_check)`  
 
@@ -201,27 +199,32 @@ _/etc/sysconfig/nfs_
 
 ## Client:
 ### Fedora
-- Install  
+**Install**  
 `dnf -y install nfs-utils rpcbind `  
-- _/etc/idmapd.conf_  
-```
-# line 5: uncomment and change to your domain name
-Domain = frop
-```
-- start (& enable) the service  
+
+**start (& enable) the service**  
 `systemctl start rpcbind`  
 `systemctl enable rpcbind`  
 
 ### openSUSE
-- [SUSE docs:22.4](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.configuring-nfs-clients)  
->To configure your host as an NFS client, you do not need to install additional software. All needed packages are installed by default.  
-- [SUSE docs:22.4.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.import)
+**Install**  
+>To configure your host as an NFS client, **you do not need to install additional software**. All needed packages are installed by default.  
+([SUSE docs:22.4](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.configuring-nfs-clients))  
+
+**verify that nfs.service is active & enabled**  
 >The prerequisite for importing file systems manually from an NFS server is a running RPC port mapper. The nfs service takes care to start it properly  
-- options appended to fstab entry  
+([SUSE docs:22.4.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.import))  
+
+**fstab entry** (options appended)  
 `defaults,x-systemd.automount,x-systemd.requires=network-online.target`  
 [Arch wiki: Mount using /etc/fstab with systemd](https://wiki.archlinux.org/index.php/NFS#Mount_using_/etc/fstab_with_systemd)  
 
 ### Distro-agnostic
+_/etc/idmapd.conf_  
+**uncomment & enter domain-name** <- same name as used in server idmapd.conf  
+```
+Domain = sameDomainNameHere
+```
 **show available mounts from server (must specify server)**  
 `showmount -e 192.168.0.13`  
 

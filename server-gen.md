@@ -14,9 +14,9 @@ Else, ...
 #### Headless Management:
 - [filesharing](fileshare.md)
   - Users/Groups
+  - NFS
   - ACL
   - Samba
-  - NFS
 - [Tvheadend](server-tvh.md)
 - [Transmission](server-trans.md)
 
@@ -49,9 +49,6 @@ Adjust :
 
 -   [explanation](http://blog.michaelhamrah.com/2015/05/networking-basics-understanding-cidr-notation-and-subnets-whats-up-with-16-and-24/)
 -   [cheatsheet](https://oav.net/mirrors/cidr.html)
-
-[Add & grow an array](https://superuser.com/questions/1061516/extending-raid-1-array-with-different-size-disks)  
-
 
 ## Backup
 

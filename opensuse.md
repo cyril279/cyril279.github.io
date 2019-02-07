@@ -35,24 +35,6 @@ sudo zypper ar -f http://ftp.gwdg.de/pub/opensuse/repositories/multimedia:/libs/
 sudo zypper ref
 ```
 ### Configuration:
-#### NFS/ACL:
-**fstab mount options for NFS shares:**  
-`defaults,x-systemd.automount,x-systemd.requires=network-online.target`  
-ensures that NFS shares are mounted upon resume  
-ref:[Arch wiki: Mount using /etc/fstab with systemd](https://wiki.archlinux.org/index.php/NFS#Mount_using_/etc/fstab_with_systemd)  
-
-**add relevant groups**  
-append groups to users appropriately  
-(see [Fileshare] for details)  
-
-_/etc/idmapd.conf_  
-**uncomment & enter domain-name** <- same name as used in server idmapd.conf  
-```
-Domain = sameDomainNameHere
-```
-**Enable (& start) rcpbind service**  
-`systemctl enable rpcbind`  
-`systemctl start rpcbind`  
 #### NetworkManager vs. Wicked:  
 - for laptop? NetworkManager. full stop.  
 - I like the configurability of Wicked, but it lacks gnome integration (applet)  
