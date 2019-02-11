@@ -2,28 +2,30 @@
 **Why openSUSE (vs.Fedora):**  
 1. Rolling  
 2. zypper  
+2. yast!
+2. snapper
 2. nicely decorated bash  
 2. other little items already installed/work out of box (so what else have I been missing?)  
-  a. firefox flash  
-  b. chrome-gnome stuff  
-  c. more ir codes  
+  a. chrome-gnome stuff  
+  b. more ir codes  
 
-**openSUSE** adds a gui/management layer in between the DE and the underlying OS.  
+**openSUSE** adds a management layer (yast) in between the DE and the underlying OS.  
 
 **Upside(s):**  
-1. because openSUSE has intelligent, centralized, and fine grained control over all aspects, despite upstream of DE.  
-2. using the tools ensure that the process is done right/completely, despite what the end-user thinks they understand about unix/linux  
+YaST
+1. Intelligent, centralized, and fine grained control over all aspects, despite upstream of DE.  
+2. Setup coverage beyond the DE: Networking, Samba, etc. that works well even headless.
+2. Ensures that the process is done right/completely, despite what the end-user thinks they understand about unix/linux  
+2. Leaves the user less in-the-dark than commandline, but still operates below the DE, and not total gui  
 
 **Downside(s)**  
 1. tutorials are more limited than more standard distro (centos, redhat, fedora, arch)  
 2. adds distro-specific stuff for the end-user to know about/learn  
-2. This layer is mostly gui  
-These aren't strong, but raise the flag of whether it is worth it for the (few) benefits.  
+These aren't strong, but raise the flag of whether the effort is worth the (few) benefits.  
 
 ### Getting started:
 **packages (util):**  
 `zypper in hplip nfs4-acl-tools git htop`  
-[markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)
 
 **packages (preference):**  
 `zypper in materia-gtk-theme paper-icon-theme`  
@@ -48,6 +50,10 @@ sudo zypper ref
 
 #### static ip:
 Use gateway ip for dns server address (& routing).  
+
+**YAST!**  
+Can invoke text-mode gui from terminal, and will help ensure that all is done right.  
+`yast`  
 
 CLI setup differs per service chosen  
 **If Wicked:**  
