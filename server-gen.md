@@ -90,3 +90,61 @@ smb://<ip_address>/<share_name> #Linux Access samba share
 \\<hostname>\<share_name> #Windows browse to samba share
 \\<ip_address>\<share_name> #Windows browse to samba share
 ```
+
+# Firewall(d)
+pre-defined zones: https://firewalld.org/documentation/zone/predefined-zones.html  
+
+**usage:** [[via reddit](https://www.reddit.com/r/openSUSE/comments/8pxbae/firewalld_on_leap_15_why_is_it_so_complicated/e0jvlar/)]
+>Unfortunately, firewalld and firewall-cmd were built for an enterprise Linux OS (RHEL) and so they seem designed to be used by a sysadmin rather than a user. Here's a quick primer:
+>
+>**zones:** These are just presets for settings. You define a zone with settings to allow services or ports and then you can assign one or more interfaces to the zone to apply the settings. This makes it easier to apply the same rules to multiple interfaces, or to define a default set of policies to be applied to any new interface (the "default zone"). firewalld ships with a default set of zones, but these are just suggested presets that can be changed. You can also create new zones with names of your choosing, but new users are encouraged to just make changes to the existing zones until they know what they are doing.
+>
+>**runtime vs. permanent:** firewalld uses two rule sets, runtime and permanent. Basically, the equivalent of Cisco's running-config vs. startup-config. If you add a rule without the --permanent option, it is only added for the current boot. If you reboot, the rule is lost. This allows you to test rules and if they completely hose you up a reboot of the server will put you back to the previous working state. There are a couple of ways to apply firewall rules:
+>
+>1. Add the same rule twice, once without --permanent to test, and then with --permanent to make the rule persistent.
+>
+>2. Add a rule once with --permanent and then firewall-cmd --reload to re-apply all permanent rules and discard any non-permanent rules. Just be sure you got the rule right when you entered it.
+>
+>3. Create your rules without --permanent and then save your current ruleset with firewall-cmd --runtime-to-permanent. This is sort of the equivalent of Cisco's copy run start.
+>
+>**Typical use case commands:**  
+>
+>`firewall-cmd --get-default-zone`  
+>Show the current default zone for new interfaces rules where --zone= is not specified.
+>
+>`firewall-cmd --set-default-zone=<zone>`  
+>Change the default zone to one of your choosing.
+>
+>`firewall-cmd --info-zone=<zone>`  
+>Show the settings for a zone.
+>
+>`firewall-cmd --zone=<zone> --change-interface=<interface> [--permanent]`  
+>Move an interface from one zone to another.
+>
+>Most zones (and especially a zone that is shipped as default, like 'public') are pre-configured to deny inbound traffic by default (outbound traffic is allowed by default). If certain inbound network traffic is to be permitted (for example, if you are running a webserver on your box), a rule has to be added explicitly. Typically, this is done by allowing 'services'. The pre-defined service set for the 'public' zone only allows SSH and DHCPv6 client traffic inbound (the basics).
+>
+>`firewall-cmd --get-services`  
+>Show a list of pre-defined rules for common network services. Applying a service to a zone is often the easiest way to allow access to a server application running on your machine (e.g. apache or vsftpd).
+>
+>`firewall-cmd --info-service=<service>`  
+>See the settings of a pre-defined service.
+>
+>`firewall-cmd --zone=<zone> --add-service=<service> [--permanent]`  
+>Add a service to a zone to allow access. You can add multiple services in the same command. For example, if you wanted to allow HTTP and HTTPS to your server you could issue the command:
+>
+>`firewall-cmd --zone=public --add-service=http --add-service=https --permanent`
+>The opposite of `--add-service` is `--remove-service`.  
+>
+>`firewall-cmd --zone=<zone> --remove-service=<service> [--permanent]`  
+>Removes a service from a zone.
+>
+>Sometimes you may want to allow something that isn't defined in a pre-existing service. You can create your own services if there is a need for multiple ports and/or protocols, but the easiest method for simple rules is to use `--add-port`:
+>
+>`firewall-cmd --zone=<zone> --add-port=<port>/<proto> [--permanent]`  
+>For example, if you needed to allow TCP port 8080 to your server, you might use:
+>
+>`firewall-cmd --zone=public --add-port=8080/tcp --permanent`  
+>As with services, `--remove-port` is the opposite of `--add-port`.
+>
+>`firewall-cmd --zone=<zone> --remove-port=<port>/<proto> [--permanent]`  
+>The above just scratches the surface of what firewalld can do. It's a very powerful and flexible tool, definitely one worth learning.
