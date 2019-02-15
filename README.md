@@ -4,25 +4,25 @@
 - [kodi (Fedora)](kodi-fedora.md)  
 - [kodi (openSUSE)](kodi-opensuse.md)  
 - [mdadm](mdadm.md)  
+- [Transmission (server)](server-trans.md)  
+- [Tvheadend](server-tvh.md)  
 
-### Distribution
+### Configuration
+- [config-fstab](fstab.md)  
+- [config-general](config.md)  
+- [server-General](server-gen.md)  
 - [Fedora](fedora.md)  
 - [OpenSUSE](opensuse.md)  
-
-### Server
-- [General](server-gen.md)  
-- [Tvheadend](server-tvh.md)  
-- [Transmission](server-trans.md)  
 
 ### History
 
 Distribution version | DE | Initial Date | notes  
 --: | :--: | :--: | :--  
-**openSUSE tumbleweed** | Gnome | 2019/02 | rolling,zypper,clean/simple/easy DE,PakAvl+,ComSup+  
-+**Fedora** | Server | 2017/09 | installed on Optiplex 3010 as Media Server and DVR backend  
-**Fedora** | Gnome | 2016/11 | dnf,clean/simple/easy DE,PakAvl+,ComSup+,builds android  
-**Elementary** | Pantheon | 2016/09 | Beautiful OS,lightweight,OBF+,UB,over-simplified/over-limited controls  
-+**openSUSE tumbleweed** | KDE | 2016/09 | brilliant package management,rolling,ComSup+,PakAvl+, over-thinks & duplicates DE features,can’t get multimedia support right  
+**openSUSE tumbleweed** | Gnome (+Server) | 2019/02 | rolling,zypper,snapper,yast,Docs,ComSup+,PakAvl+  
++**Fedora** | (Server) | 2017/09 | installed as Media Server and DVR backend  
+**Fedora** | Gnome | 2016/11 | dnf,PakAvl+,ComSup+,builds android  
+**Elementary** | Pantheon | 2016/09 | Beautiful OS,lightweight,OBF+,UB,over-simplified/over-limited settings  
++**openSUSE tumbleweed** | KDE | 2016/09 | zypper,rolling,ComSup+,PakAvl+, over-thinks & duplicates DE features,can’t get multimedia support right  
 **Manjaro** | KDE | 2016/08 | OBF++,PakAvl+,ComSup+,rolling+,proprietary support+, KDE: pretty, but too-much menu-bars, scattered settings  
 **Mint** | Cinnamon | 2016/03 | OBF++,UB, looks/feels dated  
 **Ubuntu** | Unity | 2014/09 | OBF+,ComSup+,PakAvl+, but _despise_ AptGet and Unity  
@@ -34,7 +34,6 @@ Distribution version | DE | Initial Date | notes
 
 ### Archive
 - [colorspace](colorspace.md)  
-- [fstab](fstab.md)  
 - [nvidia](nvidia.md)  
 
 [markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)
