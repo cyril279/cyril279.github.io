@@ -118,5 +118,5 @@ shrink filesystem: resize2fs to-size
 shrink (reshape) raid vol: mdadm --grow  
 shrink partition by delete/recreation: gdisk  
 
-> Written with [StackEdit](https://stackedit.io/).
+[Add & grow an array](https://superuser.com/questions/1061516/extending-raid-1-array-with-different-size-disks)  
 

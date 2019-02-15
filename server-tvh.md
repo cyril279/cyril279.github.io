@@ -14,6 +14,17 @@ hostname:9981 :: [ref_01](https://www.linuxserver.io/2017/02/19/how-to-set-up-tv
 
 **openSUSE:**  
 `zypper in  tvheadend`  
+not smooth. stock installation works except wizard runs again at each reboot. config info wasn't stored.  
+
+/etc/passwd showed that user directory was pointed at /var/lib/tvheadend, so user files had been put there.  
+created /home/.hts  
+moved the user files there-to  
+chown hts:video  
+point /etc/passwd to new home, and config is now stored.  
+I like the idea of everything living in /var/tvheadend, because containment.  
+maybe will move the user files back and see what blows up?  
+
+useradd -m tvheadend #adds user and creates /home/tvheadend directory  
 
 ---------
   
@@ -138,34 +149,19 @@ On the kodi device, a successful setup&scan generates settings & configuration f
 Migrating the setup to be managed by a (headless) tvheadend backend/server involves two steps:
 
 1.  Copying the kodi-configured (& tested) addon for tvheadend server usage
-    
-
--   Copy the contents of .kodi/addons/script.module.zap2epg (core addon files) to user@serverip:/home/tvheadend/script.module.zap2epg
-    
--   Copy the contents of .kodi/userdata/../addon_data/script.module.zap2epg (configuration and settings) to user@serverip:/home/tvheadend/script.module.zap2epg
-    
+-   Copy the contents of .kodi/addons/script.module.zap2epg (core addon files) to user@serverip:/var/lib/tvheadend/script.module.zap2epg
+-   Copy the contents of .kodi/userdata/../addon_data/script.module.zap2epg (configuration and settings) to user@serverip:/var/lib/tvheadend/script.module.zap2epg
 
 3.  Setting up the tv_grab_file
-    
 
 -   settings.xml: change ip address to loopback address, to mitigate ip change woes.
-    
 -   script.module.zap2epg/bin/tv_grab_zap2epg:
-    
-
--   ADDON_HOME & ADDON_DIR: Modify to the actual location of the addon files
-    
+-   ADDON_HOME & ADDON_DIR: Modify to the actual location of the addon files  
+/var/lib/tvheadend  
 -   copy to /usr/bin/
-    
-
 -   Systemctl restart tvheadend #make tvheadend notice grabber additions/changes
-    
 -   Enable tv_grab_zap2epg in tvheadend [ configuration > channel/epg > EPG Grabber Modules ]
-    
--   Edit cron frequency [ configuration > channel/epg > EPG Grabber > Internal Grabber ]
-    
-
-  
+-   Edit cron frequency [ configuration > channel/epg > EPG Grabber > Internal Grabber ]  
 
 ssh -A -t kodi@kodibox scp -r /home/kodi/.kodi/addons/script.module.zap2epg cyril@192.168.0.13:/home/tvheadend/
 

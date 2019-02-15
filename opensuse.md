@@ -2,23 +2,27 @@
 **Why openSUSE (vs.Fedora):**  
 1. Rolling  
 2. zypper  
+2. yast!
+2. snapper
 2. nicely decorated bash  
 2. other little items already installed/work out of box (so what else have I been missing?)  
-  a. firefox flash  
-  b. chrome-gnome stuff  
-  c. more ir codes  
+  a. chrome-gnome stuff  
+  b. more ir codes  
 
-**openSUSE** adds a gui/management layer in between the DE and the underlying OS.  
+**openSUSE** adds a management layer (yast) in between the DE and the underlying OS.  
 
 **Upside(s):**  
-1) because openSUSE has intelligent, centralized, and fine grained control over all aspects, despite upstream of DE.  
-2) using the tools ensure that the process is done right/completely, despite what the end-user thinks they understand about unix/linux  
+YaST
+1. Intelligent, centralized, and fine grained control over all aspects, despite upstream of DE.  
+2. Setup coverage beyond the DE: Networking, Samba, etc. that works well even headless.
+2. Ensures that the process is done right/completely, despite what the end-user thinks they understand about unix/linux  
+2. Leaves the user less in-the-dark than commandline, but still operates below the DE, and not total gui  
 
 **Downside(s)**  
-1) tutorials are more limited than more standard distro (centos, redhat, fedora, arch)
-2) adds distro-specific stuff for the end-user to know about/learn 
-2) This layer is mostly gui  
-These aren't strong, but raise the flag of whether it is worth it for the (few) benefits.  
+1. tutorials are more limited than more standard distro (centos, redhat, fedora, arch)  
+2. adds distro-specific stuff for the end-user to know about/learn  
+These aren't strong, but raise the flag of whether the effort is worth the (few) benefits.  
+
 ### Getting started:
 **packages (util):**  
 `zypper in hplip nfs4-acl-tools git htop`  
@@ -33,28 +37,9 @@ sudo zypper ar -f http://ftp.gwdg.de/pub/opensuse/repositories/multimedia:/libs/
 sudo zypper ref
 ```
 ### Configuration:
-#### NFS/ACL:
-**fstab mount options for NFS shares:**  
-`defaults,x-systemd.automount,x-systemd.requires=network-online.target`  
-ensures that NFS shares are mounted upon resume  
-ref:[Arch wiki: Mount using /etc/fstab with systemd](https://wiki.archlinux.org/index.php/NFS#Mount_using_/etc/fstab_with_systemd)  
-
-**add relevant groups**  
-append groups to users appropriately  
-(see [Fileshare] for details)  
-
-_/etc/idmapd.conf_  
-**uncomment & enter domain-name** <- same name as used in server idmapd.conf  
-```
-Domain = sameDomainNameHere
-```
-**Enable (& start) rcpbind service**  
-`systemctl enable rpcbind`  
-`systemctl start rpcbind`  
 #### NetworkManager vs. Wicked:  
 - for laptop? NetworkManager. full stop.  
 - I like the configurability of Wicked, but it lacks gnome integration (applet)  
-- Wicked (so far, for kodibox) shows no significant advantage over NM  
 **Service switch (to [Wicked])**  
 `systemctl status network` #show/verify which service is managing the network, and its status  
 `systemctl stop network` #stop the network (& assigned services)  
@@ -64,9 +49,29 @@ Domain = sameDomainNameHere
 `systemctl status network`  #show/verify which service is managing the network, and its status  
 
 #### static ip:
-Use gateway ip for dns server address, if needed.  
+Use gateway ip for dns server address (& routing).  
 
-CLI setup differs per service chosen"  
+**YAST!**  
+Can invoke text-mode gui from terminal, and will help ensure that all is done right.  
+`yast`  
+
+CLI setup differs per service chosen  
+**If Wicked:**  
+_/etc/sysconfig/network/ifcfg-p4p1_  
+``` 
+BOOTPROTO='static'  
+STARTMODE='auto'  
+IPADDR='192.168.9.14/24'  
+```
+_/etc/sysconfig/network/routes_  
+``` 
+default 192.168.9.1 - -  
+```
+_/etc/sysconfig/network/config_  
+```
+NETCONFIG_DNS_STATIC_SERVERS="192.168.9.1"  
+```
+ 
 **If NetworkManager**, ~[three files need to be modified](https://forums.opensuse.org/showthread.php/431523-Configure-Static-Ip-using-the-Terminal?p=2109330#post2109330) if not done through the gui.  
 
 > You need to edit three files:  
@@ -89,7 +94,7 @@ CLI setup differs per service chosen"
 > nameserver 192.168.2.1  
 > ```
 
-And then this gem of advice:  
+This gem of advice:  
 > Another idea, not nearly as geeky or sexy, would be to enter "yast" at that terminal prompt, then use the arrow and tab keys to get to Network Devices -> Network Settings.  
 > 
 > If you insist on knowing how to do it manually, just look at the contents of the files named above *after* you use Yast to see what it did.  
