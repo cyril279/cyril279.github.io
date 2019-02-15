@@ -108,3 +108,10 @@ https://github.com/openSUSE/wicked/blob/master/README
 [Fileshare]: ../html/fileshare.html#acl-setup
 [Wicked]: https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.network.html#sec.network.manconf.using_wicked
 
+# xfce
+less graphically demanding on old hardware.  
+Do this on top of gnome, because I still prefer the minimal presentation of gtk applications.  
+`sudo zypper in xfce4-session yast2-alternatives papirus-icon-theme`  
+in yast > misc > alternatives, switch from gdm to lightdm  
+set keyboard shortcut `xfce4-popup-whiskermenu` to super-key  
+
