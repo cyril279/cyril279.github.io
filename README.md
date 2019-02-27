@@ -18,7 +18,7 @@
 
 Distribution version | DE | Initial Date | notes  
 --: | :--: | :--: | :--  
-**openSUSE tumbleweed** | Gnome (+Server) | 2019/02 | rolling,zypper,snapper,yast,Docs,ComSup+,PakAvl+  
+**openSUSE tumbleweed** | Gnome Xfce (+Server) | 2019/02 | rolling,zypper,snapper,yast,Docs,ComSup+,PakAvl+  
 +**Fedora** | (Server) | 2017/09 | installed as Media Server and DVR backend  
 **Fedora** | Gnome | 2016/11 | dnf,PakAvl+,ComSup+,builds android  
 **Elementary** | Pantheon | 2016/09 | Beautiful OS,lightweight,OBF+,UB,over-simplified/over-limited settings  
