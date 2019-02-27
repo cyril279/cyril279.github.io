@@ -1,9 +1,6 @@
 # Multi-boot usb
-Arch-wiki shows two methods:  
-1. Using GRUB and loopback devices  
-2. Using Syslinux and memdisk  <- not works for uefi
-
-[live-grub-stick](https://github.com/cyberorg/live-fat-stick)  
+let's have our standard util iso's on one usb.  
+clonezilla, gparted, etc...  
 
 ## [MultiBoot USB](https://mbusb.aguslr.com/)  
 git clone the project, then from within the folder, prepare the usb.  
@@ -33,20 +30,3 @@ error 'Could not find resource 'data/tools/gptmbr.bin''
 
 *works, but only from legacy boot menu.  
 uefi grub would not progress into either program. MeThinks because usb was created on bios machine; relevant efi files were not available?  
-
-## (not) [live-grub-stick](https://software.opensuse.org/package/live-grub-stick)  
-gdisk, create single partition, type 0700  
-'makefs.vfat /dev/sdx#'  
-'su -c 'live-grub-stick /path/to/file.iso /dev/sdx#''  
-then per instructions, I add subsequent iso's:  
-'su -c 'live-grub-stick --isohybrid gparted-live-0.33.0-1-amd64.iso /dev/sdc1''  
-**didn't work.**  
-
-## (not) [liveusb-builder](https://github.com/mytbk/liveusb-builder)  
-must actually follow instructions.  
-udevil from: https://software.opensuse.org/download.html?project=home%3AAndnoVember%3Atest&package=udevil  
-aw, **apparently only works with its own list of distributions.**  
-`./buildlive --boot /media/boot --root /media/root/ -L`  
-yields specific list, which explains the `isoinfo not found` error when pointed directly to an iso.  
-
-
