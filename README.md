@@ -35,4 +35,6 @@ budgie	|	Gnom-ish but: snappier, more centralized settings	| limited availabilit
 - [colorspace](colorspace.md)  
 - [nvidia](nvidia.md)  
 
-[markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)
+### bookmarks
+[markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)  
+[PineBook PRO (laptop)](https://forum.pine64.org/showthread.php?tid=7093&pid=43850#pid43850) <- not yet available as of 2019/03/05  
