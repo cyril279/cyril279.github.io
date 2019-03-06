@@ -10,9 +10,10 @@
 ### Configuration
 - [config-fstab](fstab.md)  
 - [config-general](config.md)  
-- [server-General](server-gen.md)  
+- [Desktop Environment Preferences](DE.md)
 - [Fedora](fedora.md)  
 - [OpenSUSE](opensuse.md)  
+- [server-General](server-gen.md)  
 
 ### NOTES
 
