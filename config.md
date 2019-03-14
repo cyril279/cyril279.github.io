@@ -89,3 +89,61 @@ smb://<ip_address>/<share_name> #Linux Access samba share
 \\<hostname>\<share_name> #Windows browse to samba share
 \\<ip_address>\<share_name> #Windows browse to samba share
 ```
+
+#### _dobackup.sh:_
+```
+#!/bin/sh
+
+sourceDir=""
+destDir=""
+allVariablesSet=false
+
+if [[ -z $1 ]] || [[ -z $2 ]] ; then
+	allVariablesSet=false
+	echo ""
+	echo "one (or both) of the input variables is (are) empty"
+	echo "Usage: dobackup.sh [option] [source hostname/ip]"
+	echo "Options: docs|pics|diskimg|all"
+	echo ""
+elif [[ $1 = "docs" ]];	then
+	sourceDir="share/Documents"
+	destDir="docs"
+	allVariablesSet=true
+elif [[ $1 = "img" ]];	then
+	echo ""
+	echo "consider re-naming source directory as 'image'"
+	sourceDir="backup"
+	destDir="image"
+	allVariablesSet=true
+elif [[ $1 = "pics" ]];	then
+	sourceDir="share/Pictures"
+	destDir="pics"
+	allVariablesSet=true
+else
+	allVariablesSet=false
+	echo ""
+	echo "Invalid option selected"
+	echo "Usage: dobackup.sh [option] [source hostname/ip]"
+	echo "Options: docs|pics|img"
+	echo ""
+fi
+
+# Sync only if all variables are actually defined.
+if [[ -z $sourceDir ]]; then
+	allVariablesSet=false
+	echo ""
+	echo "all necessary variables not defined, exiting script"
+	echo "Usage: dobackup.sh [option] [source hostname/ip]"
+	echo "Options: docs|pics|diskimg|all"
+	echo ""
+elif [[ $allVariablesSet = true ]]; then
+	echo ""
+	echo "Syncing '$sourceDir' files from hostname/IP '$2'"
+	echo ""
+	echo "echoing: sudo rsync -avhz --delete -e ssh cyril@$2:/storage/$sourceDir	/storage/backup/$destDir"
+	echo "perform: sudo rsync -avhz --delete -e ssh cyril@$2:/storage/$sourceDir	/storage/backup/$destDir"
+	echo "Time: $(date -Iminutes)" >> timestamp.log
+	echo ""
+fi
+```
+
