@@ -11,7 +11,8 @@ keeper:x:1308:cyril
 `grep 'group-name-here' /etc/group`  
 
 **Config:**
- +	| gid | cyril | kodi | tvheadend
+
+name | gid | cyril | kodi | tvheadend
 ---:	|:---:|:---:|:---:|---
 docs | 1305 | x | x | -
 media | 1306 | x | x | x
