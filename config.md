@@ -102,47 +102,50 @@ destPath="/storage/backup/"
 
 sourceDir=""
 destDir=""
-allVariablesSet=false
 response=""
 rsyncCommand=""
 
 # define variables per inputs provided
 # output message if variable is missing or invalid
-if [ -z "$1" ]; then
-	allVariablesSet=false
+# case example: https://www.tldp.org/LDP/Bash-Beginners-Guide/html/sect_09_05.html
+
+case $1 in
+	docs )
+	sourceDir="share/Documents/"
+	destDir="docs/"
+#	echo "case choice: McStuffins"
+	;;
+	diskImg )
+	sourceDir="diskImg/"
+	destDir="diskImg/"
+#	echo "case choice: disc image"
+	;;
+	pics )
+	sourceDir="share/Pictures/"
+	destDir="pics/"
+#	echo "case choice: Pritchard"
+	;;
+	"" )
 	echo ""
 	echo "**Missing input variable**"
 	echo "Usage: dobackup.sh [option]"
 	echo "Options: docs|pics|diskimg"
-elif [ "$1" = "docs" ]; then
-	sourceDir="share/Documents/"
-	destDir="docs/"
-	allVariablesSet=true
-elif [ "$1" = "diskImg" ]; then
-	sourceDir="diskImg/"
-	destDir="diskImg/"
-	allVariablesSet=true
-elif [ "$1" = "pics" ]; then
-	sourceDir="share/Pictures/"
-	destDir="pics/"
-	allVariablesSet=true
-else
-	allVariablesSet=false
+	;;
+	* )
 	echo ""
 	echo "Invalid option selected"
 	echo "Usage: dobackup.sh [option]"
 	echo "Options: docs|pics|diskImg"
-fi
+	;;
+esac
 
-# Sync only if all variables are actually defined.
+# Check if all script internal variables are actually defined
+# If all good, prompt for verification, and respond accordingly
 if [ -z "$sourceDir" ] || [ -z "$destDir" ]; then
-	allVariablesSet=false
 	echo ""
-	echo "all necessary variables not defined, exiting script"
-	echo "Usage: dobackup.sh [option]"
-	echo "Options: docs|pics|diskimg"
+	echo "Script variable(s) not defined, exiting..."
 	echo ""
-elif [ "$allVariablesSet" = true ]; then
+else
 	rsyncCommand="sudo rsync -avhz --delete -e ssh $sshPath$sourcePath$sourceDir	$destPath$destDir"
 	echo ""
 	echo "Syncing: $sourcePath$sourceDir"
@@ -171,7 +174,6 @@ sourceMachine=""
 sshPath=""
 sourcePath=""
 destPath=""
-allVariablesSet=false
 destDir=""
 rsyncCommand=""
 sourceDir=""
