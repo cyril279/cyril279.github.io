@@ -103,6 +103,7 @@ destPath="/storage/backup/"
 sourceDir=""
 destDir=""
 allVariablesSet=false
+response=""
 rsyncCommand=""
 
 # define variables per inputs provided
@@ -113,16 +114,15 @@ if [ -z "$1" ]; then
 	echo "**Missing input variable**"
 	echo "Usage: dobackup.sh [option]"
 	echo "Options: docs|pics|diskimg"
-	echo ""
-elif [ "$1" = "docs" ];	then
+elif [ "$1" = "docs" ]; then
 	sourceDir="share/Documents/"
 	destDir="docs/"
 	allVariablesSet=true
-elif [ "$1" = "diskImg" ];	then
+elif [ "$1" = "diskImg" ]; then
 	sourceDir="diskImg/"
 	destDir="diskImg/"
 	allVariablesSet=true
-elif [ "$1" = "pics" ];	then
+elif [ "$1" = "pics" ]; then
 	sourceDir="share/Pictures/"
 	destDir="pics/"
 	allVariablesSet=true
@@ -132,7 +132,6 @@ else
 	echo "Invalid option selected"
 	echo "Usage: dobackup.sh [option]"
 	echo "Options: docs|pics|diskImg"
-	echo ""
 fi
 
 # Sync only if all variables are actually defined.
@@ -150,13 +149,24 @@ elif [ "$allVariablesSet" = true ]; then
 	echo "Hostname/IP: $sourceMachine"
 	echo "As user: $USER"
 	echo ""
-	echo $rsyncCommand
-	echo "running: $rsyncCommand"
-	echo "Time: $(date -Iminutes)" >> timestamp.log
+	echo "Do you wish to run:"
+	echo " $rsyncCommand "
+	select response in "Yes" "No"; do
+	    case $response in
+	        Yes )
+			echo "sync, because the response was yes"
+			echo "Time: $(date -Iminutes) :: $1" >> timestamp.log
+			break ;;
+	        No )
+			echo "Okay, then let's not"
+			break ;;
+	    esac
+	done
 	echo ""
 fi
 
 # Clear/reset all variables
+response=""
 sourceMachine=""
 sshPath=""
 sourcePath=""
