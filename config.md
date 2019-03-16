@@ -113,17 +113,14 @@ case $1 in
 	docs )
 	sourceDir="share/Documents/"
 	destDir="docs/"
-#	echo "case choice: McStuffins"
 	;;
 	diskImg )
 	sourceDir="diskImg/"
 	destDir="diskImg/"
-#	echo "case choice: disc image"
 	;;
 	pics )
 	sourceDir="share/Pictures/"
 	destDir="pics/"
-#	echo "case choice: Pritchard"
 	;;
 	"" )
 	echo ""
@@ -146,7 +143,7 @@ if [ -z "$sourceDir" ] || [ -z "$destDir" ]; then
 	echo "Script variable(s) not defined, exiting..."
 	echo ""
 else
-	rsyncCommand="sudo rsync -avhz --delete -e ssh $sshPath$sourcePath$sourceDir	$destPath$destDir"
+	rsyncCommand="rsync -avhz --delete -e ssh $sshPath$sourcePath$sourceDir	$destPath$destDir"
 	echo ""
 	echo "Syncing: $sourcePath$sourceDir"
 	echo "Hostname/IP: $sourceMachine"
@@ -156,13 +153,15 @@ else
 	echo " $rsyncCommand "
 	select response in "Yes" "No"; do
 	    case $response in
-	        Yes )
-			echo "sync, because the response was yes"
-			echo "Time: $(date -Iminutes) :: $1" >> timestamp.log
-			break ;;
-	        No )
-			echo "Okay, then let's not"
-			break ;;
+		Yes )
+		$rsyncCommand
+		echo "Time: $(date -Iminutes) :: $1" >> timestamp.log
+		break
+		;;
+		No )
+		echo "Okay, then let's not"
+		break
+		;;
 	    esac
 	done
 	echo ""
