@@ -97,8 +97,10 @@ smb://<ip_address>/<share_name> #Linux Access samba share
 
 sourceMachine="dubserv"
 sshPath="$USER@$sourceMachine:"
-sourcePath="/storage/"
-destPath="/storage/backup/"
+srcPathPrefix="/storage/"
+destPathPrefix="/storage/backup/"
+bold=$(tput bold)
+normal=$(tput sgr0)
 
 sourceDir=""
 destDir=""
@@ -118,6 +120,10 @@ case $1 in
 	sourceDir="diskImg/"
 	destDir="diskImg/"
 	;;
+	music )
+	sourceDir="share/Music/"
+	destDir="Music/"
+	;;
 	pics )
 	sourceDir="share/Pictures/"
 	destDir="pics/"
@@ -126,13 +132,13 @@ case $1 in
 	echo ""
 	echo "**Missing input variable**"
 	echo "Usage: dobackup.sh [option]"
-	echo "Options: docs|pics|diskimg"
+	echo "Options: docs|pics|music|diskimg"
 	;;
 	* )
 	echo ""
 	echo "Invalid option selected"
 	echo "Usage: dobackup.sh [option]"
-	echo "Options: docs|pics|diskImg"
+	echo "Options: docs|pics|music|diskImg"
 	;;
 esac
 
@@ -143,22 +149,23 @@ if [ -z "$sourceDir" ] || [ -z "$destDir" ]; then
 	echo "Script variable(s) not defined, exiting..."
 	echo ""
 else
-	rsyncCommand="rsync -avhz --delete -e ssh $sshPath$sourcePath$sourceDir	$destPath$destDir"
+	rsyncCommand="rsync -avhz --delete -e ssh $sshPath$srcPathPrefix$sourceDir	$destPathPrefix$destDir"
 	echo ""
-	echo "Syncing: $sourcePath$sourceDir"
-	echo "Hostname/IP: $sourceMachine"
-	echo "As user: $USER"
+	echo "Syncing: ${bold}$srcPathPrefix$sourceDir${normal}"
+	echo "Hostname/IP: ${bold}$sourceMachine${normal}"
+	echo "As user: ${bold}$USER${normal}"
 	echo ""
 	echo "Do you wish to run:"
-	echo " $rsyncCommand "
+	echo "${bold}$rsyncCommand${normal}"
+	echo ""
 	select response in "Yes" "No"; do
 	    case $response in
-		Yes )
+	        Yes )
 		$rsyncCommand
 		echo "Time: $(date -Iminutes) :: $1" >> timestamp.log
 		break
 		;;
-		No )
+	        No )
 		echo "Okay, then let's not"
 		break
 		;;
@@ -171,8 +178,8 @@ fi
 response=""
 sourceMachine=""
 sshPath=""
-sourcePath=""
-destPath=""
+srcPathPrefix=""
+destPathPrefix=""
 destDir=""
 rsyncCommand=""
 sourceDir=""
