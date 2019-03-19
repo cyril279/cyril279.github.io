@@ -1,4 +1,5 @@
 ### Method
+- [Budgie-10.5@openSUSE](budgieSUSE.md)
 - [fileshare](fileshare.md)  
 - [HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
 - [kodi (Fedora)](kodi-fedora.md)  
@@ -29,7 +30,7 @@ Distribution	|	the good |	the bad
 **Desktop Environment**	|	**the good**	|	**the bad**
 gnome	|	beautiful, minimalist approach, gtk4/csd | resource hog (functions, but not as graphically snappy on older hardware)
 xfce	|	light on resources, graphically snappy, runs csd apps | not as cohesive as gnome
-budgie	|	Gnom-ish but: snappier, more centralized settings	| limited availability outside of solus, arch, & ubuntu
+budgie	|	GNOME-like but snappier, more cohesive than XFCE	| less cohesive than GNOME, less snappy than XFCE, less mature/complete than both
 
 ### Archive
 - [colorspace](colorspace.md)  
