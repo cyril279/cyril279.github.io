@@ -41,6 +41,8 @@ The `left|traditional` option is chosen in [com.solus-project.budgie-wm.ButtonPo
 methinks that an additional `case argument` named `gnome` is appropriate, but perhaps must be defined prior to the build?  
 I can't find it in the OS  
 
+****** or re-define one of these existing (useless) cases******  
+
 _settings_wm.vala_  
 ```
         /* Button layout  */
