@@ -14,10 +14,13 @@ per [using the script](https://mbusb.aguslr.com/install.html#using-the-script):
 WoeUSB (gui tool)  
 Windows USB installation media creator for the gnu/linux platform  
 `sudo zypper in WoeUSB`  
+commandline usage example:
+`sudo woeusb --workaround-bios-boot-flag -d Windows1809ALL.iso /dev/sdc`  
+workaround flag ensures that the boot flag is set, because many legacy bios will skip the device if the flag is not set.  
+It is unclear why [this is not enabled by default](https://github.com/slacka/WoeUSB/issues/193).  
 
 ## Bootable USB issues:
 - GPT not recognised  
-- volume/device size not recognized (4gb seems to be the max for some ~2012 devices)  
 
 ## Volume label:
 https://www.tecmint.com/change-modify-linux-disk-partition-label-names/  
