@@ -1,10 +1,10 @@
 ### Method
-- [Budgie-10.5@openSUSE](budgieSUSE.md)
+- [Budgie-10.5@openSUSE](budgieSUSE.md)  
+- [eye-Candy-tweaky-nonsense](candy.md)  
 - [fileshare](fileshare.md)  
 - [HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
 - [Kodi](kodi-gen.md)  
 - [mdadm](mdadm.md)  
-- [Open CASCADE JT Assistant](jtviewer.md)  
 - [Transmission (server)](server-trans.md)  
 - [Tvheadend](server-tvh.md)  
 - [USB (Bootable & MultiBoot)](multiboot-usb.md)  
@@ -36,6 +36,7 @@ budgie	|	GNOME-like but snappier, more cohesive than XFCE	| less cohesive than G
 ### Archive
 - [colorspace](colorspace.md)  
 - [nvidia](nvidia.md)  
+- [Open CASCADE JT Assistant](jtviewer.md)  
 
 ### bookmarks
 [markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)  
