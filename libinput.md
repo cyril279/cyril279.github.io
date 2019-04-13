@@ -106,6 +106,8 @@ E: LIBINPUT_FUZZ_35=8
 E: LIBINPUT_FUZZ_36=8
 E: DEVLINKS=/dev/input/by-path/platform-i8042-serio-1-event-mouse
 ```
+>The actual hwdb is stored in binary file on-disk and must be updated manually whenever a .hwdb file changes  
+
 restarting hardware database:  
 1. update the binary  
 `sudo systemd-hwdb update`  
@@ -113,6 +115,8 @@ restarting hardware database:
 `sudo udevadm trigger /sys/class/input/event1`  
 3. verify changes:  
 `udevadm info /sys/class/input/event1 `  
+
+ref: https://wayland.freedesktop.org/libinput/doc/latest/device-configuration-via-udev.html#reloading-the-hwdb  
 
 
 
