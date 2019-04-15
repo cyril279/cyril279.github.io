@@ -7,7 +7,7 @@
 - [mdadm](mdadm.md)  
 - [Transmission (server)](server-trans.md)  
 - [Tvheadend](server-tvh.md)  
-- [USB (Bootable & MultiBoot)](multiboot-usb.md)  
+- [USB (Bootable & MultiBoot)](bootableUSB.md)  
 
 ### Configuration
 - [config-fstab](fstab.md)  

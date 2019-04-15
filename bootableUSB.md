@@ -1,8 +1,14 @@
-# Multi-boot usb
+# Bootable USB how-to's
+
+- [MultiBoot USB](#multiboot-usb-)  
+- [Windows USB](#windows-usb-)  
+- [Update PC BIOS](#update-pc-bios)  
+- [Volume label](#volume-label-)  
+
+## [MultiBoot USB](https://mbusb.aguslr.com/):  
 let's have our standard util-iso's on one usb.  
 clonezilla, gparted, etc...  
 
-## [MultiBoot USB](https://mbusb.aguslr.com/):  
 git clone the project, then from within the folder, prepare the usb.  
 per [using the script](https://mbusb.aguslr.com/install.html#using-the-script):  
 `./makeUSB.sh -b -e /dev/sdc ext4`
@@ -19,8 +25,8 @@ commandline usage example:
 workaround flag ensures that the boot flag is set, because many legacy bios will skip the device if the flag is not set.  
 It is unclear why [this is not enabled by default](https://github.com/slacka/WoeUSB/issues/193).  
 
-## Update BIOS (DELL)
-FreeDos ([per ArchWiki]):  
+## Update PC BIOS
+FreeDos [(per ArchWiki)]:  
 **Procedure:**  
 1. Grab the `USB "Full" installer` from http://www.freedos.org/download/
 2. Extract the archive, locate the .img file
