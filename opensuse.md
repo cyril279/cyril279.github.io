@@ -94,6 +94,13 @@ less graphically demanding on old hardware.
 in yast > misc > alternatives, switch from gdm to lightdm  
 set keyboard shortcut `xfce4-popup-whiskermenu` to super-key  
 
-#### notes: unverified:  
-laptop broadcom wifi?  
-Enable Packman (yast) and install the broadcom-wl package.  
+## WIP: Scanner recognition:
+printer was setup easily via cups or socket/port (verified working), but scanner app does not recognize scanner.
+
+>> [start here](https://forums.opensuse.org/showthread.php/518777-Adding-HP-ENVY-4500-scanner) <<  
+...sounds most like what I am currently experiencing.  
+
+verify that `/etc/hosts` has `envy212` assigned to `192.168.9.212`
+
+from `HP Device Manager`, connecting usb is only to get the printer on the network?  
+In theory, once the printer is on the network then we can use `hp-setup envy212` to directly add the printer to the local setup  
