@@ -94,13 +94,19 @@ less graphically demanding on old hardware.
 in yast > misc > alternatives, switch from gdm to lightdm  
 set keyboard shortcut `xfce4-popup-whiskermenu` to super-key  
 
-## WIP: Scanner recognition:
-printer was setup easily via cups or socket/port (verified working), but scanner app does not recognize scanner.
+## Scanner setup:
+**CUPS:**  
+Printer is easily added & setup via socket/port (verified working), but scanner app does not recognize scanner.
 
->> [start here](https://forums.opensuse.org/showthread.php/518777-Adding-HP-ENVY-4500-scanner) <<  
-...sounds most like what I am currently experiencing.  
+**HPLIP:**  
+1. connect HP printer to network  
+Involves USB connection (Linux or Windows)  
+`hp-setup`
+  - assign static IP  
+  - assign alias on local machine via `/etc/hosts`  
+2. Add/configure printer on local machine  
+`hp-setup envy212`  
+3. Add scanner via `YaST scanner tool`  
+`yast > hardware > scanner`  
+assign appropriate driver (hpaio) to newly recognized device
 
-verify that `/etc/hosts` has `envy212` assigned to `192.168.9.212`
-
-from `HP Device Manager`, connecting usb is only to get the printer on the network?  
-In theory, once the printer is on the network then we can use `hp-setup envy212` to directly add the printer to the local setup  
