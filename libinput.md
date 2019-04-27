@@ -69,7 +69,7 @@ AttrPressureRange=25:24
 ```
 
 per [jitter section]:
-_/usr/lib/udev/hwdb.d/99-touchpad-fuzz-override.hwdb_
+_/etc/udev/hwdb.d/99-touchpad-fuzz-override.hwdb_
 ```
 # DellInc. SynPS/2 Synaptics TouchPad
 evdev:name:SynPS/2 Synaptics TouchPad:dmi:*svnDellInc.:pnInspiron5423*
