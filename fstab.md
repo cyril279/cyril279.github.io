@@ -50,8 +50,7 @@ https://wiki.archlinux.org/index.php/samba#As_systemd_unit
 #
 UUID=6eb4b0d6-ae28-45c0-b47c-bb34cab12ff9 / xfs defaults 0 0
 UUID=47f029ca-da8a-4b0c-a94f-f341d669607b swap swap defaults 0 0
-dubserv:/storage/share /storage/share nfs defaults 0 0
-dubserv:/storage/workshop /storage/workshop nfs defaults 0 0
+dubserv:/storage/share /storage/share nfs defaults,x-systemd.automount    0 0
 ```  
 -------
 **[cyril@kodibox ~]**$ cat /etc/fstab  
