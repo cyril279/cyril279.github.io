@@ -1,11 +1,13 @@
 # Bootable USB how-to's
 
-- [MultiBoot USB](#multiboot-usb-)  
-- [Windows USB](#windows-usb-)  
+- [MultiBoot USB](#multiboot-usb)  
+- [Windows USB](#windows-usb)
+- [Clonezilla (installed to hdd)](#clonezilla-install-to-hard-disk)
 - [Update PC BIOS](#update-pc-bios)  
-- [Volume label](#volume-label-)  
+- [Volume label](#volume-label)  
 
-## [MultiBoot USB](https://mbusb.aguslr.com/):  
+## MultiBoot USB
+https://mbusb.aguslr.com/  
 let's have our standard util-iso's on one usb.  
 clonezilla, gparted, etc...  
 
@@ -16,7 +18,7 @@ per [using the script](https://mbusb.aguslr.com/install.html#using-the-script):
 **Get bootable files**  
 >Once you have a bootable USB drive, it only remains to copy the bootable files (ISO or kernel) to the pendrive. [...] save them into $mntusb/boot/isos.  
 
-## Windows USB:
+## Windows USB
 WoeUSB (gui tool)  
 Windows USB installation media creator for the gnu/linux platform  
 `sudo zypper in WoeUSB`  
@@ -30,9 +32,10 @@ https://clonezilla.org/livehd.php
 
 - Decide mount/boot location (could be separate partition or space on local drive)
 - Download clonezilla.zip
-- unzip clonezilla to chosen directory
+- unzip clonezilla to chosen directory  
   `unzip /path/of/clonezilla.zip -d /chosen/directory/`
-- Rename `/chosen/directory/live` to `/chosen/directory/live-hd`
+- Rename _live_ to _live-hd_  
+  `mv /chosen/directory/live /chosen/directory/live-hd`
 - Append [grub] menuentry to `/etc/grub.d/40_custom`
 ```
 menuentry "Clonezilla" {
@@ -72,10 +75,7 @@ Once you are in the FreeDOS live installation environment:
   - author note: in the case of the Dell tool, the machine displayed a spash screen and then rebooted. Upon reboot, it started the firmware upgrade automatically, and ran for about 2 minutes with the fan at full speed)
 2. Once the process specific to your vendor completes, optionally verify through the BIOS setup screen, as well as by running `dmidecode` when you're back in linux  
 
-## Bootable USB issues:
-- GPT not recognised  
-
-## Volume label:
+## Volume label
 https://www.tecmint.com/change-modify-linux-disk-partition-label-names/  
 https://superuser.com/questions/1022992/how-to-change-a-usb-stick-name  
 
