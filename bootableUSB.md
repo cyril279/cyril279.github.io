@@ -25,6 +25,25 @@ commandline usage example:
 workaround flag ensures that the boot flag is set, because many legacy bios will skip the device if the flag is not set.  
 It is unclear why [this is not enabled by default](https://github.com/slacka/WoeUSB/issues/193).  
 
+## Clonezilla (Install to hard-disk)
+https://clonezilla.org/livehd.php
+
+- Decide mount/boot location (could be separate partition or space on local drive)
+- Download clonezilla.zip
+- unzip clonezilla to chosen directory
+  `unzip /path/of/clonezilla.zip -d /chosen/directory/`
+- Rename `/chosen/directory/live` to `/chosen/directory/live-hd`
+- Append [grub] menuentry to `/etc/grub.d/40_custom`
+```
+menuentry "Clonezilla" {
+set root=(hd0,2)
+linux /live-hd/vmlinuz boot=live union=overlay username=user config components quiet noswap nolocales edd=on nomodeset ocs_live_run=\"ocs-live-general\" ocs_live_extra_param=\"\" keyboard-layouts= ocs_live_batch=\"no\" locales= vga=788 ip=frommedia nosplash live-media-path=/live-hd bootfrom=/dev/sda2 toram=live-hd,syslinux,EFI
+initrd /live-hd/initrd.img
+}
+```
+- update grub `sudo yast`
+- Reboot & profit
+
 ## Update PC BIOS
 FreeDos [(per ArchWiki)]:  
 **Procedure:**  
