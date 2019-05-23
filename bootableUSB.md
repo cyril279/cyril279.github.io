@@ -39,12 +39,15 @@ https://clonezilla.org/livehd.php
 - Append [grub] menuentry to `/etc/grub.d/40_custom`
 ```
 menuentry "Clonezilla" {
-set root=(hd0,2)
-linux /live-hd/vmlinuz boot=live union=overlay username=user config components quiet noswap nolocales edd=on nomodeset ocs_live_run=\"ocs-live-general\" ocs_live_extra_param=\"\" keyboard-layouts= ocs_live_batch=\"no\" locales= vga=788 ip=frommedia nosplash live-media-path=/live-hd bootfrom=/dev/sda2 toram=live-hd,syslinux,EFI
-initrd /live-hd/initrd.img
-}
+  set root=(hd0,2)
+  set livePath=/path/to/live-hd
+  set liveUUID=<PARTUUID>
+  linux $livePath/vmlinuz boot=live union=overlay username=user config components quiet noswap nolocales edd=on nomodeset ocs_live_run=\"ocs-live-general\" ocs_live_extra_param=\"\" keyboard-layouts= ocs_live_batch=\"no\" locales= vga=788 ip=frommedia nosplash live-media-path=$livePath bootfrom=/dev/disk/by-partuuid/$liveUUID toram=filesystem.squashfs
+  initrd $livePath/initrd.img
+  }
 ```
-- update grub `sudo yast`
+- update grub  
+  `grub2-mkconfig -o /boot/grub2/grub.cfg`
 - Reboot & profit
 
 ## Update PC BIOS
