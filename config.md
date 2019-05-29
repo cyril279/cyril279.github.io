@@ -71,6 +71,30 @@ add/configure share entry(ies)
     read only = no
 ```
 
+#### _/etc/grub.d/40_custom_
+```
+#!/bin/sh
+exec tail -n +3 $0
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the 'exec tail' line above.
+#
+menuentry "Clonezilla" {
+  set root=(hd0,2)
+  set livePath=/cnzlla/live-hdd
+  set liveUUID=551f7701-27c0-4ca4-b481-ba0afe0adbe7
+  linux $livePath/vmlinuz boot=live union=overlay username=user config components quiet noswap nolocales edd=on nomodeset ocs_live_run=\"ocs-live-general\" ocs_live_extra_param=\"\" keyboard-layouts= ocs_live_batch=\"no\" locales= vga=788 ip=frommedia nosplash live-media-path=$livePath bootfrom=/dev/disk/by-partuuid/$liveUUID toram=filesystem.squashfs
+  initrd $livePath/initrd.img
+  }
+menuentry "GParted live" {
+  set root=(hd0,2)
+  set livePath=/gpartd/live-hdd
+  set liveUUID=551f7701-27c0-4ca4-b481-ba0afe0adbe7
+  linux $livePath/vmlinuz boot=live config union=overlay username=user components noswap noeject vga=788 ip= net.ifnames=0 live-media-path=$livePath bootfrom=/dev/disk/by-partuuid/$liveUUID toram=filesystem.squashfs
+  initrd $livePath/initrd.img
+  }
+```
+
 **Web interface:**  
 ```
 192.168.1.13:9090 #Cockpit server management
