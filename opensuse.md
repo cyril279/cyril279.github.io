@@ -1,37 +1,29 @@
 # workstation: openSUSE | 2019, February
-**Why openSUSE (vs.Fedora):**  
-1. Rolling  
-2. zypper  
-2. snapper  
-2. yast
-2. other little items already installed/work out of box (so what else have I been missing?)  
 
-**openSUSE** adds a management layer (yast) in between the DE and the underlying OS.  
-
-**Upside(s):**  
-1. Intelligent, centralized, fine-grained, and comprehensive controls, despite upstream of DE.  
-2. Coverage beyond the DE: Networking, Samba, etc. that works well; even headless.
-2. Ensures that the process is done right/completely, despite what the end-user thinks they understand about unix/linux  
-2. Much less in-the-dark than commandline, but still a coherent (& wiki/doc supported) experience for the end-user.  
-
-**Downside(s)**  
-1. tutorials are more limited than more standard distro (centos, redhat, fedora, arch)  
-2. adds distro-specific stuff for the end-user to know about/learn  
-
-~~These aren't strong, but raise the flag of whether it is worth it for the (few) benefits.~~ <- fuck that, it's worth it.  
 ### Getting started:
 **packages (util):**  
-`zypper in hplip nfs4-acl-tools git htop iotop`  
+```
+zypper in hplip nfs4-acl-tools git htop iotop
+```
 
 **packages (preference):**  
-`zypper in elementary-xfce-icon-theme papirus-icon-theme neofetch`  
-`zypper rm gnome-software joe`  
-`zypper al gnome-software joe`
-
-**opensuse-multimedia-libs:**  
 ```
-sudo zypper ar -f http://ftp.gwdg.de/pub/opensuse/repositories/multimedia:/libs/openSUSE_Tumbleweed/ opensuse-multimedia-libs
-sudo zypper ref
+zypper in elementary-xfce-icon-theme neofetch
+zypper rm gnome-software joe PackageKit
+zypper al gnome-software joe PackageKit
+```
+
+**packages (multimedia/codecs):**  
+https://en.opensuse.org/Additional_package_repositories  
+```
+zypper ar -f http://ftp.gwdg.de/pub/opensuse/repositories/multimedia:/libs/openSUSE_Tumbleweed/ multimedia:libs
+zypper ref
+yast repositories > add > [ select as desired ]  
+zypper dup --allow-vendor-change
+gui:
+http://opensuse-community.org/
+zypper in kodi kodi.binary-addons-pvr.hts kodi.binary-addons-vfs.rar libdvdcss libdvdnav libdvdread
+
 ```
 ### Configuration:
 #### NetworkManager vs. Wicked:  
