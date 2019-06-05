@@ -65,6 +65,13 @@ rsync -ave ssh user@server:/path/to/file /home/user/path/to/file
 rsync -avHe ssh cyril@192.168.0.13:/storage/share/Pictures /storage/backup/Pictures --delete
 ```
 
+### Boot to ~~terminal console~~ GUI!
+```
+systemctl get-default #what's the current target?
+systemctl set-default graphical.target #make it be this
+systemctl isolate graphical.target #immediately switch thereto
+```
+
 # Client
 
 ## Interface
