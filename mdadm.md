@@ -2,6 +2,10 @@
 
 ### [A guide to madam](https://raid.wiki.kernel.org/index.php/A_guide_to_mdadm)
 
+[Re-name](#re-name-an-array)  
+[Shrink](#shrink-intact-array--shrink-degraded-array-)  
+[Disk removal & cleanup](#removal-of-disk-from-mdadm-array--disk-wipe)  
+
 ## Raid 1 (mirror)
 
 [https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04)  
@@ -117,6 +121,11 @@ perform 1a through 2f on the old (3tb wd black)
 shrink filesystem: resize2fs to-size  
 shrink (reshape) raid vol: mdadm --grow  
 shrink partition by delete/recreation: gdisk  
+
+## Re-name an array
+mdadm --stop /dev/md#  
+mdadm --assemble /dev/md/**newname** --name=**newname** --update=name /dev/sd[xy]#  
+mkinitrd  #necessary if the change is to a bootable array
 
 [Add & grow an array](https://superuser.com/questions/1061516/extending-raid-1-array-with-different-size-disks)  
 
