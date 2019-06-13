@@ -114,6 +114,15 @@ smb://<ip_address>/<share_name> #Linux Access samba share
 \\<hostname>\<share_name> #Windows browse to samba share
 \\<ip_address>\<share_name> #Windows browse to samba share
 ```
+#### _System-on-raid0 partition layout_
+
+partition	| sdX	| sdY	| raid-0
+-:	| :-:	| :-:	| :-:
+1	|260M [FAT] /boot/efi	| 260M	| -
+3	|500M [XFS] /boot	| 500M	| -
+4	| 20G ->	| 20G ->	| [Btrfs]  /
+5	| remainder ->	| remainder ->	| [XFS]  /home/storage
+2	| 2G ->	| 2G ->	| [swap]
 
 #### _dobackup.sh:_
 ```
