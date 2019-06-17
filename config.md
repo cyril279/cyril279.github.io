@@ -121,7 +121,7 @@ partition	| sdX	| sdY	| raid-0
 1	|260M [FAT] /boot/efi	| 260M	| -
 3	|500M [XFS] /boot	| 500M	| -
 4	| 20G ->	| 20G ->	| [Btrfs]  /
-5	| remainder ->	| remainder ->	| [XFS]  /home/storage
+5	| remainder ->	| remainder ->	| [XFS]  /home
 2	| 2G ->	| 2G ->	| [swap]
 
 #### _dobackup.sh:_
