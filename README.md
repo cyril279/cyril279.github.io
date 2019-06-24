@@ -5,6 +5,7 @@
 - [HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
 - [Kodi](kodi-gen.md)  
 - [mdadm](mdadm.md)  
+- [PantheNOT](panthenot.md)
 - [Transmission (server)](server-trans.md)  
 - [Tvheadend](server-tvh.md)  
 - [USB (Bootable & MultiBoot)](bootableUSB.md)  

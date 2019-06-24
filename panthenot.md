@@ -18,12 +18,19 @@ switch to `[Application Autostart]` tab, add `plank` to the list
 
 # Gnome (Fedora workstation) <- best by far
 The best of pantheon without the intrusive elementary overrides
-
-dnf install pantheon-session-settings switchboard{,-plug*} elementary{,-sound,-icon}-theme elementary-wallpapers-gnome tilix dconf-editor xscreensaver gedit-plugin-{drawspaces,git}
-
-startup -> xscreensaver -no-splash  
+```
+dnf install pantheon-session-settings switchboard{,-plug*} elementary{,-sound,-icon}-theme elementary-wallpapers-gnome tilix dconf-editor xscreensaver gedit-plugin-{drawspaces,git} sddm
+```
+startup -> `xscreensaver -no-splash`  
 & configure via the app.
 
+### SDDM themes from the interwebs
+
+```
+dnf in qt5-qtquickcontrols{,2}  
+sudo tar -xzvf ~Downloads/<filename.tar.gz> -C /usr/share/sddm/themes  
+vi /etc/sddm.conf -> [Theme] -> Current=<filename>  
+```
 ## ulauncher
 because using gala jacks-up use of the "super_L/R" as the launch hotkey
 
