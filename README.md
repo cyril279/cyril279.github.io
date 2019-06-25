@@ -1,21 +1,21 @@
 ### Method
-- [Budgie-10.5@openSUSE](budgieSUSE.md)  
 - [eye-Candy-tweaky-nonsense](candy.md)  
 - [fileshare](fileshare.md)  
 - [HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
-- [Kodi](kodi-gen.md)  
 - [mdadm](mdadm.md)  
-- [PantheNOT](panthenot.md)
 - [Transmission (server)](server-trans.md)  
 - [Tvheadend](server-tvh.md)  
 - [USB (Bootable & MultiBoot)](bootableUSB.md)  
 
+### OS / DE
+- [Fedora](fedora.md)  
+- [OpenSUSE](opensuse.md)  
+- [Budgie-10.5@openSUSE](budgieSUSE.md)  
+- [PantheNOT](panthenot.md)
+
 ### Configuration
 - [config-fstab](fstab.md)  
 - [config-general](config.md)  
-- [Desktop Environment Preferences](DE.md)
-- [Fedora](fedora.md)  
-- [OpenSUSE](opensuse.md)  
 - [server-General](server-gen.md)  
 
 ### NOTES
@@ -35,9 +35,10 @@ xfce	|	light on resources, graphically snappy, runs csd apps | not as cohesive a
 budgie	|	GNOME-like but snappier, more cohesive than XFCE	| less cohesive than GNOME, less snappy than XFCE, less mature/complete than both
 
 ### Archive
-- [colorspace](colorspace.md)  
-- [nvidia](nvidia.md)  
-- [Open CASCADE JT Assistant](jtviewer.md)  
+- [colorspace](archive/colorspace.md)  
+- [Kodi](archive/kodi-gen.md)  
+- [nvidia](archive/nvidia.md)  
+- [Open CASCADE JT Assistant](archive/jtviewer.md)  
 
 ### bookmarks
 [markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)  

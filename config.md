@@ -1,4 +1,4 @@
-### Groups
+## Groups
 **_/etc/group:_**  
 ```
 docs:x:1305:cyril
@@ -19,25 +19,19 @@ media | 1306 | x | x | x
 samba | 1307 | x | - | -
 keeper	| 1308 | x | - | -
 
-#### Services:
-List service & port mapping?
-_/etc/services:_
-```
-???  
-```
-#### _firewalld:_  
+## Firewalld  
 ```
 network interface; default zone: internal  
 tcp: 9981, 9982, 9091 #tvh, tvh, transmission  
 service-name: mountd, nfs, samba, samba client, ssh  
 ```
-#### Network info:
+## Network info
 ```
 192.168.9.1 #nighthawk router  
 192.168.9.0/24 #cidr notation  
 255.255.255.0 #subnet mask  
 ```
-#### _/etc/hosts:_
+### _/etc/hosts:_
 ```
 192.168.9.11 attic11 attic11.dubnet  
 # 192.168.9.13 media13 media13.dubnet dubserv dubserv.dubnet  
@@ -46,7 +40,7 @@ service-name: mountd, nfs, samba, samba client, ssh
 192.168.9.15 media15 media15.dubnet dubserv dubserv.dubnet
 192.168.9.212 hp60504a envy212 envy212.dubnet  
 ```
-#### _/etc/samba/smb.conf:_  
+### _/etc/samba/smb.conf:_  
 ```
 netbios name = dubserv
 hosts allow = 127.0.0.1 192.168.9.0/24
@@ -70,8 +64,28 @@ add/configure share entry(ies)
     writable = yes
     read only = no
 ```
+**Port interface:**  
+```
+192.168.1.13:9090 #Cockpit server management
+192.168.1.13:9091 #transmission torrent client
+192.168.1.13:9981 #tvheadend pvr backend
+```
 
-#### _/etc/grub.d/40_custom_
+**Terminal:**  
+`ssh <userQ>@192.168.1.13` #ssh to terminal session as "userQ"  
+`ssh 192.168.x.y` #ssh as current user
+
+**File browser:**  
+```
+smb://<hostname>/<share_name> #Linux Access samba share
+smb://<ip_address>/<share_name> #Linux Access samba share
+
+\\<hostname>\<share_name> #Windows browse to samba share
+\\<ip_address>\<share_name> #Windows browse to samba share
+```
+
+## Boot
+**/etc/grub.d/40_custom:**
 ```
 #!/bin/sh
 exec tail -n +3 $0
@@ -95,26 +109,7 @@ menuentry "GParted live" {
   }
 ```
 
-**Web interface:**  
-```
-192.168.1.13:9090 #Cockpit server management
-192.168.1.13:9091 #transmission torrent client
-192.168.1.13:9981 #tvheadend pvr backend
-```
-
-**Terminal:**  
-`ssh <userQ>@192.168.1.13` #ssh to terminal session as "userQ"  
-`ssh 192.168.x.y` #ssh as current user
-
-**File browser**  
-```
-smb://<hostname>/<share_name> #Linux Access samba share
-smb://<ip_address>/<share_name> #Linux Access samba share
-
-\\<hostname>\<share_name> #Windows browse to samba share
-\\<ip_address>\<share_name> #Windows browse to samba share
-```
-#### _System-on-raid0 partition layout_
+## System-on-raid0 partition layout
 
 partition	| sdX	| sdY	| raid-0
 -:	| :-:	| :-:	| :-:
@@ -124,7 +119,8 @@ partition	| sdX	| sdY	| raid-0
 5	| remainder ->	| remainder ->	| [XFS]  /home
 2	| 2G ->	| 2G ->	| [swap]
 
-#### _dobackup.sh:_
+## Scripture
+**_dobackup.sh:_**
 ```
 #!/bin/sh
 
