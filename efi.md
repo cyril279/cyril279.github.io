@@ -1,42 +1,4 @@
-# Fix (understand?) the bogus raid boot issue
-
-## Update
-not sure what the actual issue is, but now (2019/06/10) it works.  
-Three things that may have been incorrect:
-1. `/boot` partition stored on different disk than ESP partition  #this is the only one that seems viable to me
-2. firmware/grub unable to consistently parse `md/name` (vs md/no)
-2. incorrect `/boot` volume size
-
-## Issue
-Recent switch to a RAID0 system config.
-
-The openSUSE generated `opensuse-secureboot` UEFI option does not boot the system consistently.
-
-1. The failed boots drop to a grub promp, where `ls` does return the target boot volume
-2. Booting from the firmware boot-menu usually results in a complete boot
-2. Each kernel/bootloader update is what breaks the boot process, resulting in a grub prompt upon reboot
-2. I am able to boot from the bios-generated entry (DELL boot-menu)
-
-## Fundamentals
-Research has shown that if the root is on soft-raid0, then /boot (may) need to be on a separate partition.  
-EFI and /boot cannot share a partition because EFI needs to have a 'FAT' filesystem, and '/boot' needs a posix compliant filesystem (which 'FAT' is NOT).  
-
-Action (summary):  
-- Create (& populate) a separate /boot partition on the same disk as the ESP partition
-- delete subvolumes `i386-pc` and `x86_64-efi`
-- adjust fstab to use new partition
-- re-establish subvolumes? <- no, not the /boot/grub2 ones anyway
-
-partition	| sdX	| sdY	| raid-0
--:	| :-:	| :-:	| :-:
-1	|260M [FAT] /boot/efi	| 260M	| -
-3	|500M [XFS] /boot	| 500M	| -
-4	| 20G ->	| 20G ->	| [Btrfs]  /
-5	| remainder ->	| remainder ->	| [XFS]  /home/storage
-2	| 2G ->	| 2G ->	| [swap]
-
-# None of the following bootloader stuff should matter, aside from helping me to sort the issue.  
-Information is preserved for later use, in some other document
+# EFI Bootage
 
 ## EFI entry generation
 1. Firmware, Automatically: `pciroot (0x0)/Pci...AMBO`

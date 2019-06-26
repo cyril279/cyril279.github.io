@@ -127,5 +127,25 @@ mdadm --stop /dev/md#
 mdadm --assemble /dev/md/**newname** --name=**newname** --update=name /dev/sd[xy]#  
 mkinitrd  #necessary if the change is to a bootable array
 
+## System on RAID-0
+Know the ledge
+
+>System (root) on a raid-0 volume seems to have exposed a limitation of the
+Dell optiplex 3010 UEFI firmware.  
+Corresponding efi and boot partitions are expected to be on the same physical disk.
+
+If the root is on soft-raid0, then /boot may need to be on a separate partition, because of firmware limitations similar to that experienced above.  
+EFI and /boot cannot share a partition because EFI needs to have a 'FAT' filesystem, and '/boot' needs a posix compliant filesystem (which 'FAT' is NOT).  
+
+Config used:
+
+partition	| sdX	| sdY	| raid-0
+-:	| :-:	| :-:	| :-:
+1	|260M [FAT] /boot/efi	| 260M	| -
+3	|500M [XFS] /boot	| 500M	| -
+4	| 20G ->	| 20G ->	| [Btrfs]  /
+5	| remainder ->	| remainder ->	| [XFS]  /home
+2	| 2G ->	| 2G ->	| [swap]
+
 [Add & grow an array](https://superuser.com/questions/1061516/extending-raid-1-array-with-different-size-disks)  
 
