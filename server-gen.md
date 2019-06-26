@@ -11,7 +11,7 @@
 - Server bringup? proceed to [Headless Management](#headless-management-).  
 Else, ...  
 
-#### Headless Management:
+### Headless Management:
 - [filesharing](fileshare.md)
   - Users/Groups
   - NFS
@@ -20,20 +20,6 @@ Else, ...
 - [Tvheadend](server-tvh.md)
 - [Transmission](server-trans.md)
 
-#### _info:_
-```
-192.168.9.1 #nighthawk router
-192.168.9.0/24 #cidr notation
-255.255.255.0 #subnet mask
-```
-#### _/etc/hosts:_
-```
-192.168.9.11 attic11 attic11.dubnet  
-192.168.9.13 media13 media13.dubnet dubserv dubserv.dubnet  
-192.168.9.12 kodi12 kodi12.dubnet  
-192.168.9.14 kodi14 kodi14.dubnet  
-192.168.9.212 hp60504a envy212 envy212.dubnet  
-```
 ### Gateway # changed?
 
 Adjust :
@@ -49,21 +35,6 @@ Adjust :
 
 -   [explanation](http://blog.michaelhamrah.com/2015/05/networking-basics-understanding-cidr-notation-and-subnets-whats-up-with-16-and-24/)
 -   [cheatsheet](https://oav.net/mirrors/cidr.html)
-
-## Backup
-
-Duplicity
-
-[ref_05](https://www.tecmint.com/create-encrypted-linux-file-system-backups-using-duplicity/2/) :: [ref_01](http://www.ifdattic.com/howto-encrypted-backup-with-duplicity/) :: [ref_02](https://www.vultr.com/docs/creating-incremental-and-encrypted-backups-with-duplicity) :: [ref_03](https://help.ubuntu.com/community/DuplicityBackupHowto) :: [ref_backblaze](https://help.backblaze.com/hc/en-us/articles/115001518354-How-to-configure-Backblaze-B2-with-Duplicity-on-Linux) :: [ref_06](https://fedoramagazine.org/taking-smart-backups-duplicity/)  
-
-Backblaze b2
-https://secure.backblaze.com/user_signin.htm  
-
-backup across network
-```
-rsync -ave ssh user@server:/path/to/file /home/user/path/to/file
-rsync -avHe ssh cyril@192.168.0.13:/storage/share/Pictures /storage/backup/Pictures --delete
-```
 
 ### Boot to ~~terminal console~~ GUI!
 ```
