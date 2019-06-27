@@ -3,9 +3,19 @@ Gnome, but modularized. (but messy)
 
 two approaches:
 1. Use gala over an xfce session, and work out the kinks.  
-  -works, but scattered/layered settings, resulting in unpredictable desktop.  
+  -works, but scattered/layered settings, but reduced DE conflict (gnome vs gala)  
+  -XFCE (maybe) actually picks-up where the gnome-settings-daemon issues leave us stranded
 1. Use pantheon over a gnome installation (and work out the kinks)  
-  -a fair bit of setup/cleanup, but nice results so far.
+  -works, a fair bit of setup/cleanup, but gnome vs gala issues are frustrating.
+
+Unsolved issues:  
+1. which locker to use?  
+  -Pantheon expects light-locker and sends commands for it, so it's the right candidate, but it has issues.  
+  -[i3lock](i3lock.md)
+1. what happenned to the media (& other specialty) buttons?  
+  It's a pantheon-on-unintended-OS's issue  
+  https://www.reddit.com/r/Fedora/comments/bu1mve/pantheon_de_shortcuts_not_working/  
+  XBindkeys?
 
 ## Gnome (oS Tumbleweed) <- showing promise 2019/06/25
 ***Note*** must use NetworkManager, not wicked. else, wingpanel crashes, or `zypper rm wingpanel-indicator-network`
@@ -14,6 +24,7 @@ zypper ar http://download.opensuse.org/repositories/X11:/Pantheon/openSUSE_Tumbl
 zypper in patterns-pantheon-pantheon_{basis,multimedia} xscreensaver {elementary-plus,papirus}-icon-theme 
 zypper in --no-recommends sddm
 ```
+
 ### SDDM themes from the interwebs
 
 ```
