@@ -10,8 +10,7 @@
 ### OS / DE
 - [Fedora](fedora.md)  
 - [OpenSUSE](opensuse.md)  
-- [Budgie-10.5@openSUSE](budgieSUSE.md)  
-- [PantheNOT](panthenot.md)
+- [PantheNOT](pantheNOT/README.md)
 
 ### Configuration
 - [config-fstab](fstab.md)  

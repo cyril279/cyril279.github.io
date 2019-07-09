@@ -11,9 +11,10 @@ two approaches:
 Unsolved issues:  
 1. which locker to use?  
   -Pantheon expects light-locker and sends commands for it, so it's the right candidate, but it has issues.  
+  -xscreensaver is usable too, but requires more manual implementation, and still, with issues.
   -[i3lock](i3lock.md)
-1. what happenned to the media (& other specialty) buttons?  
-  It's a pantheon-on-unintended-OS's issue  
+1. non-functional media (& other specialty) buttons?  
+  Pantheon is not distribution agnostic  
   https://www.reddit.com/r/Fedora/comments/bu1mve/pantheon_de_shortcuts_not_working/  
   XBindkeys?
 
