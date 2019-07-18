@@ -1,6 +1,6 @@
 ### Method
 - [eye-Candy-tweaky-nonsense](candy.md)  
-- [fileshare](fileshare.md)  
+- [fileshare](fileshare/README.md)  
 - [HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
 - [mdadm](mdadm.md)  
 - [Transmission (server)](server-trans.md)  
