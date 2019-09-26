@@ -1,7 +1,24 @@
-Start here: (no surprise)  https://wiki.archlinux.org/index.php/PulseAudio/Examples#Set_the_default_output_source
+# Default output device
+issues connecting to the correct output devices (audio & video) upon resume from suspend, or when display is disconnected and reconnected.
 
-# Default audio device
+## Video
+Resume issues. Is this handled by x? do we need xrandr tricks? or does resume get information from KMS settings?
+
+### KMS
+kernel mode setting is the earliest point that we can specify the output.  
+It is not obvious what effect this may have on a graphical system resuming from suspend, but let's start there.  
+
+kms [force mode method #1](https://wiki.archlinux.org/index.php/Kernel_mode_setting#Forcing_modes_and_EDID), backed up by [this other blog post](http://blog.fraggod.net/2017/10/11/force-enable-hdmi-to-specific-mode-in-linux-framebuffer-console.html).  
+1. With everything connected (and displaying) as desired, browse `/sys/class/drm/` to find the card notation that you will need. example: `/sys/class/drm/card0/card0-HDMI-A-1/`  
+2. `drm_kms_helper.edid_firmware=edid/1920x1080.bin` and `video=HDMI-A-1:1920x1080@60e` to `GRUB_CMDLINE_LINUX_DEFAULT`of `/etc/defaut/grub`
+3. or `nomodeset video=HDMI1:1920x1080@60` Which would set the virtual terminal to 1920x1080, which is 1080p... And use the first HDMI port at that mode. [ ref ](https://ubuntuforums.org/showthread.php?t=2294043&p=13353935#post13353935)
+
+### xrandr
+`xrandr --verbose` to get the name of the output and a working mode line
+
+## Audio
 Setting a specific default audio device  
+start here: (no surprise)  https://wiki.archlinux.org/index.php/PulseAudio/Examples#Set_the_default_output_source
 
 Pre-req's: `alsa-utils pulseaudio-utils`
 
