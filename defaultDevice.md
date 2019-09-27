@@ -2,7 +2,8 @@
 issues connecting to the correct output devices (audio & video) upon resume from suspend, or when display is disconnected and reconnected.
 
 ## Video
-Resume issues. Is this handled by x? do we need xrandr tricks? or does resume get information from KMS settings?
+Resume issues. Is this handled by x? do we need xrandr tricks? or does resume get information from KMS settings?  
+2019/09/27: finding out that onboard video is heavily biased toward vga. I can't get a status on the hdmi port no matter what I try.  
 
 ### KMS
 kernel mode setting is the earliest point that we can specify the output.  
@@ -12,6 +13,10 @@ kms [force mode method #1](https://wiki.archlinux.org/index.php/Kernel_mode_sett
 1. With everything connected (and displaying) as desired, browse `/sys/class/drm/` to find the card notation that you will need. example: `/sys/class/drm/card0/card0-HDMI-A-1/`  
 2. `drm_kms_helper.edid_firmware=edid/1920x1080.bin` and `video=HDMI-A-1:1920x1080@60e` to `GRUB_CMDLINE_LINUX_DEFAULT`of `/etc/defaut/grub`
 3. or `nomodeset video=HDMI1:1920x1080@60` Which would set the virtual terminal to 1920x1080, which is 1080p... And use the first HDMI port at that mode. [ ref ](https://ubuntuforums.org/showthread.php?t=2294043&p=13353935#post13353935)
+4. or `video=VGA-1:d drm_kms_helper.edid_firmware=edid/1920x1080.bin video=HDMI-A-1:1920x1080@60e` 
+certain changes require update of initramfs via `dracut -f`  
+for optiplex3010, try: uefi>maintenance>serr messaging [off]  
+[Cannot output to HDMI-A-1... cannot even status HDMI-A-1](https://forums.opensuse.org/showthread.php/537671-Cannot-output-to-HDMI-A-1-cannot-even-status-HDMI-A-1)
 
 ### xrandr
 `xrandr --verbose` to get the name of the output and a working mode line
