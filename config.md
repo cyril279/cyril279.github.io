@@ -40,6 +40,10 @@ service-name: mountd, nfs, samba, samba client, ssh
 192.168.9.15 media15 media15.dubnet dubserv dubserv.dubnet
 192.168.9.212 hp60504a envy212 envy212.dubnet  
 ```
+### _/etc/exports_
+```
+/storage/share	192.168.9.0/24(rw,sync,all_squash,anonuid=1001,anongid=1306,subtree_check)
+```
 ### _/etc/samba/smb.conf:_  
 ```
 netbios name = dubserv

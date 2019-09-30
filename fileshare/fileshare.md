@@ -40,10 +40,11 @@ _/etc/idmapd.conf_
 ```
 Domain = sameDomainNameHere
 ```
-**Configure what is exported, and with-whom to share**  
+**Configure what is exported, access permissions, and with-whom to share**  
 _/etc/exports_  
 `/storage/share 192.168.0.0/24(rw,sync,subtree_check)`  
 `/storage/share 192.168.1.0/24(rw,sync,subtree_check)`  
+`/storage/share 192.168.9.0/24(rw,sync,all_squash,anonuid=1001,anongid=1306,subtree_check)` [ kodi.wiki.nfs ](https://kodi.wiki/view/NFS#NFS_sharing_from_Linux)  
 
 **Configure firewall to allow client servers to access NFS shares**  
 `firewall-cmd --permanent --add-service nfs`  
