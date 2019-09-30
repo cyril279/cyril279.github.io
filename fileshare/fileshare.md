@@ -166,10 +166,18 @@ Connecting via entry appended to _/etc/fstab_
 ```
 (ip OR alias)
 dubserv:/storage/share /storage/share                       nfs     defaults        0 0
-192.168.0.13:/storage/share /storage/share               nfs     defaults        0 0
-192.168.0.13:/storage/share /storage/share               nfs     defaults,x-systemd.automount,_netdev        0 0
+dubserv:/storage/share  /home/storage/mediaShare     nfs    noauto,x-systemd.automount,x-systemd.device-timeout=10,timeo=14,hard,intr,noatime	0 0
 ```
-[Arch wiki: Mount using /etc/fstab with systemd](https://wiki.archlinux.org/index.php/NFS#Mount_using_/etc/fstab_with_systemd)  
+- noauto: don't mount automatically at boot
+- x-systemd.automount: create an automount entry to mount this upon access
+- x-systemd.device-timeout: length of time to attempt connecting to the device
+- timeo: Length of time in-between attempts to connect
+- hard: If the NFS server is unresponsive, requests will be retried indefinitely
+- intr: Interruptible: When the server comes back online, the process can be continued from where it was while the server became unresponsive
+- noatime: Do not record the access times (unecessary action that slows things down)
+
+https://linoxide.com/file-system/example-linux-nfs-mount-entry-in-fstab-etcfstab/  
+-[Arch wiki: Mount using /etc/fstab with systemd](https://wiki.archlinux.org/index.php/NFS#Mount_using_/etc/fstab_with_systemd)  
 see [fstab archive](../fstab.md#fstab-archive) for more examples
 
 - ### SAMBA
