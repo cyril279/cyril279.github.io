@@ -27,3 +27,11 @@ Each directory can only involve one group, so the **share-ability is managed onl
 ## ACL
 Allows appending multiple users or groups to one directory, each with different permissions, greatly increasing flexibility.  
 Not as apparent/convenient/readable (locally over a network connection) as posix options, but lacks the reduction of security brought by umask edits.  
+
+## Flatpak Tips
+Important to ensure that flatpak apps have access to files stored in non-standard places  
+
+**Permissions**
+`flatpak override --filesystem=/home/storage tv.kodi.Kodi`
+`flatpak info --show-permissions tv.kodi.Kodi`
+`flatpak override --reset tv.kodi.Kodi` 
