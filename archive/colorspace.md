@@ -101,7 +101,169 @@ try/ref:
 [https://kodi.wiki/view/Video_levels_and_color_space](https://kodi.wiki/view/Video_levels_and_color_space)  
 [https://bugs.freedesktop.org/show_bug.cgi?id=83226](https://bugs.freedesktop.org/show_bug.cgi?id=83226)  
 
-> Written with [StackEdit](https://stackedit.io/).
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMTEyMTUyNTAzOV19
--->
+# Wayland
+[Brad x tells us how](https://www.brad-x.com/2017/08/07/quick-tip-setting-the-color-space-value-in-wayland/) [(and reddit helps us out)](https://www.reddit.com/r/linuxquestions/comments/aj7ojy/has_anyone_successfully_enabled_full_rgb_range_on/elemn0b/), starting with proptest output, ending with an altered gdm.service unit.
+
+Module = radeon  
+connector = 48 #DVI-I-1  
+device = /dev/dri/card0  
+property = 40 #output_csc  
+value = 1 #tvrgb=1  
+
+```
+dubFam@kodi12:/home/cyril> proptest
+trying to open device 'i915'...failed
+trying to open device 'amdgpu'...failed
+trying to open device 'radeon'...done
+Connector 46 (DP-1)
+[ ... ]
+	40 output_csc:
+		flags: enum
+		enums: bypass=0 tvrgb=1 ycbcr601=2 ycbcr709=3
+		value: 0
+Connector 48 (DVI-I-1)
+[ ... ]
+	40 output_csc:
+		flags: enum
+		enums: bypass=0 tvrgb=1 ycbcr601=2 ycbcr709=3
+		value: 0
+```
+Full output:  
+```
+dubFam@kodi12:/home/cyril> proptest
+trying to open device 'i915'...failed
+trying to open device 'amdgpu'...failed
+trying to open device 'radeon'...done
+Connector 46 (DP-1)
+	1 EDID:
+		flags: immutable blob
+		blobs:
+
+		value:
+	2 DPMS:
+		flags: enum
+		enums: On=0 Standby=1 Suspend=2 Off=3
+		value: 0
+	5 link-status:
+		flags: enum
+		enums: Good=0 Bad=1
+		value: 0
+	6 non-desktop:
+		flags: immutable range
+		values: 0 1
+		value: 0
+	4 TILE:
+		flags: immutable blob
+		blobs:
+
+		value:
+	31 coherent:
+		flags: range
+		values: 0 1
+		value: 1
+	35 underscan:
+		flags: enum
+		enums: off=0 on=1 auto=2
+		value: 0
+	36 underscan hborder:
+		flags: range
+		values: 0 128
+		value: 0
+	37 underscan vborder:
+		flags: range
+		values: 0 128
+		value: 0
+	39 dither:
+		flags: enum
+		enums: off=0 on=1
+		value: 0
+	33 scaling mode:
+		flags: enum
+		enums: None=0 Full=1 Center=2 Full aspect=3
+		value: 0
+	38 audio:
+		flags: enum
+		enums: off=0 on=1 auto=2
+		value: 2
+	40 output_csc:
+		flags: enum
+		enums: bypass=0 tvrgb=1 ycbcr601=2 ycbcr709=3
+		value: 0
+Connector 48 (DVI-I-1)
+	1 EDID:
+		flags: immutable blob
+		blobs:
+
+		value:
+			00ffffffffffff0011ee1d0001010101
+			00140103807944780a171ba55349a326
+			0e474aa7ce0001010101010101010101
+			010101010101023a801871382d40582c
+			5500baa84200001e000000fd00324d1f
+			460f000a202020202020000000ff0055
+			50454e414b33333030393837000000fc
+			0044454e4f4e2d4156414d500a200102
+			02033c71501f13040103900512151420
+			000f241e26350f7f073d1ec01507505f
+			7e01570600657e00671e00835f00006c
+			030c003400a82dc000000000011d0072
+			51d01e206e285500baa84200001e011d
+			80d0721c1620102c2580baa84200009e
+			8c0ad08a20e02d10103e9600baa84200
+			00180000000000000000000000000085
+	2 DPMS:
+		flags: enum
+		enums: On=0 Standby=1 Suspend=2 Off=3
+		value: 0
+	5 link-status:
+		flags: enum
+		enums: Good=0 Bad=1
+		value: 0
+	6 non-desktop:
+		flags: immutable range
+		values: 0 1
+		value: 0
+	4 TILE:
+		flags: immutable blob
+		blobs:
+
+		value:
+	31 coherent:
+		flags: range
+		values: 0 1
+		value: 1
+	35 underscan:
+		flags: enum
+		enums: off=0 on=1 auto=2
+		value: 0
+	36 underscan hborder:
+		flags: range
+		values: 0 128
+		value: 0
+	37 underscan vborder:
+		flags: range
+		values: 0 128
+		value: 0
+	39 dither:
+		flags: enum
+		enums: off=0 on=1
+		value: 0
+	33 scaling mode:
+		flags: enum
+		enums: None=0 Full=1 Center=2 Full aspect=3
+		value: 0
+	38 audio:
+		flags: enum
+		enums: off=0 on=1 auto=2
+		value: 2
+	32 load detection:
+		flags: range
+		values: 0 1
+		value: 1
+	40 output_csc:
+		flags: enum
+		enums: bypass=0 tvrgb=1 ycbcr601=2 ycbcr709=3
+		value: 0
+CRTC 42
+CRTC 44
+``` 
