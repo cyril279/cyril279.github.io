@@ -42,6 +42,20 @@ Connector 48 (DVI-I-1)
 		enums: bypass=0 tvrgb=1 ycbcr601=2 ycbcr709=3
 		value: 0
 ```
+_/etc/systemd/system/tvRGB.service_
+```
+[Unit]
+Description=Force tvRGB output
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/proptest -M radeon -D /dev/dri/card0 48 connector 40 1
+
+[Install]
+before=multi-user.target graphical.target
+```
+built using: https://www.freedesktop.org/software/systemd/man/systemd.service.html#Examples
+
 ## Xorg
 ### (nvidia/nouveau):
 Nvidia via the nouveau driver doesn’t seem to respond to xorg.conf.d colorspace entries, so we use the intel method: **<< untested >>**
