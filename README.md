@@ -5,7 +5,6 @@
 - [Transmission (server)](server-trans.md)  
 - [Tvheadend](server-tvh.md)  
 - [USB (Bootable & MultiBoot)](bootableUSB.md)  
-- [Cutter/Plotter via Linux](cutter.md)
 
 ### OS / DE
 - [Fedora](fedora.md)  
@@ -16,6 +15,7 @@
 - [config-fstab](fstab.md)  
 - [config-general](config.md)  
 - [server-General](server-gen.md)  
+- [hardware/firmware](hardware/README.md)
 
 ### NOTES
 
