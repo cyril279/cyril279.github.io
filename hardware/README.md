@@ -102,7 +102,9 @@ Change the SATA mode in the BIOS from RAID to normal.
 
 ### touchpad issue: too sensitive, moves cursor as I am lifting finger.
 **Update 2019/10**  
-Libinput does not have sufficient control of this hardware, and I am less interested in going backwards to using `xf86-input-synaptics` driver just to remedy this. This is a Dell hardware limitation, We're done here.
+Libinput does not have sufficient control of this hardware, and I am less interested in going backwards to using `xf86-input-synaptics` driver just to remedy this. This is a Dell hardware limitation, We're done here.  
+see: [['touchpad issue' notes](14z5423.md#touchpad-issue-too-sensitive-moves-cursor-as-i-am-lifting-finger)]  
+see also: [[libinput.md](libinput.md)]  
 
 # Cutter/Plotter via linux
 InkCut! 2019/10  
