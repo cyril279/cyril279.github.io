@@ -1,7 +1,7 @@
 # Hardware/Firmware
 
 - [Colorspace](#colorspace)
-- [Audio: Set default device](#audio-set-default-device)
+- [Set default device output (Audio/Video)](#set-default-device-output)
 - [xorg.mouse](#xorgmouse)
 - [Hauppauge HVR2250 firmware installation](#hauppauge-hvr2250-firmware-installation)
 - [Cutter/Plotter via linux](#cutterplotter-via-linux)
@@ -18,9 +18,11 @@ The GPU is set to pass the full color range from the application to the display,
 **GPU output set to match the display**  
 The GPU is set to map the full color range of all applications to a specific range (whether larger or more limited), which ensures that ALL color levels (desktop environment, apps, etc) are displayed consistently, and closer to how they were intended.  The disadvantage is that some color-levels will be scaled/manipulated multiple times prior to being displayed, which may result in poorer gradients in the form of lines or banding.
 
-## Audio: Set default device
+## Set default device output
+[Video](defaultDevice.md#video): work (not) in progress  
+
+[Audio](defaultDevice.md#audio):  
 Setting a specific default audio device  
-start here: (no surprise)  https://wiki.archlinux.org/index.php/PulseAudio/Examples#Set_the_default_output_source
 
 Pre-req's: `alsa-utils pulseaudio-utils`
 
