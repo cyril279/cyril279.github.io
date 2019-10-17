@@ -4,7 +4,6 @@
 - [mdadm](mdadm.md)  
 - [Transmission (server)](server-trans.md)  
 - [Tvheadend](server-tvh.md)  
-- [USB (Bootable & MultiBoot)](bootableUSB.md)  
 
 ### OS / DE
 - [Fedora](fedora.md)  

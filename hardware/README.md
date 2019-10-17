@@ -1,3 +1,6 @@
+# USB (Bootable & MultiBoot)
+[Creating bootable media for bare-metal & firmware updates](bootableUSB.md)
+
 # Colorspace
 [The how-to of colorspace for xorg and Wayland...](colorspace.md)  
 
