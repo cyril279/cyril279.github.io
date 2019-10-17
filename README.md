@@ -1,22 +1,24 @@
-### Method
+Document repository of... breadcrumbs? 
+
+## Method
 - [fileshare](fileshare/README.md)  
 - [HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
 - [mdadm](mdadm.md)  
 - [Transmission (server)](server-trans.md)  
 - [Tvheadend](server-tvh.md)  
 
-### OS / DE
+## OS / DE
 - [Fedora](fedora.md)  
 - [OpenSUSE](opensuse.md)  
 - [PantheNOT](pantheNOT/README.md)
 
-### Configuration
+## Configuration
 - [config-fstab](fstab.md)  
 - [config-general](config.md)  
-- [server-General](server-gen.md)  
 - [hardware/firmware](hardware/README.md)
+- [server-General](server-gen.md)  
 
-### NOTES
+## NOTES
 
 Distribution	|	the good |	the bad
 --:|:--:|:--
@@ -32,11 +34,11 @@ gnome	|	beautiful, minimalist approach, gtk4/csd | resource hog (functions, but 
 xfce	|	light on resources, graphically snappy, runs csd apps | not as cohesive as gnome
 budgie	|	GNOME-like but snappier, more cohesive than XFCE	| less cohesive than GNOME, less snappy than XFCE, less mature/complete than both
 
-### Archive
+## Archive
 - [Kodi](archive/kodi-gen.md)  
 - [nvidia](archive/nvidia.md)  
 - [Open CASCADE JT Assistant](archive/jtviewer.md)  
 
-### bookmarks
+## bookmarks
 [markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)  
 [PineBook PRO (laptop)](https://forum.pine64.org/showthread.php?tid=7093&pid=43850#pid43850) <- not yet available as of 2019/03/05  
