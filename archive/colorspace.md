@@ -78,15 +78,18 @@ _/etc/systemd/system/tvRGB.service_
 ```
 [Unit]
 Description=Force tvRGB output
+After=rc-local.service plymouth-start.service systemd-user-sessions.service
+Before=display-manager.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/proptest -M radeon -D /dev/dri/card0 48 connector 40 1
+ExecStart=-/bin/sh -c '/usr/bin/proptest -M radeon -D /dev/dri/card0 48 connector 40 1'
 
 [Install]
-before=multi-user.target graphical.target
+WantedBy=multi-user.target
 ```
-built using: https://www.freedesktop.org/software/systemd/man/systemd.service.html#Examples
+built using: https://www.freedesktop.org/software/systemd/man/systemd.service.html#Examples  
+with input from: [https://forums.opensuse.org/showthread.php/537877...]https://forums.opensuse.org/showthread.php/537877-There-is-no-gdm-service-so-where-to-add-gdm-session-exec-line?p=2917186#post2917186
 
 ## Xorg
 ### (nvidia/nouveau):
