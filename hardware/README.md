@@ -1,3 +1,12 @@
+# Colorspace
+[The how-to of colorspace for xorg and Wayland...](colorspace.md)  
+
+**GPU set to bypass/passthrough**  
+The GPU is set to pass the full color range from the application to the display, which avoids unecessary manipulation of the video levels.  The disadvantage is that desktop applications which do NOT manage the colorspace correctly (or at all), end up being displayed incorrectly.
+
+**GPU output set to match the display**  
+The GPU is set to map the full color range of all applications to a specific range (whether larger or more limited), which ensures that ALL color levels (desktop environment, apps, etc) are displayed consistently, and closer to how they were intended.  The disadvantage is that some color-levels will be scaled/manipulated multiple times prior to being displayed, which may result in poorer gradients in the form of lines or banding.
+
 # Audio: Set default device
 Setting a specific default audio device  
 start here: (no surprise)  https://wiki.archlinux.org/index.php/PulseAudio/Examples#Set_the_default_output_source

@@ -34,7 +34,6 @@ xfce	|	light on resources, graphically snappy, runs csd apps | not as cohesive a
 budgie	|	GNOME-like but snappier, more cohesive than XFCE	| less cohesive than GNOME, less snappy than XFCE, less mature/complete than both
 
 ### Archive
-- [colorspace](archive/colorspace.md)  
 - [Kodi](archive/kodi-gen.md)  
 - [nvidia](archive/nvidia.md)  
 - [Open CASCADE JT Assistant](archive/jtviewer.md)  
