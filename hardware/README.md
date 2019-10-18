@@ -10,7 +10,7 @@
 - [USB (Bootable & MultiBoot)](#usb-bootable--multiboot)
 
 ## Colorspace
-[The how-to of colorspace for xorg and Wayland...](colorspace.md)  
+Force tv-RGB output via GPU: [[ original ](colorspace.md)] [[ Brad-remix ](colorspace_brad.md)]
 
 **GPU set to bypass/passthrough**  
 The GPU is set to pass the full color range from the application to the display, which avoids unecessary manipulation of the video levels.  The disadvantage is that desktop applications which do NOT manage the colorspace correctly (or at all), end up being displayed incorrectly.

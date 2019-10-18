@@ -48,13 +48,13 @@ limited	| full	| limited
 interestingly, despite kodi's recommendation to avoid the extra scaling by leaving the gpu as pass-through,openelec's colorspace recommendation seems to be to have the gpu do the scaling.  The recommendation of app vs. OS control seems to follow that kodi is an app (that can also operate as it's own DE), and openelec is an OS.
 
 ## Wayland
-[Brad x tells us how](https://www.brad-x.com/2017/08/07/quick-tip-setting-the-color-space-value-in-wayland/) (and [reddit helps us out)](https://www.reddit.com/r/linuxquestions/comments/aj7ojy/has_anyone_successfully_enabled_full_rgb_range_on/elemn0b/), starting with proptest output, ending with an altered gdm.service unit.
+[Brad x tells us how](https://www.brad-x.com/2017/08/07/quick-tip-setting-the-color-space-value-in-wayland/) (and [reddit helps us out)](https://www.reddit.com/r/linuxquestions/comments/aj7ojy/has_anyone_successfully_enabled_full_rgb_range_on/elemn0b/), starting with proptest output, ending with an altered gdm.service unit.  
 
-Module = radeon  
-connector = 48 #DVI-I-1  
-device = /dev/dri/card0  
-property = 40 #output_csc  
-value = 1 #tvrgb=1  
+Instead of an altered unit, we will instead create a custom unit to configure the GPU output during boot (prior to login).
+
+1. Gather hardware info  
+2. Compose command  
+3. Generate systemd-unit  
 
 ```
 dubFam@kodi12:/home/cyril> proptest
@@ -74,20 +74,32 @@ Connector 48 (DVI-I-1)
 		enums: bypass=0 tvrgb=1 ycbcr601=2 ycbcr709=3
 		value: 0
 ```
+Module = radeon  
+connector = 48 #DVI-I-1  
+device = /dev/dri/card0  
+property = 40 #output_csc  
+value = 1 #tvrgb=1  
+
+`proptest -M radeon -D dev/dri/card0 48 connector 40 1`
+
 _/etc/systemd/system/tvRGB.service_
 ```
 [Unit]
-Description=Force tvRGB output
-After=rc-local.service plymouth-start.service systemd-user-sessions.service
-Before=display-manager.service
+Description=Force tv-RGB (16-235) output
+DefaultDependencies=no
+After=sysinit.target
 
 [Service]
 Type=oneshot
-ExecStart=-/bin/sh -c '/usr/bin/proptest -M radeon -D /dev/dri/card0 48 connector 40 1'
+ExecStart=/usr/bin/proptest -M radeon -D /dev/dri/card0 48 connector 40 1
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=sysinit.target
 ```
+** **NOTE** **
+proptest command conflicts with plymouth boot-splash animation, so  
+`spash=silent quiet` must be removed from grub kernel command line for this unit to function properly.
+
 built using: https://www.freedesktop.org/software/systemd/man/systemd.service.html#Examples  
 with input from: [https://forums.opensuse.org/showthread.php/537877...]https://forums.opensuse.org/showthread.php/537877-There-is-no-gdm-service-so-where-to-add-gdm-session-exec-line?p=2917186#post2917186
 
