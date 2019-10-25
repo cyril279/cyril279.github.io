@@ -29,6 +29,10 @@ zypper in kodi kodi.binary-addons-pvr.hts kodi.binary-addons-vfs.rar libdvdcss l
 #### NetworkManager vs. Wicked:  
 - for laptop? NetworkManager. full stop.  
 - I like the configurability of Wicked (via Yast), but it lacks gnome integration (applet)  
+
+**YAST!**  
+Whether graphical gui or text-mode gui (tui), YAST will help ensure that all is done both correctly and thoroughly.  
+`yast network`  
  
 **Service switch (to [Wicked])**  
 `systemctl status network` #show/verify which service is managing the network, and its status  
@@ -39,13 +43,7 @@ zypper in kodi kodi.binary-addons-pvr.hts kodi.binary-addons-vfs.rar libdvdcss l
 `systemctl status network`  #show/verify which service is managing the network, and its status  
 
 #### static ip:
-Use gateway ip for dns server address (& routing).  
-
-**YAST!**  
-Can invoke text-mode gui from terminal, and will help ensure that all is done right.  
-`yast`  
-
-**If wicked**, Yast cli. be sure to input interior gateway ip as route and dns server
+Use internal gateway ip for both dns server and routing addresses.  
 
 CLI setup differs per service chosen"  
 **If NetworkManager**, ~[three files need to be modified](https://forums.opensuse.org/showthread.php/431523-Configure-Static-Ip-using-the-Terminal?p=2109330#post2109330) if not done via gui.  
@@ -75,16 +73,8 @@ This gem of advice:
 > 
 > If you insist on knowing how to do it manually, just look at the contents of the files named above *after* you use Yast to see what it did.  
 
-[Fileshare]: ../html/fileshare.html#acl-setup
-[Wicked]: https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.network.html#sec.network.manconf.using_wicked
-
-# xfce
-less graphically demanding on old hardware.  
-~~Do this on top of gnome, because I still prefer the minimal presentation of gtk applications.~~ <- no, this just handicaps xfce  
-`zypper in -t pattern xfce`  
-`sudo zypper in yast2-alternatives`  
-in yast > misc > alternatives, switch from gdm to lightdm  
-set keyboard shortcut `xfce4-popup-whiskermenu` to super-key  
+[Fileshare]: ../html/fileshare.html#acl-setup  
+[Wicked]: https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.network.html#sec.network.manconf.using_wicked  
 
 ## Scanner setup:
 **CUPS:**  
@@ -93,12 +83,11 @@ Printer is easily added & setup via socket/port (verified working), but scanner 
 **HPLIP:**  
 1. connect HP printer to network  
 Involves USB connection (Linux or Windows)  
-`hp-setup`
+  - Linux: `hp-setup`  
   - assign static IP  
-  - assign alias on local machine via `/etc/hosts`  
 2. Add/configure printer on local machine  
-`hp-setup envy212`  
+  - assign alias on local machine via `/etc/hosts`  
+  - configure connection to printer: `hp-setup envy212`  
 3. Add scanner via `YaST scanner tool`  
-`yast > hardware > scanner`  
-assign appropriate driver (hpaio) to newly recognized device
-
+  - `yast scanner`  
+  - Assign appropriate driver (hpaio) to newly recognized device
