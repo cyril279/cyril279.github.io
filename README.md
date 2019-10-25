@@ -2,7 +2,6 @@ Document repository of... breadcrumbs?
 
 ## Method
 - [fileshare](fileshare/README.md)  
-- [HARMONY-FLIRC-KODI](HARMONY-FLIRC-KODI.md)  
 - [mdadm](mdadm.md)  
 - [Transmission (server)](server-trans.md)  
 - [Tvheadend](server-tvh.md)  

@@ -7,7 +7,8 @@
 - [Cutter/Plotter via linux](#cutterplotter-via-linux)
 - [PC: Lenovo T450](#lenovo-t450)
 - [PC: Dell Inspiron 14z 5423](#dell-inspiron-14z-5423)
-- [USB (Bootable & MultiBoot)](#usb-bootable--multiboot)
+- [Bootable USB media for bare-metal & firmware updates](bootableUSB.md)
+- [Harmony, FLIRC, Kodi, and the shutdown dance](HARMONY-FLIRC-KODI.md)
 
 ## Colorspace
 Force tv-RGB output via GPU: [[ original ](colorspace.md)] [[ Brad-remix ](colorspace_brad.md)]
@@ -138,6 +139,3 @@ Change the SATA mode in the BIOS from RAID to normal.
 Libinput does not have sufficient control of this hardware, and I am less interested in going backwards to using `xf86-input-synaptics` driver just to remedy this. This is a Dell hardware limitation, We're done here.  
 see: [['touchpad issue' notes](14z5423.md#touchpad-issue-too-sensitive-moves-cursor-as-i-am-lifting-finger)]  
 see also: [[libinput.md](libinput.md)]  
-
-## USB (Bootable & MultiBoot)
-[Creating bootable media for bare-metal & firmware updates](bootableUSB.md)
