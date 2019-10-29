@@ -2,7 +2,7 @@
 
 ### [A guide to madam](https://raid.wiki.kernel.org/index.php/A_guide_to_mdadm)
 
-[Re-name](#re-name-an-array)  
+[Re-name](#rename-an-array)  
 [Shrink](#shrink-intact-array--shrink-degraded-array-)  
 [Disk removal & cleanup](#removal-of-disk-from-mdadm-array--disk-wipe)  
 
@@ -122,13 +122,23 @@ shrink filesystem: resize2fs to-size
 shrink (reshape) raid vol: mdadm --grow  
 shrink partition by delete/recreation: gdisk  
 
-## Re-name an array
-mdadm --stop /dev/md#  
-mdadm --assemble /dev/md/**newname** --name=**newname** --update=name /dev/sd[xy]#  
-mkinitrd  #necessary if the change is to a bootable array
+## (Re)name an array
+Helps to communicate array purpose/function/intent.
+Links the array to `/dev/md/newname`, and applies `newname` to its listing in yast and elsewhere.
+
+1. unmount, then stop the array  
+  `umount /dev/md#`  
+  `mdadm --stop /dev/md#` or `mdadm --stop --scan`
+
+2. Define & use "newname"  
+  `mdadm --assemble /dev/md/newname --name=newname --update=name /dev/sd[xy]#`  
+  edit _/etc/mdadm.conf_; change `oldname` to `newname`
+
+2. Make persistent across reboots  
+  `dracut -f`
 
 ## System on RAID-0
-Know the ledge
+This is somewhat faster, but forfeits grub-rollbacks (thumbs-down).
 
 >System (root) on a raid-0 volume seems to have exposed a limitation of the
 Dell optiplex 3010 UEFI firmware.  
