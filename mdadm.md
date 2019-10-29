@@ -39,10 +39,8 @@ print sizes in human readable format (e.g., 1K 234M 2G)
 ### Prepare disk:
 
 1.  Install disk &...
-    1.  Identify the device names of your new hard drives
-`sudo fdisk -l`
-or
-`lsblk`
+    1.  Identify the device names of your new hard drives  
+`sudo fdisk -l` or `lsblk`
     2.  Determine whether there is any existing raid configuration  
 `mdadm -E /dev/sd[x,y]`  
 2.  Create partition.
@@ -50,16 +48,16 @@ or
 `parted /dev/sd(x)`  
     2.  At the (parted) prompt, create the partition table:  
 `mklabel gpt`  
-    3.  Check the free space on the drive by typing
+    3.  Check the free space on the drive by typing  
 `print free`
-    4.  Create the partition
+    4.  Create the partition  
 `mkpart primary 1M 3001GB`
 This starts the partition at 1M offset giving a 4096 byte alignment. This may or may not be necessary, but won't hurt if its not.  
-    3.  p #displays partition setup    
-    6.  q #quit
+    3.  `p` #displays partition setup    
+    6.  `q` #quit
 
 ### Create Raid array:
-11.  initialize array /dev/md(#) using /dev/sd(x#) and a missing disk  
+3.  initialize array /dev/md(#) using /dev/sd(x#) and a missing disk  
 `sudo mdadm --create --verbose /dev/md0 --level=raid1 --raid-devices=2 /dev/sd(x#) missing`
 4.  Create a file system on the array:  
 `sudo mkfs.ext4 /dev/md0`
@@ -70,30 +68,30 @@ This starts the partition at 1M offset giving a 4096 byte alignment. This may or
 `rsync -avhW --progress --no-compress /src/ /dst/`
 
 ### USE the (degraded) array
-15.  Mount it  
+7.  Mount it  
 `sudo mount /mnt/md0`
 2.  Next, save the raid configuration manually to ‘mdadm.conf‘ file using the below command.  
 `mdadm --detail --scan --verbose >> /etc/mdadm.conf`  
-3.  All good? Add entry to /etc/fstab:  
-`/dev/md0 /storage/share auto defaults 0 0`  
-10.  All good? Add entry to /etc/fstab:  
-1.  find device
+2.  All good? Add entry to /etc/fstab: [dev/ID]  
+`/dev/md0 /storage/share auto defaults 0 0`
+2.  All good? Add entry to /etc/fstab: [UUID]  
+    1.  find device  
 `cat /proc/mdstat`
-2.  find uuid of device
+    2.  find uuid of device  
 `sudo blkid /dev/md0`
-3.  add entry to fstab
+    3.  add entry to fstab  
 `UUID=4a2b3c6d-0ada-4228-8043-7a2f40a13d4a /storage/share auto defaults 0 0`
 
 ### data verified?
 perform 1a through 2f on the old (3tb wd black)
 
-22.  let’s add the other drive…
-`mdadm /dev/md0 --add /dev/sd(y#)`  
-12.  Save the raid configuration manually to ‘mdadm.conf‘  
-`mdadm --detail --scan --verbose >> /etc/mdadm.conf`  
+22.  let’s add the other drive...  
+`mdadm /dev/md0 --add /dev/sd(y#)`
+12.  Save the raid configuration manually to _/etc/mdadm.conf_    
+`mdadm --detail --scan --verbose >> /etc/mdadm.conf`
 13.  Now you can start using your array. Bear in mind, however, that before it is fully operational it will need to complete its initial sync.  
 14.  Track/Watch sync progress:  
-`watch -n1 sudo mdadm --detail /dev/md0`
+`watch -n1 sudo mdadm --detail /dev/md0`  
 `cat /proc/mdstat`
 
 ## removal of disk from mdadm array (& disk wipe):
@@ -116,7 +114,8 @@ perform 1a through 2f on the old (3tb wd black)
 5.  Modify partition(s) as needed
 6.  Grow the RAID volume to fill the re-worked/new partition  
 `mdadm --grow /dev/md# -z max`
-7.  Resize filesystem to occupy entire RAID volume restore filesystem to full raid vol? `resize2fs /dev/md#`  
+7.  Resize filesystem to occupy entire RAID volume restore filesystem to full raid vol?  
+`resize2fs /dev/md#`  
 
 shrink filesystem: resize2fs to-size  
 shrink (reshape) raid vol: mdadm --grow  
