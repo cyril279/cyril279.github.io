@@ -124,7 +124,19 @@ partition	| sdX	| sdY	| raid-0
 2	| 2G ->	| 2G ->	| [swap]
 
 ## Scripture
-**_dobackup.sh:_**
+***batt-status*** (Use `(upower -e | grep BAT)` for single battery scenario)
+```
+#!/bin/bash
+echo \ 
+echo "Internal battery (Bat0):"
+upower -i $(upower -e | grep BAT0) | grep --color=never -E "state|to\ full|to\ empty|percentage"
+echo \ 
+echo "External battery (Bat1):" 
+upower -i $(upower -e | grep BAT1) | grep --color=never -E "state|to\ full|to\ empty|percentage"
+echo \ 
+```
+
+***dobackup.sh***
 ```
 #!/bin/sh
 
