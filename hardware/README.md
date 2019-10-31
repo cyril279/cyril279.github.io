@@ -23,8 +23,13 @@ The GPU is set to map the full color range of all applications to a specific ran
 [**Video**](defaultDevice.md#video): work (not) in progress  
 
 **Audio:**  
-Setting a specific default audio device  
+Helps if the device is already configured in yast.  
 
+**Yast unable to configure card due to snd-hda-intel module?**  
+  in ***/etc/modprobe.d/50-sound.conf*** , change:  
+  `options snd slots=snd-hda-intel` to `options snd-hda-intel enable=1 index=0`
+
+**Setting a specific default audio device**  
 Pre-req's: `alsa-utils pulseaudio-utils`
 
 **Determine desired device name**  
