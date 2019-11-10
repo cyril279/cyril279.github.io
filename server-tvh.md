@@ -110,7 +110,8 @@ Migrating the setup to be managed by a (headless) tvheadend backend/server invol
     2. Copy the contents of .kodi/userdata/../addon_data/script.module.zap2epg (configuration and settings) to user@serverip:/var/lib/tvheadend/script.module.zap2epg
 
 3.  Setting up the tv_grab_file  
-    1. ***settings.xml***: change ip address to loopback address, to mitigate ip change woes.  
+    1. ***settings.xml***:  
+Assuming that `<setting id="tvhurl">dubserv</setting>` in *settings.xml*, be sure that `dubserv` is defined in */etc/hosts*, and that the appropriate network range is configured for the kodi user via the tvheadend web interface.  
     2. ***script.module.zap2epg/bin/tv_grab_zap2epg***:  
 ADDON_HOME & ADDON_DIR: Modify to the actual location of the addon files  
 /var/lib/tvheadend  
