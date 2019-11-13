@@ -1,13 +1,18 @@
+- [Tvheadend](#pvr-backend--tvheadend)
+- [EPG Data](#epg-data-other-than-ota)
+
 # PVR (backend) | Tvheadend
 
 hostname:9981 :: [ref_01](https://www.linuxserver.io/2017/02/19/how-to-set-up-tvheadend-with-your-dvb-t2-receiver/) :: [ref_02](http://www.wetekforums.com/v/index.php?p=/discussion/27451/tutorial-how-to-install-tvheadend-and-scan-atsc-north-america-channels) :: [ref_03](https://forum.kodi.tv/showthread.php?tid=270385)  
 
--   ensure capture-card firmware files are in /lib/firmware  
--   reboot & `lspci` or `dmesg | grep dvb` to check for presence/recognition of card  
 
 ----------------
 
 ## Installation:
+
+**Hardware (capture card):**  
+-   ensure capture-card firmware files are in /lib/firmware  
+-   reboot & `lspci` or `dmesg | grep dvb` to check for presence/recognition of card  
 
 **Fedora:**  
 `dnf install tvheadend`  
@@ -87,9 +92,9 @@ EPG data from the interwebs is compiled into a xmltv.xml file, which is referenc
     
 **tvheadend**
 
-configuration > channel/epg > channels > epg source :: enter/select grab_file_channel  
-configure frequency  
-re-run internal epg grabbers  
+1. Configuration > channel/epg > channels > epg source :: enter/select grab_file_channel  
+2. configure frequency  
+3. re-run internal epg grabbers  
 
 ## zap2epg
 
@@ -101,7 +106,10 @@ Following the recommended path in the wiki, I did initial setup through kodi (pa
 
 this request was denied until I used a tvheadend account with administrative privilege.
 
-On the kodi device, a successful setup&scan generates settings & configuration files in a userdata folder under ~/.kodi/
+On the kodi device, a successful setup&scan generates settings & configuration files in a userdata folder under:  
+*~/.kodi/userdata/../addon_data*  
+or  
+*~/.var/app/tv.kodi.Kodi/data/userdata/addon_data*
 
 Migrating the setup to be managed by a (headless) tvheadend backend/server involves two steps:
 
@@ -115,7 +123,9 @@ Assuming that `<setting id="tvhurl">dubserv</setting>` in *settings.xml*, be sur
     2. ***script.module.zap2epg/bin/tv_grab_zap2epg***:  
 ADDON_HOME & ADDON_DIR: Modify to the actual location of the addon files  
 /var/lib/tvheadend  
-    2. copy (or ln -s) to */usr/bin/*
+    2. `ln -s` (or copy) to */usr/bin/*  
+    2. test to verify functionality. Success:=new xmltv.xml generated   
+`. tv_grab_zap2epg`  
     2. `Systemctl restart tvheadend` #make tvheadend notice grabber additions/changes
     2. Enable tv_grab_zap2epg in tvheadend [ configuration > channel/epg > EPG Grabber Modules ]
     2. Edit cron frequency [ configuration > channel/epg > EPG Grabber > Internal Grabber ]  
