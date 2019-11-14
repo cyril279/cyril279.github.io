@@ -182,3 +182,6 @@ Configuration > General > Base
 -   IconTest : icontest.png
 -   Channel 1 : channel1.png
 -   3.4 name : 34name.png
+
+great source of logo png (& svg) images:  
+https://logos.fandom.com/wiki/
