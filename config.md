@@ -167,7 +167,7 @@ case $1 in
 	;;
 	music )
 	sourceDir="share/Music/"
-	destDir="Music/"
+	destDir="music/"
 	;;
 	pics )
 	sourceDir="share/Pictures/"
