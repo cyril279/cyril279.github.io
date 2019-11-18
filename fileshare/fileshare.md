@@ -42,8 +42,7 @@ Domain = sameDomainNameHere
 ```
 **Configure what is exported, access permissions, and with-whom to share**  
 _/etc/exports_  
-`/storage/share 192.168.0.0/24(rw,sync,subtree_check)`  
-`/storage/share 192.168.1.0/24(rw,sync,subtree_check)`  
+`/storage/share 192.168.1.0/24(rw,sync,subtree_check)` #NOTE: all users must have uid & gid defined the same on all machines, or strange things happen with the share (like question-marks instead of permissions displayed)   
 `/storage/share 192.168.9.0/24(rw,sync,all_squash,anonuid=1001,anongid=1306,subtree_check)` [ kodi.wiki.nfs ](https://kodi.wiki/view/NFS#NFS_sharing_from_Linux)  
 
 **Configure firewall to allow client servers to access NFS shares**  
@@ -54,6 +53,8 @@ _/etc/exports_
 
 **see shares export correctly**  
 `exportfs -rav`  
+
+Info: http://www.troubleshooters.com/linux/nfs.htm
 
 ## Samba
 Windows to *nix fileshare protocol
