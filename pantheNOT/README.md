@@ -1,6 +1,36 @@
 # If I was into UBUNTU, this document would not exist
 This is about an attempt (several actually), to use Elementary's Pantheon on Fedora and openSUSE (and Manjaro)
 
+2019/11/25 edit:  
+Apparently I was doing it wrong.  
+[penSUSE's pantheon](200~https://en.opensuse.org/Portal:Pantheon) is well enough developed to work aside (or instead of) a GNOME installation.  
+There are three flavors, choose wisely. (hint:Stable)  
+```
+zypper addrepo https://download.opensuse.org/repositories/X11:Pantheon:Branch/openSUSE_Tumbleweed/X11:Pantheon:Branch.repo
+zypper refresh
+
+#for full elementary experience (plus some gnome tweakability):
+zypper install -t pantheon gnome_basis
+zypper install libreoffice-gtk3 gnome-tweaks gnome-online-accounts
+
+#for fully functional pantheon-session over full-fat gnome installation: 
+zypper install -t pattern pantheon_basis
+```
+
+>INFO: Please add a local user to the lightdm group to change the wallpaper  
+INFO: using the Pantheon desktop settings (switchboard).  
+INFO: You can change the font size, gtk theme, icon theme etc  
+INFO: using /etc/gtk-3.0/settings.ini file.  
+
+>This project is a fork of Pantheon repository to avoid depending on GNOME with some patches, using the gsettings under org.opensuse.pantheon.wrap.gnome instead of org.gnome, etc.  
+
+```
+cyril@localhost:/usr/share/glib-2.0/schemas> grep -iR "close:" ./
+./pantheon-settings-daemon-openSUSE-branding.gschema.override:overrides={'Gtk/DialogsUseHeader': <0>, 'Gtk/EnablePrimaryPaste': <0>, 'Gtk/ShellShowsAppMenu': <0>, 'Gtk/DecorationLayout': <'close:menu,maximize'>}
+pantheon-settings-daemon-openSUSE-branding.gschema.override
+pantheon-desktop-schemas-openSUSE-branding.gschema.override
+```
+
 ## I love (the idea of) pantheon
 
 - Graphically well designed
