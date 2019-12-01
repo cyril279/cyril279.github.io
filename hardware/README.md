@@ -142,5 +142,19 @@ Change the SATA mode in the BIOS from RAID to normal.
 #### touchpad issue: too sensitive, moves cursor as I am lifting finger.
 **Update 2019/10**  
 Libinput does not have sufficient control of this hardware, and I am less interested in going backwards to using `xf86-input-synaptics` driver just to remedy this. This is a Dell hardware limitation, We're done here.  
-see: [['touchpad issue' notes](14z5423.md#touchpad-issue-too-sensitive-moves-cursor-as-i-am-lifting-finger)]  
-see also: [[libinput.md](libinput.md)]  
+see: ['touchpad issue' notes](14z5423.md#touchpad-issue-too-sensitive-moves-cursor-as-i-am-lifting-finger)  
+also: [libinput.md](libinput.md)  
+
+## CD/DVD/Blu-ray to .iso
+How to create an ISO disk image from a CD-ROM, DVD or Blu-ray disk
+https://www.cyberciti.biz/tips/linux-creating-cd-rom-iso-image.html
+
+First get blocksize. I am using /dev/dvdrom or /dev/sr0. Use the grave accent (`cmd`) or ($(cmd)) to perform a command substitution:  
+`blocks=$(isosize -d 2048 /dev/sr0)`
+
+Now run dd command and display progress bar while using dd command:  
+`sudo dd if=/dev/sr0 of=/tmp/output.iso bs=2048 count=$blocks status=progress`
+
+Untested (for same result):
+`dd if=/dev/cdrom1 of=./image.img`  
+`img2iso image.img image.iso`  
