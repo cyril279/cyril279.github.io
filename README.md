@@ -9,7 +9,7 @@ Document repository of... breadcrumbs?
 ## OS / DE
 - [Fedora](fedora.md)  
 - [OpenSUSE](opensuse.md)  
-- [PantheNOT](pantheNOT/README.md)
+- [Pantheon@SuSE](pantheon-oS.md)
 
 ## Configuration
 - [config-fstab](fstab.md)  

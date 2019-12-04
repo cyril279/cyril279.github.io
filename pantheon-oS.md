@@ -41,5 +41,7 @@ Because you might need wifi before you have a graphical desktop
 [nmcli-wifi-tutorial 'kifarunix'](https://kifarunix.com/connect-to-wifi-in-linux-using-nmcli-command/)  
 [nmcli-wifi-tutorial 'ubuntu'](https://docs.ubuntu.com/core/en/stacks/network/network-manager/docs/configure-wifi-connections)  
 
+\[ [Original pantheNOT ~~struggle~~ documentation](pantheNOT/README.md) \]
+
 [No Title Bar]:https://extensions.gnome.org/extension/2015/no-title-bar-forked/
 [GTK Title Bar]:https://extensions.gnome.org/extension/1732/gtk-title-bar/
