@@ -3,33 +3,8 @@ This is about an attempt (several actually), to use Elementary's Pantheon on Fed
 
 2019/11/25 edit:  
 Apparently I was doing it wrong.  
-[penSUSE's pantheon](200~https://en.opensuse.org/Portal:Pantheon) is well enough developed to work aside (or instead of) a GNOME installation.  
-There are three flavors, choose wisely. (hint:Stable)  
-```
-zypper addrepo https://download.opensuse.org/repositories/X11:Pantheon:Branch/openSUSE_Tumbleweed/X11:Pantheon:Branch.repo
-zypper refresh
-
-#for full elementary experience (plus some gnome tweakability):
-zypper install -t pantheon gnome_basis
-zypper install libreoffice-gtk3 gnome-tweaks gnome-online-accounts
-
-#for fully functional pantheon-session over full-fat gnome installation: 
-zypper install -t pattern pantheon_basis
-```
-
->INFO: Please add a local user to the lightdm group to change the wallpaper  
-INFO: using the Pantheon desktop settings (switchboard).  
-INFO: You can change the font size, gtk theme, icon theme etc  
-INFO: using /etc/gtk-3.0/settings.ini file.  
-
->This project is a fork of Pantheon repository to avoid depending on GNOME with some patches, using the gsettings under org.opensuse.pantheon.wrap.gnome instead of org.gnome, etc.  
-
-```
-cyril@localhost:/usr/share/glib-2.0/schemas> grep -iR "close:" ./
-./pantheon-settings-daemon-openSUSE-branding.gschema.override:overrides={'Gtk/DialogsUseHeader': <0>, 'Gtk/EnablePrimaryPaste': <0>, 'Gtk/ShellShowsAppMenu': <0>, 'Gtk/DecorationLayout': <'close:menu,maximize'>}
-pantheon-settings-daemon-openSUSE-branding.gschema.override
-pantheon-desktop-schemas-openSUSE-branding.gschema.override
-```
+[openSUSE's pantheon](https://en.opensuse.org/Portal:Pantheon) is well enough developed to work aside (or instead of) a GNOME installation.  
+See [openSUSE@tumbleweed](../pantheon-oS.md)
 
 ## I love (the idea of) pantheon
 
@@ -42,10 +17,9 @@ pantheon-desktop-schemas-openSUSE-branding.gschema.override
 
 Pantheon, a gnome-dependent desktop-environment, works brilliantly with its parent distribution 'Elementary OS'. <- no surprise there  
 I don't like ubuntu-based anything, so I would rather eat beets than run Elementary.  
-The inherent challenges of this type of upstream dependency (budgie, deepin, pantheon) result in a product that is significantly less distribution-agnostic than independent DE's (xfce, gnome, plasma).  
-Hence the lack of an official Pantheon 'spin' on any of my favorite Distributions.
+GNOME-based Pantheon is not as distribution-agnostic as other DE's (xfce, gnome, plasma).  
 
-## Gnome apps over a Pantheon session on an unintended distribution
+## A Pantheon session over a GNOME base, on an unintended distribution
 
 Pros
 - Fluid, beautiful and gentle on the resources
@@ -53,24 +27,17 @@ Pros
 - The non-traditional button layout and session-specific theming can be easily covered by Gschema override(s)
 
 Cons
-- Pantheon shell-theme compatibility issues
+- Pantheon shell-theme compatibility issues/limitations
 - lightdm and light-locker clumsily work as a session locker
-- non-functional media/specialty keys (with no easy workaround)
-- non-functional links and buttons
 
-## The turning-point
-The increasing tweak:usage ratio still leaves several non-functional bits, along with the realization that gnome can be made more responsive by reducing it's searchable apps
+Outsanding issues
+- the session is often left in this pseudo-locked state, that the user has to `loginctl-unlock` to get out of.
 
-- The media/specialty-key issue is a gala/gnome-settings-daemon incompatibility that is somewhat petty, but still presents the need for yet another workaround
-- It mostly works just fine. It's totally daily drivable. Spousal acceptance factor? not high enough...  
+It mostly works just fine, and is definitely daily-drivable. Spousal acceptance factor? increasing...  
 
-In the end, I would rather handicap gnome, or simply deal with the occasional (perceived) sluggish shell, or dress-the-hell-out-of xfce, than continue pretending that this implementation of Pantheon is a reliable, fully-functional solution.
-
-### My problem with gnome is not gnome.
+### I like GNOME
 I find the gnome-shell defaults (as a starting point) preferrable to any other DE, which consistently results in a very low tweak:usage ratio.  
 I stray from gnome primarily because my (elder) hardware exhibits difficulty handling gnome's thorough-ness.  
 
 ## Notes
-[PantheNOT](panthenot.md)  
-[i3lock](i3lock.md)  
 [budgie-10.5@openSUSE](budgieSUSE.md)  

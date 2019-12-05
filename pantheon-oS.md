@@ -4,24 +4,31 @@
 `zypper addrepo --refresh https://download.opensuse.org/repositories/X11:Pantheon:Branch/openSUSE_Tumbleweed/X11:Pantheon:Branch.repo`  
 `zypper refresh`
 
+## Crititcal note:
+Locking the screen sometimes results in a pseudo-locked session, that has to be unlocked via `loginctl unlock-session` from tty  
+
+The details were captured in a [NIX-OS issue], [acknowleged by systemd], and [resolved by systemd]. I have not yet tracked how (or whether) this is on its way to oS.
+
 ### Option:
 1. Complete elementary experience:  
    1. Base installation:  
 `zypper install -t pattern pantheon`  
+`zypper install elementary-tweaks`
    2. Add gnome tweakability:  
 `zypper in -t pattern gnome_basis`  
-`zypper in libreoffice-gtk3 gnome-{disk-utility,online-accounts,tweaks}`  
+`zypper in libreoffice-gtk3 gnome-{disk-utility,online-accounts,tweaks} nautilus`  
 
 2. Append Fully functional pantheon-session over existing gnome installation:  
 `zypper install -t pattern pantheon_basis`  
-`zypper install pantheon-terminal`  
+`zypper install pantheon-terminal elementary-{tweaks,calendar}`  
 
 ### Beware:  
 - `pantheon-files` does not have batch-rename
+- `pantheon-files` does not allow multi-selection from name-filtering/search
 - '[No Title Bar]' or '[GTK Title Bar]' must be enabled/configured from a gnome session
 
 ### Cleanup:  
-/usr/share/glib-2.0/schemas> grep -iR "close:" ./  
+`/usr/share/glib-2.0/schemas> grep -iR "close:" ./`  
 
 must edit both files (& glib-compile-schemas & reboot) for desired effect as of 2019/11/27  
 pantheon-settings-daemon-openSUSE-branding.gschema.override  
@@ -43,5 +50,8 @@ Because you might need wifi before you have a graphical desktop
 
 \[ [Original pantheNOT ~~struggle~~ documentation](pantheNOT/README.md) \]
 
-[No Title Bar]:https://extensions.gnome.org/extension/2015/no-title-bar-forked/
-[GTK Title Bar]:https://extensions.gnome.org/extension/1732/gtk-title-bar/
+[No Title Bar]:https://extensions.gnome.org/extension/2015/no-title-bar-forked/  
+[GTK Title Bar]:https://extensions.gnome.org/extension/1732/gtk-title-bar/  
+[NIX-OS issue]:https://github.com/NixOS/nixpkgs/issues/69399  
+[acknowleged by systemd]:https://github.com/systemd/systemd/issues/13769
+[resolved by systemd]:https://github.com/systemd/systemd/commit/8cc64c2a3640121745fdfaccc6eae896ac25a911
