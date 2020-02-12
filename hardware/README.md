@@ -2,6 +2,7 @@
 
 - [Colorspace](#colorspace)
 - [Set default device output (Audio/Video)](#set-default-device-output)
+- [Add proprietary bluetooth sound profiles (Audio)](#audiobt)
 - [xorg.mouse](#xorgmouse)
 - [Hauppauge HVR2250 firmware installation](#hauppauge-hvr2250-firmware-installation)
 - [Cutter/Plotter via linux](#cutterplotter-via-linux)
@@ -56,6 +57,24 @@ Pre-req's: `alsa-utils pulseaudio-utils`
   `#set-default-sink output`  
   to:  
   `set-default-sink alsa_output.pci-0000_00_1b.0.hdmi-stereo`
+
+## AudioBT
+
+[This fork] of pulseaudio-bluetooth-modules adds LDAC, APTX, APTX-HD, AAC support, extended configuration for SBC
+
+OpenSUSE packages
+https://build.opensuse.org/package/show/home:sonaj96/pulseaudio-modules-bt
+https://software.opensuse.org/package/pulseaudio-modules-bt?search_term=pulseaudio-modules-bt
+
+To verify what you are using:
+
+>When you pair your headphones, choose AD2P profile in sound settings. Then you can check if aptX is used:
+`pactl list | grep a2dp_codec`
+The response should look something like this:
+`bluetooth.a2dp_codec = "APTX"`
+The rest of codecs should behave similarly.
+
+[This fork]:https://github.com/EHfive/pulseaudio-modules-bt
 
 ## xorg.mouse
 get mouse name:  
