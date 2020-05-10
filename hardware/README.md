@@ -1,5 +1,6 @@
 # Hardware/Firmware
 
+- [68 keys](68keys.md)
 - [Colorspace](#colorspace)
 - [Set default device output (Audio/Video)](#set-default-device-output)
 - [Add proprietary bluetooth sound profiles (Audio)](#audiobt)
