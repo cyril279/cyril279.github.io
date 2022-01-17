@@ -7,7 +7,9 @@ regarding the laptop issues, let's first get rid of the v4l2loopback-kmod and ak
 Installation of v4l2...  
  1) `sudo dnf in v4l2loopback dkms rpm-build openssl libappindicator-gtk3 v4l-utils android-tools`
  3) [grab this script](https://gist.github.com/Underknowledge/78bdf079469f3f5eb4d1dfb9419cc149)
- and run it.
+ and ~~run it.~~ if applicable, edit path to be `extra/v4l2loopback/v4l2loopback.ko.xz` instead of `extra/v4l2loopback.ko.xz`. This was needed for Fed35.  
+ see https://gist.github.com/Underknowledge/78bdf079469f3f5eb4d1dfb9419cc149#gistcomment-3972019  
+ 3a) run the script
  4) reboot and use the password, like the script output tells you.
  5) run the script again, which signs, builds & loads the module.
 
