@@ -2,7 +2,6 @@
 
 Must first get a standing v4l2loopback installation, and loaded module.  
 Without that, there is no need to even install droidcam.  
-regarding the laptop issues, let's first get rid of the v4l2loopback-kmod and akmod... everything pre-packaged. dnf rm that shit.  
 
 Installation of v4l2...  
  1) `sudo dnf in v4l2loopback dkms rpm-build openssl libappindicator-gtk3 v4l-utils android-tools`
@@ -125,9 +124,6 @@ kmod-v4l2loopback-5.11.17-300.fc34.x86_64-0.12.5-3.fc34.x86_64
 v4l-utils-1.20.0-3.fc34.x86_64
 ```
 
-latest:  
-`sudo dnf rm kmod-v4l2loopback`  
-Everything (seems to) still works.  
-started with:  
-`sudo modprobe v4l2loopback video_nr=9 devices=1 card_label="Droidcam" max_width=1920 max_height=1080`  
-which (seemed to) load videodev (since internally defined as a dependency?)
+Resources:  
+https://www.janhendrikpeters.de/2021/05/11/obs-virtual-camera-secure-boot/  
+https://github.com/umlaeute/v4l2loopback#load-the-module-at-boot
