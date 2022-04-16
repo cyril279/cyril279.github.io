@@ -3,7 +3,7 @@
 - [68 keys](68keys.md)
 - [Colorspace](#colorspace)
 - [Set default device output (Audio/Video)](#set-default-device-output)
-- [Add proprietary bluetooth sound profiles (Audio)](#audiobt)
+- [BlueTooth Audio (Proprietary profiles, sample-rates)](#audiobt)
 - [xorg.mouse](#xorgmouse)
 - [Hauppauge HVR2250 firmware installation](#hauppauge-hvr2250-firmware-installation)
 - [Cutter/Plotter via linux](#cutterplotter-via-linux)
@@ -59,8 +59,10 @@ Pre-req's: `alsa-utils pulseaudio-utils`
   to:  
   `set-default-sink alsa_output.pci-0000_00_1b.0.hdmi-stereo`
 
-## AudioBT
+## AudioBT  
+Bluetooth audio tweaks for increased functionality
 
+### BT profiles
 [This fork] of pulseaudio-bluetooth-modules adds LDAC, APTX, APTX-HD, AAC support, extended configuration for SBC
 
 OpenSUSE packages
@@ -76,6 +78,15 @@ The response should look something like this:
 The rest of codecs should behave similarly.
 
 [This fork]:https://github.com/EHfive/pulseaudio-modules-bt
+
+### Pipewire: Add sample-rates  
+(bluetooth devices sometimes need this)  
+
+Copy the configuration file to user-config space:  
+`cp /usr/share/pipewire/pipewire.conf /etc/pipewire/pipewire.conf`
+
+Uncomment and add/edit desired sample rates.  
+`default.clock.allowed-rates = [ 44100, 48000 ]`
 
 ## xorg.mouse
 get mouse name:  
