@@ -123,6 +123,11 @@ InkCut! 2019/10
 https://codelv.com/projects/inkcut/  
 
 **Installation**  
+fedora: (tested working 2022/04/15)  
+`dnf in python3-{qt5,pyside2,cups,pip,setuptools,wheel} qt5-qtsvg cups-devel`  
+`pip3 install inkcut`  
+
+opensuse:  
 `zypper in python3-{pip,qt5,pyside2,service_identity}`  
 `pip3 install git+https://github.com/codelv/inkcut.git`  
 
