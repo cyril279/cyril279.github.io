@@ -28,7 +28,8 @@ keeper:x:1308:cyril
 `grep 'group-name-here' /etc/group`  
 
 #### Config
- +	| gid | cyril | kodi | tvheadend
+
+group | gid | cyril | kodi | tvheadend
 ---:	|:---:|:---:|:---:|---
 docs | 1305 | x | x | -
 media | 1306 | x | x | x
@@ -40,29 +41,17 @@ keeper	| 1308 | x | - | -
 Each directory can only involve one group, so the **share-ability is managed only by appending groups to users**  
 
 ### Important:  
-umask must be changed so that newly created files can be writen by group.  
-This can be set per user, or system-wide. Not obvious which approach is worse for security.  
-Setting system wide is easier (one change), but affects all future created users AND the files they create, and is limited to local machine, so this would have to be done on every machine?  
+When the bit is set for a directory, the set of files in that directory will have the same group as the group of the parent directory, and not that of the user who created those files. This is used for file sharing since they can be now modified by all the users who are part of the group of the parent directory.
 
-Although locally & visually convenient, this does not seem like the ideal approach to network fileshare permission handling.  
 
-### Process:
-_https://unix.stackexchange.com/questions/12842/make-all-new-files-in-a-directory-accessible-to-a-group_  
-- adjust umask to allow group write; everyone must do this
-- set ownership of directory group as needed
-- set directory gid
-
-### umask:
-**user-specific change:**  
-_~/.bashrc_  
-If not already present, append the following line  
-`umask 002`
-
-**System-wide change:**  
-`grep UMASK /etc/login.defs`  
-_/etc/login.defs_  
+To set or remove the setgid bit, use the following commands.  
 ```
-UMASK		002
+chmod g+s
+chmod g-s
+```
+To locate/verify the setgid bit, look for an ‘s’ in the group section of the file permissions, as shown in the example below.  
+```
+-rwxrwsr-x root root 1427 Aug 2 2019 sample_file
 ```
 
 ### group ownership:
@@ -73,13 +62,13 @@ UMASK		002
 `find /path/to/dir -type d -exec echo chmod g+s {} \;`  
 `find /path/to/dir -type d -exec chmod g+s {} \;`  
 **chmod all:**  
-`chmod -R g+rws` # recursively sets group permissions to rwx, where s indicates that the gid bit has been set.  
+`chmod -R g+rws` # recursively sets group permissions to rwx, where 's' indicates that the gid bit has been set.  
 append groups to users as needed (test)
 
 # ACL
 
 Allows appending multiple users or groups to one directory, each with different permissions, greatly increasing flexibility.  
-Not as apparent/convenient/readable (locally over a network connection) as posix options, but lacks the reduction of security brought by umask edits.  
+Not as apparent/convenient/readable (locally over a network connection) as posix options.  
 
 **check for acl support in kernel**  
 `grep -i acl /boot/config*`  
