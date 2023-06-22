@@ -1,7 +1,7 @@
 ## Torrent | Transmission
 
 ### Transmission@server  
-192.168.9.13:9091 :: dubserv:9091 :: [ref_Fedora-spec](https://ask.fedoraproject.org/en/question/67980/how-do-i-use-transmission-from-server-21/) :: [ref_ubuntu-inst](https://help.ubuntu.com/community/TransmissionHowTo) ::  
+192.168.9.13:9091 :: dubserv:9091 :: [ref_Transmission_Docs_headless](https://github.com/transmission/transmission/blob/main/docs/Headless-Usage.md) :: [ref_Fedora-spec](https://ask.fedoraproject.org/en/question/67980/how-do-i-use-transmission-from-server-21/) :: [ref_ubuntu-inst](https://help.ubuntu.com/community/TransmissionHowTo) ::  
 
 -------------
 
