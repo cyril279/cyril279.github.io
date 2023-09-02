@@ -123,7 +123,7 @@ InkCut! 2019/10
 https://codelv.com/projects/inkcut/  
 
 **Installation**  
-fedora: (tested working 2022/04/15)  
+fedora: (tested working Fedora 37 & 38)  
 `dnf in python3-{qt5,pyside2,cups,pip,setuptools,wheel} qt5-qtsvg cups-devel`  
 `pip3 install inkcut`  
 
