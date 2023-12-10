@@ -127,11 +127,15 @@ fedora: (tested working Fedora 37 & 38)
 `dnf in python3-{qt5,pyside2,cups,pip,setuptools,wheel} qt5-qtsvg cups-devel`  
 `pip3 install inkcut`  
 
+fedora39: uses python-3.12 which (as of 2023/12) boogers inkcut's python installation.  
+Options are to install InkCut into a VM or container (Podman/Distrobox) running something less current (like AlmaLinux)  
+[>>Detailed here<<](cutter.md)
+
 opensuse:  
 `zypper in python3-{pip,qt5,pyside2,service_identity}`  
 `pip3 install git+https://github.com/codelv/inkcut.git`  
 
-**Cutter: PII-60**  
+**Cutter Setup: PII-60**  
 
 Model	| PII-60
 --:	| :--
