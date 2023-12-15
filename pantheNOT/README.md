@@ -1,9 +1,17 @@
 # If I was into UBUNTU, this document would not exist
-This is about an attempt (several actually), to use Elementary's Pantheon on Fedora and openSUSE (and Manjaro)
+This is (well, was) about an attempt (several actually), to use Elementary's Pantheon on Fedora and openSUSE (and Manjaro)
+
+For a while, Pantheon was difficult (for me) to get right on a non-ubuntu distro.    
+Now (2023) there are distributions that deliver Pantheon on a silver(blue) platter, so the remaining content of this document is irrelevant ((soon to be reduced, archived or deleted)).  
+
+2023/12 edit:  
+**Pantheon on Fedora can be enjoyed painlessly via [SodaliteOS](https://github.com/sodaliterocks/sodalite) or [Ultramarine linux](https://ultramarine-linux.org/).**  
+I tried it, but still ended up back on GNOME.  
+Everything worked swimmingly on both distributions, and I love how pantheon looks, but I simply prefer the GNOME workflow.  
 
 2019/11/25 edit:  
-Apparently I was doing it wrong.  
-[penSUSE's pantheon](200~https://en.opensuse.org/Portal:Pantheon) is well enough developed to work aside (or instead of) a GNOME installation.  
+**Apparently I was doing it wrong.**  
+[openSUSE's pantheon](200~https://en.opensuse.org/Portal:Pantheon) is well enough developed to work aside (or instead of) a GNOME installation.  
 There are three flavors, choose wisely. (hint:Stable)  
 ```
 zypper addrepo https://download.opensuse.org/repositories/X11:Pantheon:Branch/openSUSE_Tumbleweed/X11:Pantheon:Branch.repo
@@ -73,4 +81,3 @@ I stray from gnome primarily because my (elder) hardware exhibits difficulty han
 ## Notes
 [PantheNOT](panthenot.md)  
 [i3lock](i3lock.md)  
-[budgie-10.5@openSUSE](budgieSUSE.md)  
