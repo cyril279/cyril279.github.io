@@ -31,6 +31,8 @@ Typically used to list uuid’s for fstab entry
 dubserv:/storage/share /storage/share nfs defaults 0 0
 # nfs, automount:
 dubserv:/storage/share  /home/storage/mediaShare     nfs    noauto,x-systemd.automount,x-systemd.device-timeout=10,timeo=14,hard,intr,noatime       0 0
+# nfs automount@Silverblue laptop:
+dubserv:/storage/share/011010		/mnt/dubserv/011010	nfs    x-systemd.automount,nofail,intr,x-systemd.idle-timeout=90sec       0 0
 # samba, automount:
 //192.168.0.13/share /storage cifs credentials=/root/.cifscred,file_mode=0775,dir_mode=0775,gid=1002,x-systemd.automount 0 0
 # server share of NTFS volume:
