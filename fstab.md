@@ -26,15 +26,23 @@ Typically used to list uuid’s for fstab entry
 ### fstab archive:
 --------------
 **[cyril@kodibox ~]**$ cat /etc/fstab #useful network connection entries 
-```
+```sh
 # nfs, ultra-basic:
 dubserv:/storage/share /storage/share nfs defaults 0 0
+```
+```sh
 # nfs, automount:
 dubserv:/storage/share  /home/storage/mediaShare     nfs    noauto,x-systemd.automount,x-systemd.device-timeout=10,timeo=14,hard,intr,noatime       0 0
-# nfs client/remote automount laptop & kodibox:
+```
+```sh
+# nfs client/remote automount, laptop & kodibox:
 dubserv:/storage/share/011010		/mnt/dubserv/011010	nfs    x-systemd.automount,nofail,intr,users,acl,x-systemd.idle-timeout=90sec       0 0
+```
+```sh
 # samba, automount:
 //192.168.0.13/share /storage cifs credentials=/root/.cifscred,file_mode=0775,dir_mode=0775,gid=1002,x-systemd.automount 0 0
+```
+```sh
 # server share of NTFS volume:
 UUID=F4B2B47CB2B444C0 /storage/share ntfs uid=0,gid=1001,umask=007,nosuid,nodev,nofail,x-gvfs-show,context=system_u:object_r:samba_share_t:s0 0 0
 ```  
