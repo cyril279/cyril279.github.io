@@ -19,7 +19,7 @@ toolbox enter alma9
 ```
 ### Install prerequisite software per inkcut-installation directions for fedora37/38  
 ```sh
-dnf in python3-{qt5,pyside2,cups,pip,setuptools,devel} qt5-qtsvg cups-devel
+dnf in python3-{qt5,qt5-devel,cups,pip,setuptools,devel} qt5-qtsvg cups-devel
 ```   
 ### Install inkcut (& test)  
 ```sh
