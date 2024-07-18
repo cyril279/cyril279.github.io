@@ -25,8 +25,10 @@ Address access/group limitations for actually connecting to the cutter
 ```sh
 #create container:
 distrobox-create --name inkcutBox --image registry.opensuse.org/opensuse/leap:15
+
 #enter container:
 distrobox enter inkcutBox
+
 #install prereq. packages to container
 sudo zypper install python3-{pip,qt5,service_identity,cups}
 ```
@@ -35,8 +37,10 @@ sudo zypper install python3-{pip,qt5,service_identity,cups}
 ```sh
 #create container:
 distrobox-create --name inkcutBox --image quay.io/toolbx-images/alpine-toolbox:3.16
+
 #enter container:
 distrobox enter inkcutBox
+
 #install prereq. packages to container
 sudo apk add gcc python3-dev musl-dev linux-headers py3-{pip,pycups,qt5}
 ```
@@ -45,17 +49,21 @@ sudo apk add gcc python3-dev musl-dev linux-headers py3-{pip,pycups,qt5}
 ```sh
 #create container:
 distrobox-create --name inkcutBox --image quay.io/toolbx-images/almalinux-toolbox:9
+
 #enter container:
 distrobox enter inkcutBox
+
 #install prereq. packages to container
 sudo dnf install python3-{qt5,qt5-devel,cups,pip,setuptools,devel} qt5-qtsvg cups-devel
 ```
 
 ## Install Inkcut
 While still inside the container
-```
+```sh
+# Build/Install inkcut
 pip install inkcut
-# &test
+
+# Test for successful launch
 inkcut
 ```
 Successful launch? Let's move on.
@@ -66,7 +74,7 @@ The creation of this **inkcut.desktop** file will make inkcut available as a cli
 
 First, let's verify that we know how to launch inkcut directly from the host.  
 This command will vary according to the container (toolbox, distrobox, etc), and will be used in place of `>>run command here<<` on the `Exec` line of the `inkcut.desktop` file that we will create in the following step.  
-```
+```sh
 #Distrobox
 /usr/bin/distrobox-enter -n inkcutBox -- inkcut
 
@@ -75,7 +83,7 @@ This command will vary according to the container (toolbox, distrobox, etc), and
 ```
 
 Contents of `~/.local/share/applications/inkcut.desktop` :
-```
+```conf
 [Desktop Entry]
 Type=Application
 Name=Inkcut
@@ -90,7 +98,7 @@ Keywords=plotter;cutter;vinyl;cnc;2D;
 ```
 
 Alternate Contents of `~/.local/share/applications/inkcut.desktop` :
-```
+```conf
 [Desktop Entry]
 Version=1.0
 Type=Application
