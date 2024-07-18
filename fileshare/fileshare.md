@@ -6,22 +6,30 @@
 
 ### Fedora:
 **Install**  
-`dnf -y install nfs-utils rpcbind `
-
+```sh
+dnf -y install nfs-utils rpcbind
+```
 **start (& enable) the service**  
-`systemctl start rpcbind`  
-`systemctl enable rpcbind`  
-
+```sh
+systemctl start rpcbind
+systemctl enable rpcbind  
+```
 **show available mounts from server (must specify server)**  
-`showmount -e 192.168.0.13`  
+```sh
+showmount -e 192.168.0.13
+```  
 
 **start (& enable) the service(s)**  
-`systemctl start nfs-server rpcbind rpc-statd nfs-idmapd`  
-`systemctl enable nfs-server rpcbind`  
+```sh
+systemctl start nfs-server rpcbind rpc-statd nfs-idmapd
+systemctl enable nfs-server rpcbind
+```  
 
 ### openSUSE
 **Install**  
-`zypper in -t pattern file_server`  
+```sh
+zypper in -t pattern file_server
+```  
 >The NFS server is not part of the default installation  
 ([Suse docs:22.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.installation))  
 
@@ -31,28 +39,40 @@ _/etc/sysconfig/nfs_
 ([SUSE docs:22.3.2](https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha.nfs.html#sec.nfs.export.manual))  
 
 **start/enable associated services**  
-`systemctl restart nfsserver`  
-`systemctl enable nfsserver`  
+```sh
+systemctl restart nfsserver
+systemctl enable nfsserver
+```  
 
 ### Distro-agnostic
 _/etc/idmapd.conf_  
 **uncomment & enter domain-name** <- same name as used in server idmapd.conf  
-```
+```conf
 Domain = sameDomainNameHere
 ```
 **Configure what is exported, access permissions, and with-whom to share**  
 _/etc/exports_  
-`/storage/share 192.168.1.0/24(rw,sync,subtree_check)` #NOTE: all users must have uid & gid defined the same on all machines, or strange things happen with the share (like question-marks instead of permissions displayed)   
-`/storage/share 192.168.9.0/24(rw,sync,all_squash,anonuid=1001,anongid=1306,subtree_check)` [ kodi.wiki.nfs ](https://kodi.wiki/view/NFS#NFS_sharing_from_Linux)  
+```sh
+/storage/share 192.168.1.0/24(rw,sync,subtree_check)
+#NOTE: all users must have uid & gid defined the same on all machines, or strange things happen with the share (like question-marks instead of permissions displayed)   
+```
+...or options per [ kodi.wiki.nfs ](https://kodi.wiki/view/NFS#NFS_sharing_from_Linux)  
+```sh
+/storage/share 192.168.9.0/24(rw,sync,all_squash,anonuid=1001,anongid=1306,subtree_check)
+```
 
 **Configure firewall to allow client servers to access NFS shares**  
-`firewall-cmd --permanent --add-service nfs`  
-`firewall-cmd --permanent --add-service mountd`  
-`firewall-cmd --permanent --add-service rpc-bind`  
-`firewall-cmd --reload`  
+```sh
+firewall-cmd --permanent --add-service nfs
+firewall-cmd --permanent --add-service mountd
+firewall-cmd --permanent --add-service rpc-bind
+firewall-cmd --reload
+```  
 
 **see shares export correctly**  
-`exportfs -rav`  
+```sh
+exportfs -rav
+```  
 
 Info: http://www.troubleshooters.com/linux/nfs.htm
 
@@ -60,7 +80,9 @@ Info: http://www.troubleshooters.com/linux/nfs.htm
 Windows to *nix fileshare protocol
 
 **Fedora**  
-`dnf install samba samba-client samba-common`  
+```sh
+dnf install samba samba-client samba-common
+```  
 
 **openSUSE**  
 [[ samba guide ](https://forums.opensuse.org/content.php/199-Configure-Samba-for-Local-Lan-Workgroup)]  
@@ -69,7 +91,7 @@ Windows to *nix fileshare protocol
 **Configure**  
 (backup original conf file)  
 /etc/samba/smb.conf  
-```
+```conf
 netbios name = dubserv
 hosts allow = 127.0.0.1 192.168.9.0/24
 workgroup = WORKGROUP
@@ -93,53 +115,67 @@ add/configure share entry(ies)
     read only = no
 ```
 **Configure firewall to allow samba service**  
-`firewall-cmd --permanent --add-service=samba `  
-`firewall-cmd --permanent --add-service=samba-client`  
-`firewall-cmd --reload`  
+```sh
+firewall-cmd --permanent --add-service=samba
+firewall-cmd --permanent --add-service=samba-client
+firewall-cmd --reload
+```  
 
 **SEManage the shared directory**  
-`dnf install policycoreutils-python-utils`  
-`semanage fcontext -a -t samba_share_t '/path/to/goods(/.*)?'`  
-`restorecon -Rv /path/to/goods`  
+```sh
+dnf install policycoreutils-python-utils
+semanage fcontext -a -t samba_share_t '/path/to/goods(/.*)?'
+restorecon -Rv /path/to/goods
+```
 
 **If shared volume is NTFS partition: edit NTFS fstab entry**  
-`context=system_u:object_r:samba_share_t:s0`  
-
+```sh
+context=system_u:object_r:samba_share_t:s0
+```
 #### Samba Users, groups, & permissions
 **User:**  
-`groupadd samba` #Create a new group  
-`usermod -a -G samba cyril` #add secondary group to existing user  
-`useradd cyril -G samba` #Create a new user & add to smbgrp  
-`smbpasswd -a cyril` #Create a Samba password for the user  
-`smbpasswd -e cyril` #Enable Samba user  
-
+```sh
+groupadd samba #Create a new group  
+usermod -a -G samba cyril #add secondary group to existing user  
+useradd cyril -G samba #Create a new user & add to smbgrp  
+smbpasswd -a cyril #Create a Samba password for the user  
+smbpasswd -e cyril #Enable Samba user  
+```
 **Filesystem:**  
-`chmod -R 0770 /path/to/goods` #Change the permissions of the folder  
-`chown -R root:samba /path/to/goods` #Change the ownership of the folder  
-
+```sh
+chmod -R 0770 /path/to/goods #Change the permissions of the folder  
+chown -R root:samba /path/to/goods #Change the ownership of the folder  
+```
 **Test the newly saved entry & restart samba services**  
-`testparm`  
-`systemctl restart smb nmb`  
-
+```sh
+testparm
+systemctl restart smb nmb
+```
 **Works? then enable both smb & nmb services**  
-`systemctl enable smb nmb`  
-
+```sh
+systemctl enable smb nmb
+```
 **nmb service is avc denied when selinux is enforcing ?**  
-`ausearch -c 'nmbd' --raw | audit2allow -M my-nmbd`  
-`semodule -i my-nmbd.pp`  
-`systemctl restart nmb`  
-
+```sh
+ausearch -c 'nmbd' --raw | audit2allow -M my-nmbd
+semodule -i my-nmbd.pp
+systemctl restart nmb
+```
 <=========>
 # Client Config
 
 ## Software
 - ### Fedora  
 **Install**  
-`dnf -y install nfs-utils rpcbind `  
+```sh
+dnf -y install nfs-utils rpcbind
+```
   
   **start (& enable) the service**  
-`systemctl start rpcbind`  
-`systemctl enable rpcbind`  
+```sh
+systemctl start rpcbind
+systemctl enable rpcbind
+```  
 
 - ### openSUSE
 **Install**  
@@ -157,14 +193,15 @@ _/etc/idmapd.conf_
 Domain = sameDomainNameHere
 ```
 **show available mounts from server (must specify server)**  
-`showmount -e 192.168.0.13`  
-
+```sh
+showmount -e 192.168.0.13
+```
 
 ## Method: fstab
 Connecting via entry appended to _/etc/fstab_
 
 - ### NFS
-```
+```sh
 (ip OR alias)
 dubserv:/storage/share /storage/share                       nfs     defaults        0 0
 dubserv:/storage/share  /home/storage/mediaShare     nfs    noauto,x-systemd.automount,x-systemd.device-timeout=10,timeo=14,hard,intr,noatime	0 0
