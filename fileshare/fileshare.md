@@ -26,7 +26,12 @@ systemctl enable nfs-server rpcbind
 ```  
 
 ### openSUSE
-**Install**  
+**Install (MicroOS,Aeon)**  
+```sh
+transactional-update pkg in -t pattern file_server
+```
+
+**Install (Tumbleweed,Leap)**  
 ```sh
 zypper in -t pattern file_server
 ```  
@@ -69,7 +74,7 @@ firewall-cmd --permanent --add-service rpc-bind
 firewall-cmd --reload
 ```  
 
-**see shares export correctly**  
+**Verify shares export as expected**  
 ```sh
 exportfs -rav
 ```  
