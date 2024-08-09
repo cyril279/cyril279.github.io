@@ -1,6 +1,6 @@
 # InkCut in a container
 **Challenge**  
-An increasing number of distributions ship with **python3.11 or later**, which fouls the inkcut installation.  
+An increasing number of distributions ship with **python3.11.9 or later**, which fouls the inkcut installation.  
 
 **Solution**  
 Installing inkcut to a container provides a reliable way to isolate the specific needs of inkcut's sparsely maintained codebase while maintaining close integration with the host OS.  
@@ -19,7 +19,7 @@ Make InkCut conveniently launchable from host machine
 Address access/group limitations for actually connecting to the cutter 
 
 ## Create container
-**Note**: Each container-image version was chosen specifically for python = 3.10.x
+**Note**: Each container-image version was chosen specifically for python =/< 3.11.8
 
 ### openSUSE Leap15
 ```sh
