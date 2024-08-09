@@ -36,7 +36,7 @@ sudo zypper install python3-{pip,qt5,service_identity,cups}
 ### Alpine 3.16
 ```sh
 #create container:
-distrobox-create --name inkcutBox --image quay.io/toolbx-images/alpine-toolbox:3.16
+distrobox-create --name inkcutBox --image alpine:3.18
 
 #enter container:
 distrobox enter inkcutBox
@@ -64,7 +64,7 @@ While still inside the container
 pip install inkcut
 
 # Test for successful launch
-inkcut
+.local/bin/inkcut
 ```
 Successful launch? Let's move on.
 
@@ -76,7 +76,7 @@ First, let's verify that we know how to launch inkcut directly from the host.
 This command will vary according to the container (toolbox, distrobox, etc), and will be used in place of `>>run command here<<` on the `Exec` line of the `inkcut.desktop` file that we will create in the following step.  
 ```sh
 #Distrobox
-/usr/bin/distrobox-enter -n inkcutBox -- inkcut
+/usr/bin/distrobox-enter -n inkcutBox -- .local/bin/inkcut
 
 #toolbox
 /usr/bin/toolbox run -c inkcutBox inkcut
