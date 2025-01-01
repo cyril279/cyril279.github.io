@@ -3,6 +3,7 @@
 - [68 keys](68keys.md)
 - [BlueTooth Audio (Proprietary profiles, sample-rates)](#audiobt)
 - [Hauppauge HVR2250 firmware installation](#hauppauge-hvr2250-firmware-installation)
+- [Printing/Cups](cups.md)
 - [Cutter/Plotter via linux](#cutterplotter-via-linux)
 - [PC: Lenovo T450](#lenovo-t450)
 - [Bootable USB media for bare-metal & firmware updates](bootableUSB.md)

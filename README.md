@@ -3,20 +3,21 @@ Document repository of... breadcrumbs?
 ## Method
 - [fileshare](fileshare/README.md)  
 - [mdadm](mdadm.md)  
-- [Transmission (server)](server-trans.md)  
-- [Tvheadend](server-tvh.md)  
+- [Transmission (server)](serverConfigTransmission.md)  
+- [Tvheadend](serverConfigTVH.md)  
 
 ## OS / DE
-- [microOS](microOSDesktop.md)
+- [microOS Desktop](microosDesktop.md)  
+- [microOS Server](microosServer.md)  
 - [Fedora](fedora.md)  
 - [OpenSUSE](opensuse.md)  
-- [PantheNOT](pantheNOT/README.md)
+- [PantheNOT](pantheNOT/README.md)  
 
 ## Configuration
 - [config-fstab](fstab.md)  
 - [config-general](config.md)  
 - [hardware/firmware](hardware/README.md)
-- [server-General](server-gen.md)  
+- [server-General](serverConfigGeneral.md)  
 
 ## NOTES
 

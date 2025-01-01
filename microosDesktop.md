@@ -6,8 +6,45 @@ Some tweaks needed to better suit more standard desktop-PC usage.
 Aeon was the goal (rolling-release AND immutable OS), but on my older hardware it forces "fallback FDE mode" which requires a passphrase on each boot, which is NOT okay for a family-friendly-living-room PC.  
 A slightly customized MicroOS is the easy next-best choice.
 
-## Restart & Shutdown
-The profile for polkit privilege is set to `restrictive` (the most secure option), which requires authentication for reboot & power-off (among other small-worry items).  
+### Overview
+- [Add user-module & parental-controls](#user-controls) to gnome-settings  
+- [Change polkit policy](#polkit-policy) from `restrictive` to `standard`
+
+## During OS installation
+- Choose GNOME as desktop software (duh)
+- Set policy as `standard` (from `restrictive`)
+- Choose `systemd-boot` as boot manager  
+    (personal preference, not req'd)
+
+## User-controls
+Are not integrated into Gnome-settings of MicroOS.  
+Specifically, I wanted to be able to apply auto-login to a specific user, and apply parental controls.  
+
+### GUI gnome-controls
+```sh
+# install gnome-settings 'users' menu & install parental controls gui options
+sudo transactional-update pkg install \
+gnome-control-center-users \
+malcontent{,-control}
+```
+
+### CLI auto-login
+( If gui packages are not installed )
+```sh
+# create user
+sudo useradd -d /home/username username
+# set password for 'username'
+passwd username
+```
+Once user is created, apply username to autologin:  
+```sh
+/etc/sysconfig/displaymanager
+--------------------
+DISPLAYMANAGER_AUTOLOGIN="username"
+```
+
+## Polkit policy
+The defualt profile for polkit privilege is set as `restrictive` (the most secure option), which requires authentication for reboot & power-off (among other small-worry items).  
 This profile is not ideal for casual or community desktop usage.  
 
 ### Solution:  
@@ -37,20 +74,3 @@ sudo set_polkit_default_privs
 
 ### Ref  
 https://manpages.opensuse.org/Tumbleweed/polkit-default-privs.5.en.html#PROFILE_TYPES  
-
-## User-controls
-Are not integrated into Gnome-settings of MicroOS.  
-Specifically, I wanted to be able to apply auto-login to a specific user.  
-
-### Solution 1: install the GUI
-```sh
-# install gnome-settings 'users' menu
-sudo transactional-update pkg install gnome-control-center-users
-```
-
-### Solution 2: just do the thing
-```sh
-/etc/syscofig/displaymanager
--------------
-DISPLAYMANAGER_AUTOLOGIN="cyril" # or whomever
-```

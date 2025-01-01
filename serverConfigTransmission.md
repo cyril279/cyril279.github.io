@@ -10,9 +10,12 @@ mkdir -p /etc/transmission/config
 mkdir -p /var/storage/watch
 ```
 
-### Create `/etc/transmission/docker-compose.yml`  
+### Create Docker entry  
 Defines core transmission-server parameters  
-and maps host ports & directories to the container
+and maps host ports & directories to the container  
+
+`/etc/docker/docker-compose.yml`  
+
 ```yaml
 ---
 services:
@@ -27,38 +30,18 @@ services:
       - USER= #optional
       - PASS= #optional
       - WHITELIST=127.0.0.1,192.168.9.*
-      - PEERPORT=51417
-      - HOST_WHITELIST=dubserv
+      - PEERPORT=51419 #must manually forward port in router software
+      - HOST_WHITELIST=serverus #must have defined by router ip-reservation
     volumes:
       - /etc/transmission/config:/config
-      - /var/storage:/storage
+      - /var/storage/media:/media
       - /var/storage/watch:/watch
     ports:
       - 9091:9091
-      - 51413:51413
-      - 51413:51413/udp
+      - 51419:51419 #must manually forward port in router software
+      - 51419:51419/udp #must manually forward port in router software
     restart: unless-stopped
 
-```
-
-### Create `/etc/systemd/system/transmission.service` unit file  
-so that transmission container is automatically launched at boot  
-```
-[Unit]
-Description=Service for Transmission container
-Requires=docker.service
-After=docker.service
-
-[Service]
-Type=oneshot
-WorkingDirectory=/etc/transmission/
-ExecStart=/usr/bin/docker-compose -f docker-compose.yml up -d
-ExecStop=/usr/bin/docker-compose -f docker-compose.yml stop
-StandardOutput=syslog
-RemainAfterExit=yes
-
-[Install]
-WantedBy=default.target
 ```
 
 ### Notes:  
@@ -107,5 +90,3 @@ server-hostname:9091
 
 or use the remote client application:  
 _transmission-remote-gtk_  
-
-
