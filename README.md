@@ -7,8 +7,7 @@ Document repository of... breadcrumbs?
 - [Tvheadend](serverConfigTVH.md)  
 
 ## OS / DE
-- [microOS Desktop](microosDesktop.md)  
-- [microOS Server](microosServer.md)  
+- [microOS](microOS.md)  
 - [Fedora](fedora.md)  
 - [OpenSUSE](opensuse.md)  
 - [PantheNOT](pantheNOT/README.md)  

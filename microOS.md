@@ -1,22 +1,26 @@
-# MicroOS as a desktop PC
+# MicroOS
+An immutable OS with a minimal presentation and tumbleweed's package base.  
 Out of the box, MicroOS is designed as a foundation for single-purpose server/appliance usage.  
-Some tweaks needed to better suit more standard desktop-PC usage.
+Some tweaks are needed to better suit more standard desktop-PC usage.
 
-### Why not use Tumbleweed or Aeon?
-Aeon was the goal (rolling-release AND immutable OS), but on my older hardware it forces "fallback FDE mode" which requires a passphrase on each boot, which is NOT okay for a family-friendly-living-room PC.  
+- [As a desktop PC](#as-a-desktop-pc)
+- [As a server](#as-a-server)
+
+## As a desktop PC
+Aeon was the original goal (rolling-release AND immutable OS), but my older hardware forces Aeon to use "fallback FDE mode" which requires a passphrase on each boot, which is NOT okay for a family-friendly-living-room PC.  
 A slightly customized MicroOS is the easy next-best choice.
 
 ### Overview
 - [Add user-module & parental-controls](#user-controls) to gnome-settings  
 - [Change polkit policy](#polkit-policy) from `restrictive` to `standard`
 
-## During OS installation
+### During OS installation
 - Choose GNOME as desktop software (duh)
 - Set policy as `standard` (from `restrictive`)
 - Choose `systemd-boot` as boot manager  
     (personal preference, not req'd)
 
-## User-controls
+### User-controls
 Are not integrated into Gnome-settings of MicroOS.  
 Specifically, I wanted to be able to apply auto-login to a specific user, and apply parental controls.  
 
@@ -41,6 +45,78 @@ Once user is created, apply username to autologin:
 /etc/sysconfig/displaymanager
 --------------------
 DISPLAYMANAGER_AUTOLOGIN="username"
+```
+
+## As a server
+(2024/12 update)  
+
+During OS installation, ensure:  
+systemd-boot  
+
+layered packages  
+```sh
+transactional-update pkg in -t pattern file_server
+transactional-update pkg in samba docker{,-compose}
+usermod -aG docker cyril #or whomever will need to test and run docker containers
+```
+
+## Container life:  
+```sh
+docker create --name transmission lscr.io/linuxserver/transmission:latest
+docker create --name jelyfin jellyfin/jellyfin:latest
+```
+
+`/etc/docker/docker-compose.yml` #config file for starting/running containers
+```
+---
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    # user: 1000:100
+    network_mode: 'host'
+    volumes:
+      - /etc/jellyfin/config:/config
+      - /etc/jellyfin/cache:/cache
+      - /var/storage/media/video:/data/video
+      - /var/storage/media/music:/data/music
+      - /var/storage/media/pictures:/data/pictures
+      - /var/storage/media/books:/data/books
+    # Optional - alternative address used for autodiscovery
+    environment:
+      - PUID=1000
+      - PGID=100
+      - JELLYFIN_PublishedServerUrl=192.168.9.40
+      - TZ=America/Denver
+    # Optional - may be necessary for docker healthcheck to pass if running in host network mode
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    devices: #optional, see 'hardware acceleration'
+      - /dev/dri:/dev/dri
+    restart: 'unless-stopped'
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Denver
+      - TRANSMISSION_WEB_HOME= #optional
+      - USER= #optional
+      - PASS= #optional
+      - WHITELIST=127.0.0.1,192.168.9.*
+      - PEERPORT= #optional
+      - HOST_WHITELIST=serverus
+    volumes:
+      - /etc/transmission/config:/config
+      - /var/storage/media:/media
+      - /var/storage/watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51419 #must manually forward port in router software
+      - 51413:51419/udp #must manually forward port in router software
+    restart: unless-stopped
 ```
 
 ## Polkit policy
