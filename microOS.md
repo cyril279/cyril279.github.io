@@ -1,5 +1,5 @@
 # MicroOS
-An immutable OS with a minimal presentation and tumbleweed's package base.  
+A rolling-release & immutable OS with a minimal presentation and tumbleweed's package base.  
 Out of the box, MicroOS is designed as a foundation for single-purpose server/appliance usage.  
 Some tweaks are needed to better suit more standard desktop-PC usage.
 
@@ -7,7 +7,7 @@ Some tweaks are needed to better suit more standard desktop-PC usage.
 - [As a server](#as-a-server)
 
 ## As a desktop PC
-Aeon was the original goal (rolling-release AND immutable OS), but my older hardware forces Aeon to use "fallback FDE mode" which requires a passphrase on each boot, which is NOT okay for a family-friendly-living-room PC.  
+Aeon was the original goal (also rolling-release AND immutable OS), but my older hardware forces Aeon to use "fallback FDE mode" which requires a passphrase on each boot, which is NOT okay for a family-friendly-living-room PC.  
 A slightly customized MicroOS is the easy next-best choice.
 
 ### Overview
@@ -37,6 +37,8 @@ malcontent{,-control}
 ```sh
 # create user
 sudo useradd -d /home/username username
+```
+```sh
 # set password for 'username'
 passwd username
 ```
@@ -56,68 +58,24 @@ systemd-boot
 layered packages  
 ```sh
 transactional-update pkg in -t pattern file_server
+```
+```sh
 transactional-update pkg in samba docker{,-compose}
+```
+```sh
 usermod -aG docker cyril #or whomever will need to test and run docker containers
 ```
 
 ## Container life:  
-```sh
-docker create --name transmission lscr.io/linuxserver/transmission:latest
-docker create --name jelyfin jellyfin/jellyfin:latest
-```
+Apps on a headless & immutable OS are best installed as containers  
+Docker (& docker-compose) is the way: [serverConfigDocker.md](serverConfigDocker.md)
 
-`/etc/docker/docker-compose.yml` #config file for starting/running containers
-```
----
-services:
-  jellyfin:
-    image: jellyfin/jellyfin:latest
-    container_name: jellyfin
-    # user: 1000:100
-    network_mode: 'host'
-    volumes:
-      - /etc/jellyfin/config:/config
-      - /etc/jellyfin/cache:/cache
-      - /var/storage/media/video:/data/video
-      - /var/storage/media/music:/data/music
-      - /var/storage/media/pictures:/data/pictures
-      - /var/storage/media/books:/data/books
-    # Optional - alternative address used for autodiscovery
-    environment:
-      - PUID=1000
-      - PGID=100
-      - JELLYFIN_PublishedServerUrl=192.168.9.40
-      - TZ=America/Denver
-    # Optional - may be necessary for docker healthcheck to pass if running in host network mode
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    devices: #optional, see 'hardware acceleration'
-      - /dev/dri:/dev/dri
-    restart: 'unless-stopped'
-
-  transmission:
-    image: lscr.io/linuxserver/transmission:latest
-    container_name: transmission
-    environment:
-      - PUID=1000
-      - PGID=100
-      - TZ=America/Denver
-      - TRANSMISSION_WEB_HOME= #optional
-      - USER= #optional
-      - PASS= #optional
-      - WHITELIST=127.0.0.1,192.168.9.*
-      - PEERPORT= #optional
-      - HOST_WHITELIST=serverus
-    volumes:
-      - /etc/transmission/config:/config
-      - /var/storage/media:/media
-      - /var/storage/watch:/watch
-    ports:
-      - 9091:9091
-      - 51413:51419 #must manually forward port in router software
-      - 51413:51419/udp #must manually forward port in router software
-    restart: unless-stopped
-```
+Install as desired, configure as needed  
+(links to Docker service entries):  
+[BOINC](serverConfigDocker#boinc)  
+[Jellyfin](serverConfigDocker#jellyfin)  
+[Transmission](serverConfigDocker#transmission)  
+[tvheadend](serverConfigDocker#tvheadend)  
 
 ## Polkit policy
 The defualt profile for polkit privilege is set as `restrictive` (the most secure option), which requires authentication for reboot & power-off (among other small-worry items).  

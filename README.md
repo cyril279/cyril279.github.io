@@ -1,6 +1,7 @@
 Document repository of... breadcrumbs? 
 
 ## Method
+- [docker/docker-compose](serverConfigDocker.md)  
 - [fileshare](fileshare/README.md)  
 - [mdadm](mdadm.md)  
 - [Transmission (server)](serverConfigTransmission.md)  
@@ -17,6 +18,8 @@ Document repository of... breadcrumbs?
 - [config-general](config.md)  
 - [hardware/firmware](hardware/README.md)
 - [server-General](serverConfigGeneral.md)  
+- [Transmission (docker)](serverConfigDocker.md#transmission)  
+- [Tvheadend (docker)](serverConfigDocker.md#tvheadend)  
 
 ## NOTES
 
