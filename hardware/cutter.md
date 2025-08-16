@@ -1,88 +1,163 @@
-# InkCut in a container
-**Challenge**  
-An increasing number of distributions ship with **python3.11.9 or later**, which fouls the inkcut installation.  
-
-**Solution**  
-Installing inkcut to a container provides a reliable way to isolate the specific needs of inkcut's sparsely maintained codebase while maintaining close integration with the host OS.  
-With the approach outlined below, inkcut is accessed and launched the same way as every other graphical package on the system.  
-
-**Bonus**  
-This method also applies to immutable distributions where container/sandbox apps are 'the way'  
+# Inkcut Containerized | 2025/08 revisit  
+Immutable-distro friendly, isolated python management.  
+See [notes](#notes) for details
 
 ## Overview:
-1. [Create the container](#create-container) (into which we will install inkcut)
+1. [Create the container](#create--enter-container-prep-environment) (into which we will install inkcut)  
 2. Enter the container and install packages that will be needed to build inkcut
-2. [Build (& test) inkcut](#install-inkcut)
+2. [Build (& test) inkcut](#build--install-inkcut)
 2. [Create an inkcut.desktop file](#launching-inkcut-from-the-host)  
 Make InkCut conveniently launchable from host machine
-2. [Create a udev rule](#usb-serial-permissions)  
-Address access/group limitations for actually connecting to the cutter 
+2. [Modify USB-serial permissions](#usb-serial-permissions)  
+Address 'permission-denied' when sending data to the cutter 
 
-## Create container
-**Note**: Each container-image version was chosen specifically for python =/< 3.11.8
-
-### openSUSE Leap15
+## Create & enter container, prep environment
 ```sh
 #create container:
-distrobox-create --name inkcutBox --image registry.opensuse.org/opensuse/leap:15
-
-#enter container:
-distrobox enter inkcutBox
-
-#install prereq. packages to container
-sudo zypper install python3-{pip,qt5,service_identity,cups}
+distrobox-create \
+--name inkcutBox \
+--image docker.io/library/alpine:3.22 \
+--home ~/distrobox/inkcutBox
 ```
-
-### Alpine 3.16
 ```sh
-#create container:
-distrobox-create --name inkcutBox --image alpine:3.18
-
 #enter container:
 distrobox enter inkcutBox
-
-#install prereq. packages to container
-sudo apk add gcc python3-dev musl-dev linux-headers py3-{pip,pycups,qt5}
 ```
-
-### Almalinux 9
 ```sh
-#create container:
-distrobox-create --name inkcutBox --image quay.io/toolbx-images/almalinux-toolbox:9
-
-#enter container:
-distrobox enter inkcutBox
-
 #install prereq. packages to container
-sudo dnf install python3-{qt5,qt5-devel,cups,pip,setuptools,devel} qt5-qtsvg cups-devel
+sudo apk add gcc git cups-dev musl-dev linux-headers python3-dev pipx py3-{pip,qt6}
 ```
-
-## Install Inkcut
-While still inside the container
+## Build & install Inkcut
 ```sh
 # Build/Install inkcut
-pip install inkcut
-
-# Test for successful launch
-.local/bin/inkcut
+pipx install git+https://github.com/codelv/inkcut.git
 ```
-Successful launch? Let's move on.
-
+```sh
+# link system PyQt directory to prevent
+# qtpy.QtBindingsNotFoundError: No Qt bindings could be found
+ln -s /usr/lib/python3.12/site-packages/PyQt6 \
+~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/
+```
+```sh
+# Test for successful launch
+~/.local/bin/inkcut
+```
+Successful launch? Let's move on then.
 
 ## Launching inkcut from the host
-The creation of this **inkcut.desktop** file will make inkcut available as a clickable icon from the app menu of the host machine, just like any other graphical app.
+The creation of this **`inkcut.desktop`** file will make inkcut available as a clickable icon from the app menu of the host machine, just like any other graphical app.
 
 First, let's verify that we know how to launch inkcut directly from the host.  
 This command will vary according to the container (toolbox, distrobox, etc), and will be used in place of `>>run command here<<` on the `Exec` line of the `inkcut.desktop` file that we will create in the following step.  
 ```sh
 #Distrobox
-/usr/bin/distrobox-enter -n inkcutBox -- .local/bin/inkcut
+/usr/bin/distrobox-enter -n inkcutBox -- ~/.local/bin/inkcut
+
+#Distrobox; rootful, created at specific path
+/usr/bin/distrobox-enter -n inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut
 
 #toolbox
 /usr/bin/toolbox run -c inkcutBox inkcut
 ```
 
 Contents of `~/.local/share/applications/inkcut.desktop` :
+```conf
+[Desktop Entry]
+Name=Inkcut@Alp3.22
+GenericName=Terminal entering Inkcut
+Comment=Terminal entering Inkcut
+Categories=Distrobox;System;Utility
+Exec=/usr/bin/distrobox-enter -n inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut
+Icon=/home/cyril/.local/share/icons/inkcutIcon.svg
+Keywords=distrobox;
+NoDisplay=false
+Terminal=true
+TryExec=/usr/bin/distrobox
+Type=Application
+```
+[Alternate inkcut.desktop entries](#alternate-inkcutdesktop-contents)  
+Within seconds of this file being saved, it was available from the app-menu (tested on Gnome).
+
+## USB-serial permissions
+Once a serial device is configured in inkcut, you may experience a `permission denied ... ttyUSB0` error when attempting to send a job.  
+(I use a usb-serial adapter cable that shows up as /dev/ttyUSB0)  
+
+1. ~~Make sure that your user is a member of the dialout group on the host machine~~  
+    #in hindsight, I question whether this is needed considering the udev rule that is used for the container workflow.  
+2. A **udev-rule** is needed to allow passthrough of serial-device permissions to the container.  
+Inkcut will need this to send the job over serial interface to the cutter  
+
+One option is to alter the permisisons of `usb` + `tty` devices to allow `other` to read & write thereto.  
+Info on the device was gathered by using `udevadm info -a -n /dev/ttyACM0`
+
+Contents of `/etc/udev/rules.d/50-usb-serial.rules` :  
+```sh
+SUBSYSTEM=="tty", SUBSYSTEMS=="usb", MODE:="0666", ENV{ID_MM_DEVICE_IGNORE}="1", ENV{ID_MM_PORT_IGNORE}="1"
+```
+Another option is to change the owner of the devices (group seems to have no effect)
+```sh
+KERNEL=="ttyACM[0-9]*", SUBSYSTEMS=="usb", OWNER="cyril", GROUP="dialout", MODE:="0660", ENV{ID_MM_DEVICE_IGNORE}="1", ENV{ID_MM_PORT_IGNORE}="1"
+KERNEL=="ttyUSB[0-9]*", SUBSYSTEMS=="usb", OWNER="cyril", GROUP="dialout", MODE:="0660", ENV{ID_MM_DEVICE_IGNORE}="1", ENV{ID_MM_PORT_IGNORE}="1"
+```
+Reload udev  
+```sh
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+
+Now, unplug your serial device and plug it back in.  
+You should notice the change in permissions or ownership (or whatever) both on the host OS and in the container.  
+```sh
+# Host OS
+ls -l /dev/ttyACM0
+crw-rw-rw-. 1 cyril dialout 166, 0 Aug 16 09:30 /dev/ttyACM0
+```
+```sh
+# Container
+📦[cyril@inkcutBox cyril]$ ls -l /dev/ttyACM0
+crw-rw-rw- 1 cyril nobody 166, 0 Aug 16 09:30 /dev/ttyACM0
+```
+## Notes
+### Installing inkcut to a container
+Is this necessary? No, but...  
+The primary benefit is that it helps to isolate the installation so that potential packaging & configuration conflicts are avoided.  
+Containerized apps (flatpak, distrobox, docker, etc) are considered good practice even if the system is mutable.
+
+### pipx who?
+Attempts to use `pip install someThing` trigger a warning suggesting to either install python stuff using the core package manager, or using pipx - a tool that creates and works inside a virtual environment.  
+Isolation is tha way nowadays. pipx it is, then...
+
+### Failure to launch Inkcut because
+`qtpy.QtBindingsNotFoundError: No Qt bindings could be found`
+
+This error showed up when my preferred distributions started using `python 3.12.x`  
+The solution is to copy (or symbolically link) the PyQt directory from the system location to the local inkcut installation.
+```sh
+# example
+ln -s /usr/lib/site-packages/python312/PyQt6 \
+/.local/share/pipx/.../site-packages/python312/
+```
+### Distributions/Packages
+My current distribution of choice comes with Distrobox, so that's what this revisit used.  
+Toolbox works VERY similarly, and would be fine to use as well.
+
+I chose alpine as the container OS because it's small, and starts with a minimal set of packages installed.  
+This is a low-needs project, and so the low-profile OS is perfect.
+### Alternate inkcut.desktop Contents
+```conf
+[Desktop Entry]
+Name=Inkcut@Alp3.22
+GenericName=Terminal entering Inkcut
+Comment=Terminal entering Inkcut
+Categories=Distrobox;System;Utility
+Exec=sh -c 'distrobox enter -n inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut'
+Icon=/home/cyril/.local/share/icons/inkcutIcon.svg
+Keywords=distrobox;
+NoDisplay=false
+Terminal=false
+TryExec=/usr/bin/distrobox
+Type=Application
+```
 ```conf
 [Desktop Entry]
 Type=Application
@@ -96,8 +171,6 @@ Categories=Graphics;Office;
 MimeType=image/svg+xml;
 Keywords=plotter;cutter;vinyl;cnc;2D;
 ```
-
-Alternate Contents of `~/.local/share/applications/inkcut.desktop` :
 ```conf
 [Desktop Entry]
 Version=1.0
@@ -108,50 +181,4 @@ Name=inkcut
 Comment=Software for your cutter
 Keywords=cutter;plotter;
 Icon=
-```
-Within seconds of this file being saved, it was available from the app-menu (tested on Gnome).
-
-## USB-serial permissions
-Once a serial device is configured in inkcut, you may experience a `permission denied ... ttyUSB0` error when attempting to send a job.  
-(I use a usb-serial adapter cable that shows up as /dev/ttyUSB0)  
-
-1. ~~Make sure that your user is a member of the dialout group on the host machine~~  
-    #in hindsight, I question whether this is needed considering the udev rule that is used for the container workflow.  
-2. A **udev-rule** is needed to allow passthrough of serial-device permissions to the container.  
-Inkcut will need this to send the job to the cutter  
-
-Contents of `/etc/udev/rules.d/50-usb-serial.rules` :  
-```sh
-SUBSYSTEM=="tty", SUBSYSTEMS=="usb-serial", OWNER="${USER}"
-```
-
-Reload udev  
-```sh
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-```
-
-Now, unplug your serial device and plug it back in. You should notice that it is now owned by your user, not root.  
-```sh
-ls -l /dev/ttyUSB0
-crw-rw----. 1 csmart dialout 188, 0 Apr 18 20:53 /dev/ttyUSB0
-```
-
-It should also be the same inside the toolbox container now.  
-```sh
-[21:03 csmart ~]$ toolbox enter
-⬢[csmart@toolbox ~]$ ls -l /dev/ttyUSB0 
-crw-rw----. 1 csmart nobody 188, 0 Apr 18 20:53 /dev/ttyUSB0
-```  
-**Profit!**  
-ref: https://blog.christophersmart.com/2020/04/18/accessing-usb-serial-devices-in-fedora-silverblue/  
-ref: [Accessing usb serial devices in fedora silverblue](containerSerial.md#inside-a-container-with-udev)  
-
-post-installation container size comparison
-```sh
-cyril@x1c6:~> podman ps --size
-CONTAINER ID  IMAGE                                           PORTS        NAMES       SIZE
-43296ed867e2  registry.opensuse.org/opensuse/leap:15     ...  inkcutLeap   1.46GB (virtual 1.7GB)
-ddd81161f33f  quay.io/toolbx-images/alpine-toolbox:3.16  ...  inkcutAlpine 771MB (virtual 982MB)
-70fae8d15555  quay.io/toolbx-images/almalinux-toolbox:9  ...  inkcutAlma   1.29GB (virtual 1.88GB)
 ```
