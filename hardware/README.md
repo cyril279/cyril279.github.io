@@ -49,23 +49,12 @@ so from that directory:
 `cp *fw /lib/firmware`
 
 ## Cutter/Plotter via linux
-InkCut! 2019/10  
+### InkCut!  
 https://codelv.com/projects/inkcut/  
 
-**Installation**  
-fedora: (tested working Fedora 37 & 38)  
-`dnf in python3-{qt5,pyside2,cups,pip,setuptools,wheel} qt5-qtsvg cups-devel`  
-`pip3 install inkcut`  
+[>>Containerize the installation<<](inkcutContainerized.md)
 
-fedora39: uses python-3.12 which (as of 2023/12) boogers inkcut's python installation.  
-Options are to install InkCut into a VM or container (Podman/Distrobox) running something less current (like AlmaLinux)  
-[>>Detailed here<<](cutter.md)
-
-opensuse:  
-`zypper in python3-{pip,qt5,pyside2,service_identity}`  
-`pip3 install git+https://github.com/codelv/inkcut.git`  
-
-**Cutter Setup: PII-60**  
+### Cutter Setup: PII-60
 
 Model	| PII-60
 --:	| :--
@@ -76,7 +65,7 @@ Data Buffer Size	| 4MB
 Interfaces	| USB 1.1 & Parallel (Centronics) & Serial (RS-232C,9600 baud)
 Commands	| HP-GL, HP-GL/2
 
-**Setup Notes**  
+### Setup Notes
 **Serial connection** may return `/dev/ttyS0: Permission denied` unless user added to `dialout` group. [details](https://askubuntu.com/a/210230)  
 > **Cutters with a parallel interface** (either a 'real' parallel port or using a built-in parallel-to-USB converter) must be added to your system as a printer before using them from Inkcut. Start your printer configuration utility (e.g. system-config-printer), which at least when connecting via USB should detect the connected cutter. Proceed to add it with the 'Generic' 'Raw Queue' driver.
 
