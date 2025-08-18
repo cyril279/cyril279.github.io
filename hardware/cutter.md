@@ -3,46 +3,47 @@ Immutable-distro friendly, isolated python management.
 See [notes](#notes) for details
 
 ## Overview:
-1. [Create the container](#create--enter-container-prep-environment) (into which we will install inkcut)  
-2. Enter the container and install packages that will be needed to build inkcut
-2. [Build (& test) inkcut](#build--install-inkcut)
+1. Create the container (into which inkcut will be installed)  
+The [composed approach](#create-the-container) will create the container and build & install inkcut in one step.  
+The [decomposed approach](#decomposed-approach) separates the process, facilitating troubleshooting.
 2. [Create an inkcut.desktop file](#launching-inkcut-from-the-host)  
 Make InkCut conveniently launchable from host machine
 2. [Modify USB-serial permissions](#usb-serial-permissions)  
 Address 'permission-denied' when sending data to the cutter 
 
-## Create & enter container, prep environment
-```sh
-#create container:
-distrobox-create \
---name inkcutBox \
---image docker.io/library/alpine:3.22 \
---home ~/distrobox/inkcutBox
-```
-```sh
-#enter container:
-distrobox enter inkcutBox
-```
-```sh
-#install prereq. packages to container
-sudo apk add gcc git cups-dev musl-dev linux-headers python3-dev pipx py3-{pip,qt6}
-```
-## Build & install Inkcut
-```sh
+## Create the container
+& build/isntall inkcut
+
+### Create container ini file/entry
+I create my `distrobox.ini` at `~/distrobox`,  
+which is also where I create the home directories for containers.
+distrobox.ini:
+```ini
+[inkcutBox]
+image=docker.io/library/alpine:3.22
+home=/home/cyril/distrobox/inkcutBox
+pull=true
+start_now=true
+additional_packages="gcc cups-dev musl-dev linux-headers"
+additional_packages="python3-dev pipx py3-pip py3-qt6"
+additional_packages="fastfetch git"
 # Build/Install inkcut
-pipx install git+https://github.com/codelv/inkcut.git
-```
-```sh
+init_hooks=pipx install git+https://github.com/codelv/inkcut.git;
 # link system PyQt directory to prevent
 # qtpy.QtBindingsNotFoundError: No Qt bindings could be found
-ln -s /usr/lib/python3.12/site-packages/PyQt6 \
-~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/
+init_hooks=ln -s /usr/lib/python3.12/site-packages/PyQt6 ~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/;
 ```
+### Assemble the container (also installs inkcut)
 ```sh
-# Test for successful launch
-~/.local/bin/inkcut
+distrobox-assemble create --name inkcutBox
 ```
-Successful launch? Let's move on then.
+### Test proper creation by attempting to launch inkcut from the host
+```sh
+/usr/bin/distrobox-enter --name inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut
+```
+Successful launch?  
+if no, try [this decomposed approach](#decomposed-approach) to help isolate where things might be going wrong.  
+if yes, Great! Let's move on.
 
 ## Launching inkcut from the host
 The creation of this **`inkcut.desktop`** file will make inkcut available as a clickable icon from the app menu of the host machine, just like any other graphical app.
@@ -67,7 +68,7 @@ Name=Inkcut@Alp3.22
 GenericName=Terminal entering Inkcut
 Comment=Terminal entering Inkcut
 Categories=Distrobox;System;Utility
-Exec=/usr/bin/distrobox-enter -n inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut
+Exec=/usr/bin/distrobox-enter --name inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut
 Icon=/home/cyril/.local/share/icons/inkcutIcon.svg
 Keywords=distrobox;
 NoDisplay=false
@@ -75,8 +76,8 @@ Terminal=true
 TryExec=/usr/bin/distrobox
 Type=Application
 ```
-[Alternate inkcut.desktop entries](#alternate-inkcutdesktop-contents)  
 Within seconds of this file being saved, it was available from the app-menu (tested on Gnome).
+[Alternate inkcut.desktop entries](#alternate-inkcutdesktop-contents)  
 
 ## USB-serial permissions
 Once a serial device is configured in inkcut, you may experience a `permission denied ... ttyUSB0` error when attempting to send a job.  
@@ -117,6 +118,42 @@ crw-rw-rw-. 1 cyril dialout 166, 0 Aug 16 09:30 /dev/ttyACM0
 📦[cyril@inkcutBox cyril]$ ls -l /dev/ttyACM0
 crw-rw-rw- 1 cyril nobody 166, 0 Aug 16 09:30 /dev/ttyACM0
 ```
+## Decomposed Approach
+### Create & enter container, prep environment
+```sh
+#create container:
+distrobox-create \
+--name inkcutBox \
+--image docker.io/library/alpine:3.22 \
+--home ~/distrobox/inkcutBox
+```
+```sh
+#enter container:
+distrobox enter inkcutBox
+```
+```sh
+#install prereq. packages to container
+sudo apk add gcc git cups-dev musl-dev linux-headers python3-dev pipx py3-{pip,qt6}
+```
+### Build & install Inkcut
+```sh
+# Build/Install inkcut
+pipx install git+https://github.com/codelv/inkcut.git
+```
+```sh
+# link system PyQt directory to prevent
+# qtpy.QtBindingsNotFoundError: No Qt bindings could be found
+ln -s /usr/lib/python3.12/site-packages/PyQt6 \
+~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/
+```
+### Test for successful launch
+(while still inside container)  
+```sh
+~/.local/bin/inkcut
+```
+Successful launch? Let's move onto [launching from the host](#launching-inkcut-from-the-host).
+
+
 ## Notes
 ### Installing inkcut to a container
 Is this necessary? No, but...  
