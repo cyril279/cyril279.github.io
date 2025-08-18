@@ -1,10 +1,14 @@
-# Inkcut Containerized | 2025/08 revisit  
-Immutable-distro friendly, isolated python management.  
+# Inkcut + Distrobox
+2025/08 revisit   
+- Distribution independent
+- Immutable-distro friendly
+- Isolated python management.  
+
 See [notes](#notes) for details
 
 ## Overview:
 1. Create the container (into which inkcut will be installed)  
-The [composed approach](#create-the-container) will create the container and build & install inkcut in one step.  
+The [declarative approach](#create-the-container) will create the container and build & install inkcut in one step.  
 The [decomposed approach](#decomposed-approach) separates the process, facilitating troubleshooting.
 2. [Create an inkcut.desktop file](#launching-inkcut-from-the-host)  
 Make InkCut conveniently launchable from host machine
@@ -14,9 +18,9 @@ Address 'permission-denied' when sending data to the cutter
 ## Create the container
 & build/isntall inkcut
 
-### Create container ini file/entry
-I create my `distrobox.ini` at `~/distrobox`,  
-which is also where I create the home directories for containers.
+### Create distrobox.ini file/entry
+I prefer to use `~/distrobox` directory to store the `distrobox.ini` file and also for the home directory of each container.  
+
 distrobox.ini:
 ```ini
 [inkcutBox]
@@ -33,13 +37,13 @@ init_hooks=pipx install git+https://github.com/codelv/inkcut.git;
 # qtpy.QtBindingsNotFoundError: No Qt bindings could be found
 init_hooks=ln -s /usr/lib/python3.12/site-packages/PyQt6 ~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/;
 ```
-### Assemble the container (also installs inkcut)
+### Assemble the container (also installs inkcut to the container)
 ```sh
 distrobox-assemble create --name inkcutBox
 ```
 ### Test proper creation by attempting to launch inkcut from the host
 ```sh
-/usr/bin/distrobox-enter --name inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut
+/usr/bin/distrobox-enter --name inkcutBox -- ~/.local/bin/inkcut
 ```
 Successful launch?  
 if no, try [this decomposed approach](#decomposed-approach) to help isolate where things might be going wrong.  
@@ -62,13 +66,13 @@ This command will vary according to the container (toolbox, distrobox, etc), and
 ```
 
 Contents of `~/.local/share/applications/inkcut.desktop` :
-```conf
+```ini
 [Desktop Entry]
 Name=Inkcut@Alp3.22
 GenericName=Terminal entering Inkcut
 Comment=Terminal entering Inkcut
 Categories=Distrobox;System;Utility
-Exec=/usr/bin/distrobox-enter --name inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut
+Exec=/usr/bin/distrobox-enter --name inkcutBox -- ~/.local/bin/inkcut
 Icon=/home/cyril/.local/share/icons/inkcutIcon.svg
 Keywords=distrobox;
 NoDisplay=false
@@ -157,12 +161,14 @@ Successful launch? Let's move onto [launching from the host](#launching-inkcut-f
 ## Notes
 ### Installing inkcut to a container
 Is this necessary? No, but...  
-The primary benefit is that it helps to isolate the installation so that potential packaging & configuration conflicts are avoided.  
+The isolation from the host OS makes the installation MUCH less prone to breaking as a result of updates to the host OS, or packaging & configuration conficts.
+Once the needs of the distrobox  have been sorted, the declarative distrobox.ini captures everything needed to recreate the fully-functional container.
+The distrobox approach works exactly the same on a LARGE number of linux distributions.
 Containerized apps (flatpak, distrobox, docker, etc) are considered good practice even if the system is mutable.
 
 ### pipx who?
-Attempts to use `pip install someThing` trigger a warning suggesting to either install python stuff using the core package manager, or using pipx - a tool that creates and works inside a virtual environment.  
-Isolation is tha way nowadays. pipx it is, then...
+Attempts to use `pip install someThing` trigger a warning suggesting to either install python stuff using the core package manager, or using `pipx` - a tool that creates and works inside a virtual environment.  
+Isolation is tha way nowadays.
 
 ### Failure to launch Inkcut because
 `qtpy.QtBindingsNotFoundError: No Qt bindings could be found`
@@ -181,13 +187,13 @@ Toolbox works VERY similarly, and would be fine to use as well.
 I chose alpine as the container OS because it's small, and starts with a minimal set of packages installed.  
 This is a low-needs project, and so the low-profile OS is perfect.
 ### Alternate inkcut.desktop Contents
-```conf
+```ini
 [Desktop Entry]
 Name=Inkcut@Alp3.22
 GenericName=Terminal entering Inkcut
 Comment=Terminal entering Inkcut
 Categories=Distrobox;System;Utility
-Exec=sh -c 'distrobox enter -n inkcutBox -- distrobox/inkcutBox/.local/bin/inkcut'
+Exec=sh -c 'distrobox enter -n inkcutBox -- ~/.local/bin/inkcut'
 Icon=/home/cyril/.local/share/icons/inkcutIcon.svg
 Keywords=distrobox;
 NoDisplay=false
@@ -195,7 +201,7 @@ Terminal=false
 TryExec=/usr/bin/distrobox
 Type=Application
 ```
-```conf
+```ini
 [Desktop Entry]
 Type=Application
 Name=Inkcut
@@ -208,7 +214,7 @@ Categories=Graphics;Office;
 MimeType=image/svg+xml;
 Keywords=plotter;cutter;vinyl;cnc;2D;
 ```
-```conf
+```ini
 [Desktop Entry]
 Version=1.0
 Type=Application
