@@ -36,38 +36,52 @@ The above command:
 
 ### Enter Container & install inkcut
 ```sh
+# Enter the container
 distrobox enter inkcutBox
 ```
 ```sh
-pipx install git+https://github.com/codelv/inkcut.git
-```
-### link system PyQt directory
-...to prevent `qtpy.QtBindingsNotFoundError: No Qt bindings could be found`
-```sh
-ln -s /usr/lib/python3.12/site-packages/PyQt5 \
+# Install inkcut && link system PyQt directory to inkcut installation
+pipx install git+https://github.com/codelv/inkcut.git \
+&& ln -s \
+/usr/lib/python3.12/site-packages/PyQt5 \
 ~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/
 ```
-(`pipx inject PyQt5` is what should be used here, but hasn't worked for me)
+#### Note: 
+Linking the container-system PyQt directory to the inkcut installation environment prevents `qtpy.QtBindingsNotFoundError: No Qt bindings could be found` error.  
+
+`pipx inject PyQt5` is what should be used here, but hasn't worked for me
+
 ### Test launch
 ```sh
 .local/bin/inkcut
 ```
 ### Export inkcut to host-OS
-Create handle for easily launching inkcut from the host-os
+...then exit the container  
 ```sh
+#Create handle for easily launching inkcut from the host-os
 distrobox-export \
 --bin /home/${USER}/distrobox/inkcutBox/.local/bin/inkcut \
 --export-path /home/${USER}/.local/bin
 ```
-
-### Test proper creation by attempting to launch inkcut from the host
-1. Since we exported a link to the container's /bin/inkcut, we can simply type `inkcut` to a terminal prompt
-2. We could also use `distrobox-enter --name inkcutBox -- ~/.local/bin/inkcut` to directly enter `inkcutBox` & launch inkcut.
-
-Successful launch?  
-Great! Let's `exit` the container and move on.
+```sh
+#exit the container
+exit
+```
 
 ## Launching inkcut from the host
+Now let's work on how to launch inkcut WITHOUT entering the container.
+
+### Test proper creation by attempting to launch inkcut from the host
+```sh
+# Direct launch
+distrobox-enter --name inkcutBox -- ~/.local/bin/inkcut
+```
+Since we took the time/effort to export the container bin/inkcut, we can also simply type `inkcut` to a terminal prompt.
+
+Successful launch?  
+Great! Let's add an entry/icon for the graphical launcher.  
+
+### Create inkcut.desktop file & icon
 The following script will Create an `inkcut.desktop` file that will make inkcut available as a clickable icon from the app menu of the host machine, just like any other graphical app.
 
 ```sh
