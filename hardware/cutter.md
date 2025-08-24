@@ -81,7 +81,11 @@ Successful launch?
 Great! Let's `exit` the container and move on.
 
 ## Launching inkcut from the host
-The creation of this **`inkcut.desktop`** file will make inkcut available as a clickable icon from the app menu of the host machine, just like any other graphical app.
+The following script will Create an `inkcut.desktop` file that will make inkcut available as a clickable icon from the app menu of the host machine, just like any other graphical app.
+
+```sh
+wget -O - https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/hardware/inkcut.desktop.sh | bash
+```
 
 Contents of `~/.local/share/applications/inkcut.desktop` :
 ```ini
