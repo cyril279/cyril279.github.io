@@ -22,24 +22,6 @@ Address 'permission-denied' when sending data to the cutter
 
 ### Assemble the container
 ```sh
-distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/hardware/inkcutBox.ini
-```
-The above command uses the parameters defined in the inkcutBox.ini `inkcutBox` entry to:  
-- Create a distrobox container based on Alpine linux 3.22  
-(distrobox home located at /home/${USER}/distrobox/inkcutBox)
-- Install additional packages that are needed to build & install inkcut within the container
-
-inkcutBox.ini:
-```ini
-[inkcutBox]
-image=docker.io/library/alpine:3.22
-home=/home/${USER}/distrobox/inkcutBox
-pull=true
-additional_packages="gcc git cups-dev musl-dev linux-headers"
-additional_packages="python3-dev pipx py3-pip py3-qt5"
-```
-or skip the assembly command and enter the following into the command prompt:  
-```sh
 #create container:
 distrobox-create \
 --name inkcutBox \
@@ -47,6 +29,11 @@ distrobox-create \
 --home /home/${USER}/distrobox/inkcutBox \
 --additional-packages "gcc git cups-dev musl-dev linux-headers python3-dev pipx py3-pip py3-qt5"
 ```
+The above command:
+- Creates a distrobox container based on Alpine linux 3.22  
+(distrobox home located at /home/${USER}/distrobox/inkcutBox)
+- Installs additional packages that are needed to build & install inkcut within the container
+
 ### Enter Container & install inkcut
 ```sh
 distrobox enter inkcutBox
