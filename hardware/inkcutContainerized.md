@@ -2,16 +2,14 @@
 2025/08 revisit   
 - Distribution agnostic  
 - Immutable-distro friendly  
-- Isolated python management  
+- Isolated package management  
 
 See [notes](#notes) for details
 
 ## Overview:
 1. [Create the container](#create-the-container) (into which inkcut will be installed)  
-    - Assemble the container  
-    - Enter container & install inkcut  
-    - link system PyQt directory  
-    - Export launch-handle to host OS (optional)  
+    - Define & Assemble the container  
+    - Install inkcut  
 2. [Create an inkcut.desktop file](#launching-inkcut-from-the-host)  
 Make InkCut conveniently launchable from host machine
 2. [Modify USB-serial permissions](#usb-serial-permissions)  
@@ -20,86 +18,78 @@ Address 'permission-denied' when sending data to the cutter
 ## Create the container
 & build/install inkcut
 
-### Assemble the container
+### Define & Assemble the container
 ```sh
-#create container:
-distrobox-create \
---name inkcutBox \
---image docker.io/library/alpine:3.22 \
---home /home/$USER/distrobox/inkcutBox \
---additional-packages "gcc git cups-dev musl-dev linux-headers python3-dev pipx py3-pip py3-qt5"
+# create directory to isolate our distrobox shenanigans
+mkdir $HOME/inkcutBox && cd $_
+```
+```conf
+# Create 'inkcutBox.ini'; container definition file
+cat >$HOME/inkcutBox/inkcutBox.ini <<EOL
+[inkcutBox]
+image=docker.io/library/alpine:3.22
+home=$HOME/inkcutBox
+pull=true
+additional_packages="gcc cups-dev musl-dev linux-headers"
+additional_packages="python3-dev pipx py3-qt5"
+additional_flags="--env PIPX_HOME=$HOME/inkcutBox/.local/share"
+additional_flags="--env PIPX_INKCUT=venvs/inkcut/lib/python*/site-packages/inkcut"
+exported_bins="/usr/bin/pipx"
+exported_bins_path="$HOME/.local/bin"
+EOL
+```
+```sh
+# Assemble/create the container
+distrobox-assemble create --file inkcutBox.ini
 ```
 The above command:
 - Creates a distrobox container based on Alpine linux 3.22  
-(distrobox home located at /home/$USER/distrobox/inkcutBox)
+(distrobox home located at $HOME/inkcutBox)
 - Installs additional packages that are needed to build & install inkcut within the container
+- Exports pipx so that it can be called from the host-OS
 
-### Enter Container & install inkcut
+### Install inkcut
 ```sh
-# Enter the container
-distrobox enter inkcutBox
-```
-```sh
-# Install inkcut && link system PyQt directory to inkcut installation
-pipx install git+https://github.com/codelv/inkcut.git \
-&& ln -s \
-/usr/lib/python3.12/site-packages/PyQt5 \
-~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/
-```
-#### Note: 
-Linking the container-system PyQt directory to the inkcut installation environment satisfies `qtpy.QtBindingsNotFoundError: No Qt bindings could be found` error.  
-
-`pipx inject PyQt5` is what should be used here, but hasn't worked for me
-
-### Test launch
-```sh
-.local/bin/inkcut
-```
-### Export inkcut to host-OS
-...then exit the container  
-```sh
-#Create handle for easily launching inkcut from the host-os
-distrobox-export \
---bin /home/$USER/distrobox/inkcutBox/.local/bin/inkcut \
---export-path /home/$USER/.local/bin
-```
-```sh
-#exit the container
-exit
+# Install inkcut, allowing access to the system site-packages dir
+pipx install inkcut --system-site-packages
 ```
 
-## Launching inkcut from the host
-Now let's work on how to launch inkcut WITHOUT entering the container.
-
-### Test proper creation by attempting to launch inkcut from the host
+### Test proper creation by attempting to launch inkcut
 ```sh
 # Direct launch
-distrobox-enter --name inkcutBox -- ~/.local/bin/inkcut
+distrobox-enter --name inkcutBox -- $HOME/inkcutBox/.local/bin/inkcut
 ```
-We can also simply type `inkcut` to a terminal prompt,  
-taking advantage of the (conditionally wrapped) `.local/bin/inkcut` file exported from `inkcutBox`
 
 Successful launch?  
 Great! Let's add an entry/icon for the graphical launcher.  
 
-### Create inkcut.desktop file & icon
-The creation of this `inkcut.desktop` file will make inkcut available as a clickable icon from the app menu of the host machine, just like any other graphical app.
+## Create inkcut.desktop file & icon
+The following commands will Create an `inkcut.desktop` file that will make inkcut available as a clickable icon from the app menu of the host machine, just like any other graphical app.
 
-Contents of `~/.local/share/applications/inkcut.desktop` :
-```ini
+```sh
+# copy source icon for system use
+distrobox-enter --name inkcutBox -- sh -c \
+'cp $PIPX_HOME/$PIPX_INKCUT/res/media/inkcut.svg \
+/home/$USER/.local/share/icons'
+```
+```conf
+# Create 'inkcut.desktop' (configured as shown below)
+cat >$HOME/.local/share/applications/inkcut.desktop <<EOL
 [Desktop Entry]
-Name=Inkcut@Alp3.22
+Name=Inkcut
 GenericName=Terminal entering Inkcut
 Comment=Terminal entering Inkcut
 Categories=Distrobox;System;Utility
-Exec=/usr/bin/distrobox-enter --name inkcutBox -- .local/bin/inkcut
-Icon=/home/cyril/.local/share/icons/inkcutIcon.svg
+Exec=/usr/bin/distrobox-enter inkcutBox -- $HOME/inkcutBox/.local/bin/inkcut
+Icon=$HOME/.local/share/icons/inkcut.svg
 Keywords=distrobox;
 NoDisplay=false
 Terminal=false
 Type=Application
+EOL
 ```
-Within seconds of this file being saved, it was available from the app-menu (tested on Gnome).
+Within seconds of this file being created, it was available from the app-menu  
+(Tested on Gnome).
 
 ## USB-serial permissions
 Once a serial device is configured in inkcut, you may experience a `permission denied ... ttyUSB0` error when attempting to send a job.  
@@ -144,18 +134,21 @@ crw-rw-rw- 1 cyril nobody 166, 0 Aug 16 09:30 /dev/ttyACM0
 ## Notes
 ### Installing inkcut to a container
 Is this necessary? No, but...  
-The isolation from the host OS makes the installation MUCH less prone to breaking as a result of updates to the host OS, or packaging & configuration conficts.
-Once the needs of the distrobox  have been sorted, the declarative distrobox.ini captures everything needed to recreate the fully-functional container.
-The distrobox approach works exactly the same on a LARGE number of linux distributions.
+The isolation from the host OS makes the installation MUCH less prone to breaking as a result of updates to the host OS, or packaging & configuration conficts.  
+Once the needs of the distrobox  have been sorted, the declarative distrobox.ini captures everything needed to recreate the fully-functional container.  
+The distrobox approach works exactly the same on a LARGE number of linux distributions.  
 Containerized apps (flatpak, distrobox, docker, etc) are considered good practice even if the system is mutable.
 
-### pipx who?
-Attempts to use `pip install someThing` trigger a warning suggesting to either install python stuff using the core package manager, or using `pipx` - a tool that creates and works inside a virtual environment.  
-Isolation is tha way nowadays.
-
 ### Distributions/Packages
-My current distribution of choice comes with Distrobox, so that's what this revisit used.  
+My current distribution of choice comes with Distrobox, so that's what this revisit uses.  
 Toolbox works VERY similarly, and would be fine to use as well.
 
 I chose alpine as the container OS because it's small, and starts with a minimal set of packages installed.  
-This is a low-needs project, and so the low-profile OS is perfect.
+This is a low-needs project, so the low-profile OS is perfect.
+
+'''
+# alt launch commands
+distrobox-enter --name inkcutBox -- sh -c '$HOME/.local/bin/inkcut'
+/usr/bin/distrobox-enter --name inkcutBox -- sh -c '$HOME/.local/bin/inkcut'
+/usr/bin/distrobox-enter --name inkcutBox -- .local/bin/inkcut
+```
