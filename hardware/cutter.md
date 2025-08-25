@@ -11,7 +11,7 @@ See [notes](#notes) for details
     - Assemble the container  
     - Enter container & install inkcut  
     - link system PyQt directory  
-    - Export launch-handle to host OS (limited benefit methinks)  
+    - Export launch-handle to host OS (optional)  
 2. [Create an inkcut.desktop file](#launching-inkcut-from-the-host)  
 Make InkCut conveniently launchable from host machine
 2. [Modify USB-serial permissions](#usb-serial-permissions)  
@@ -26,12 +26,12 @@ Address 'permission-denied' when sending data to the cutter
 distrobox-create \
 --name inkcutBox \
 --image docker.io/library/alpine:3.22 \
---home /home/${USER}/distrobox/inkcutBox \
+--home /home/$USER/distrobox/inkcutBox \
 --additional-packages "gcc git cups-dev musl-dev linux-headers python3-dev pipx py3-pip py3-qt5"
 ```
 The above command:
 - Creates a distrobox container based on Alpine linux 3.22  
-(distrobox home located at /home/${USER}/distrobox/inkcutBox)
+(distrobox home located at /home/$USER/distrobox/inkcutBox)
 - Installs additional packages that are needed to build & install inkcut within the container
 
 ### Enter Container & install inkcut
@@ -47,7 +47,7 @@ pipx install git+https://github.com/codelv/inkcut.git \
 ~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/
 ```
 #### Note: 
-Linking the container-system PyQt directory to the inkcut installation environment prevents `qtpy.QtBindingsNotFoundError: No Qt bindings could be found` error.  
+Linking the container-system PyQt directory to the inkcut installation environment satisfies `qtpy.QtBindingsNotFoundError: No Qt bindings could be found` error.  
 
 `pipx inject PyQt5` is what should be used here, but hasn't worked for me
 
@@ -60,8 +60,8 @@ Linking the container-system PyQt directory to the inkcut installation environme
 ```sh
 #Create handle for easily launching inkcut from the host-os
 distrobox-export \
---bin /home/${USER}/distrobox/inkcutBox/.local/bin/inkcut \
---export-path /home/${USER}/.local/bin
+--bin /home/$USER/distrobox/inkcutBox/.local/bin/inkcut \
+--export-path /home/$USER/.local/bin
 ```
 ```sh
 #exit the container
@@ -76,7 +76,8 @@ Now let's work on how to launch inkcut WITHOUT entering the container.
 # Direct launch
 distrobox-enter --name inkcutBox -- ~/.local/bin/inkcut
 ```
-Since we took the time/effort to export the container bin/inkcut, we can also simply type `inkcut` to a terminal prompt.
+We can also simply type `inkcut` to a terminal prompt,  
+taking advantage of the (conditionally wrapped) `.local/bin/inkcut` file exported from `inkcutBox`
 
 Successful launch?  
 Great! Let's add an entry/icon for the graphical launcher.  
