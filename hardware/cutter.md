@@ -10,7 +10,6 @@ See [notes](#notes) for details
 1. [Create the container](#create-the-container) (into which inkcut will be installed)  
     - Assemble the container  
     - Enter container & install inkcut  
-    - link system PyQt directory  
     - Export launch-handle to host OS (optional)  
 2. [Create an inkcut.desktop file](#launching-inkcut-from-the-host)  
 Make InkCut conveniently launchable from host machine
@@ -27,7 +26,7 @@ distrobox-create \
 --name inkcutBox \
 --image docker.io/library/alpine:3.22 \
 --home /home/$USER/distrobox/inkcutBox \
---additional-packages "gcc git cups-dev musl-dev linux-headers python3-dev pipx py3-pip py3-qt5"
+--additional-packages "gcc git cups-dev musl-dev linux-headers python3-dev pipx py3-qt5"
 ```
 The above command:
 - Creates a distrobox container based on Alpine linux 3.22  
@@ -40,16 +39,9 @@ The above command:
 distrobox enter inkcutBox
 ```
 ```sh
-# Install inkcut && link system PyQt directory to inkcut installation
-pipx install git+https://github.com/codelv/inkcut.git \
-&& ln -s \
-/usr/lib/python3.12/site-packages/PyQt5 \
-~/.local/share/pipx/venvs/inkcut/lib/python3.12/site-packages/
+# Install inkcut, allowing access to the system site-packages dir
+pipx install git+https://github.com/codelv/inkcut.git --system-site-packages
 ```
-#### Note: 
-Linking the container-system PyQt directory to the inkcut installation environment satisfies `qtpy.QtBindingsNotFoundError: No Qt bindings could be found` error.  
-
-`pipx inject PyQt5` is what should be used here, but hasn't worked for me
 
 ### Test launch
 ```sh
@@ -69,7 +61,7 @@ exit
 ```
 
 ## Launching inkcut from the host
-Now let's work on how to launch inkcut WITHOUT entering the container.
+Now let's work on launching inkcut WITHOUT entering the container.
 
 ### Test proper creation by attempting to launch inkcut from the host
 ```sh
