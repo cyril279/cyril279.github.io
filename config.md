@@ -1,6 +1,6 @@
 ## Groups
 **_/etc/group:_**  
-```
+```js
 docs:x:1305:cyril
 media:x:1306:cyril,kodi,transmission,tvheadend
 samba:x:1307:cyril
@@ -26,13 +26,13 @@ tcp: 9981, 9982, 9091 #tvh, tvh, transmission
 service-name: mountd, nfs, samba, samba client, ssh  
 ```
 ## Network info
-```
+```ini
 192.168.9.1 #nighthawk router  
 192.168.9.0/24 #cidr notation  
 255.255.255.0 #subnet mask  
 ```
 ### _/etc/hosts:_
-```
+```ini
 192.168.9.11 attic11 attic11.dubnet  
 # 192.168.9.13 media13 media13.dubnet dubserv dubserv.dubnet  
 # 192.168.9.12 kodi12 kodi12.dubnet  
@@ -45,7 +45,7 @@ service-name: mountd, nfs, samba, samba client, ssh
 /storage/share	192.168.9.0/24(rw,sync,all_squash,anonuid=1001,anongid=1306,subtree_check)
 ```
 ### _/etc/samba/smb.conf:_  
-```
+```ini
 netbios name = dubserv
 hosts allow = 127.0.0.1 192.168.9.0/24
 workgroup = WORKGROUP
@@ -69,7 +69,7 @@ add/configure share entry(ies)
     read only = no
 ```
 **Port interface:**  
-```
+```sh
 192.168.1.13:9090 #Cockpit server management
 192.168.1.13:9091 #transmission torrent client
 192.168.1.13:9981 #tvheadend pvr backend
@@ -80,7 +80,7 @@ add/configure share entry(ies)
 `ssh 192.168.x.y` #ssh as current user
 
 **File browser:**  
-```
+```conf
 smb://<hostname>/<share_name> #Linux Access samba share
 smb://<ip_address>/<share_name> #Linux Access samba share
 
@@ -90,7 +90,7 @@ smb://<ip_address>/<share_name> #Linux Access samba share
 
 ## Boot
 **/etc/grub.d/40_custom:**
-```
+```sh
 #!/bin/sh
 exec tail -n +3 $0
 # This file provides an easy way to add custom menu entries.  Simply type the
@@ -125,7 +125,7 @@ partition	| sdX	| sdY	| raid-0
 
 ## Scripture
 ***batt-status*** (Use `(upower -e | grep BAT)` for single battery scenario)
-```
+```sh
 #!/bin/bash
 echo \ 
 echo "Internal battery (Bat0):"
@@ -137,7 +137,7 @@ echo \
 ```
 
 ***dobackup.sh***
-```
+```sh
 #!/bin/sh
 
 sourceMachine="dubserv"
