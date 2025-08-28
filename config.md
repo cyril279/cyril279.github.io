@@ -1,5 +1,5 @@
 ## Groups
-**_/etc/group:_**  
+### _/etc/group:_
 ```js
 docs:x:1305:cyril
 media:x:1306:cyril,kodi,transmission,tvheadend
@@ -7,10 +7,10 @@ samba:x:1307:cyril
 keeper:x:1308:cyril
 ```
 
-**list all members of a group**  
+### list all members of a group
 `grep 'group-name-here' /etc/group`  
 
-**Config:**
+### Config:
 
 name | gid | cyril | kodi | tvheadend
 ---:	|:---:|:---:|:---:|---
@@ -68,24 +68,11 @@ add/configure share entry(ies)
     writable = yes
     read only = no
 ```
-**Port interface:**  
+### Port interface
 ```sh
-192.168.1.13:9090 #Cockpit server management
-192.168.1.13:9091 #transmission torrent client
-192.168.1.13:9981 #tvheadend pvr backend
-```
-
-**Terminal:**  
-`ssh <userQ>@192.168.1.13` #ssh to terminal session as "userQ"  
-`ssh 192.168.x.y` #ssh as current user
-
-**File browser:**  
-```conf
-smb://<hostname>/<share_name> #Linux Access samba share
-smb://<ip_address>/<share_name> #Linux Access samba share
-
-\\<hostname>\<share_name> #Windows browse to samba share
-\\<ip_address>\<share_name> #Windows browse to samba share
+serverIP:8096 #Jellyfin media server
+serverIP:9091 #transmission torrent client
+serverIP:9981 #tvheadend pvr backend
 ```
 
 ## Boot
@@ -113,18 +100,8 @@ menuentry "GParted live" {
   }
 ```
 
-## System-on-raid0 partition layout
-
-partition	| sdX	| sdY	| raid-0
--:	| :-:	| :-:	| :-:
-1	|260M [FAT] /boot/efi	| 260M	| -
-3	|500M [XFS] /boot	| 500M	| -
-4	| 20G ->	| 20G ->	| [Btrfs]  /
-5	| remainder ->	| remainder ->	| [XFS]  /home
-2	| 2G ->	| 2G ->	| [swap]
-
 ## Scripture
-***batt-status*** (Use `(upower -e | grep BAT)` for single battery scenario)
+### batt-status
 ```sh
 #!/bin/bash
 echo \ 
@@ -135,8 +112,9 @@ echo "External battery (Bat1):"
 upower -i $(upower -e | grep BAT1) | grep --color=never -E "state|to\ full|to\ empty|percentage"
 echo \ 
 ```
+Note: Use `(upower -e | grep BAT)` for single battery scenario
 
-***dobackup.sh***
+### dobackup.sh
 ```sh
 #!/bin/sh
 
