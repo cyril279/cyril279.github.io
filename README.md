@@ -20,6 +20,7 @@ Document repository of... breadcrumbs?
 - [server-General](serverConfigGeneral.md)  
 - [Transmission (docker)](serverConfigDocker.md#transmission)  
 - [Tvheadend (docker)](serverConfigDocker.md#tvheadend)  
+- [workbench (distrobox)](configDistrobox.md)  
 
 ## NOTES
 
