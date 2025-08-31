@@ -54,37 +54,26 @@ exported_bins_path="$HOME/.local/bin"
 ```
 ## My setup
 2025/08
-Distrobox 'home' directories are isolated from the base-OS, but grouped by distribution  
-```conf
-cat >$HOME/dbxAlpine/workbench.ini <<EOL
-[workbench]
-image=docker.io/library/alpine:latest
+General needs and inkcut-specific stuff grouped into the same container  
+(trying to avoid unique containers with so little in them)
+```ini
+cat >$HOME/dbxAlpine/distrobox.ini <<EOL
+[Alpine3]
+image=docker.io/library/alpine:3
 home=$HOME/dbxAlpine
 pull=true
-replace=true
 additional_packages="git vim"
 init_hooks="rm /usr/bin/vi; ln -s /usr/bin/vim /usr/bin/vi"
 exported_bins="/usr/bin/git"
 exported_bins_path="$HOME/.local/bin"
-EOL
-```
-```conf
-cat >$HOME/dbxAlpine/inkcutBox.ini <<EOL
-[inkcutBox]
-image=docker.io/library/alpine:3.22
-home=$HOME/dbxAlpine
-pull=true
-additional_packages="gcc git cups-dev musl-dev linux-headers"
+#inkcut-specific
+additional_packages="gcc cups-dev musl-dev linux-headers"
 additional_packages="python3-dev pipx py3-qt5"
 additional_flags="--env PIPX_HOME=$HOME/inkcutBox/.local/share"
 additional_flags="--env PIPX_INKCUT=venvs/inkcut/lib/python*/site-packages/inkcut"
 exported_bins="/usr/bin/pipx"
-exported_bins_path="$HOME/.local/bin"
 EOL
 ```
 ```sh
-distrobox-assemble create inkcutBox
-```
-```sh
-distrobox-assemble create workbench
+distrobox-assemble create
 ```
