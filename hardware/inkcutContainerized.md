@@ -57,7 +57,7 @@ pipx install inkcut --system-site-packages
 ### Test proper creation by attempting to launch inkcut
 ```sh
 # Direct launch
-distrobox-enter --name inkcutBox -- $HOME/inkcutBox/.local/bin/inkcut
+distrobox-enter --name inkcutBox -- sh -c '$HOME/.local/bin/inkcut'
 ```
 
 Successful launch?  
@@ -80,7 +80,7 @@ Name=Inkcut
 GenericName=Terminal entering Inkcut
 Comment=Terminal entering Inkcut
 Categories=Distrobox;System;Utility
-Exec=/usr/bin/distrobox-enter inkcutBox -- $HOME/inkcutBox/.local/bin/inkcut
+Exec=/usr/bin/distrobox-enter inkcutBox -- sh -c '$HOME/.local/bin/inkcut'
 Icon=$HOME/.local/share/icons/inkcut.svg
 Keywords=distrobox;
 NoDisplay=false

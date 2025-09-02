@@ -69,7 +69,7 @@ exported_bins_path="$HOME/.local/bin"
 #inkcut-specific
 additional_packages="gcc cups-dev musl-dev linux-headers"
 additional_packages="python3-dev pipx py3-qt5"
-additional_flags="--env PIPX_HOME=$HOME/inkcutBox/.local/share"
+additional_flags="--env PIPX_HOME=$HOME/dbxAlpine/.local/share"
 additional_flags="--env PIPX_INKCUT=venvs/inkcut/lib/python*/site-packages/inkcut"
 exported_bins="/usr/bin/pipx"
 EOL
