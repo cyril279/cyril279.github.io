@@ -1,23 +1,24 @@
 #!/bin/bash
 set -e #exit if processes fail
+
 # define variables
-CONTAINER_NAME=inkcutBox
-INKCUTBOX_HOME=$HOME/$CONTAINER_NAME
-PIPX_HOME=$INKCUTBOX_HOME/.local/share
-PIPX_INKCUT=venvs/inkcut/lib/python*/site-packages/inkcut
+CONTAINER_NAME=inkcutBox # Name of distrobox & of distrobox definition file
+CONTAINER_HOME=$HOME/$CONTAINER_NAME #Path where $HOME of distrobox will be located
+PIPX_INKCUT_SRC=$CONTAINER_HOME/.local/share/pipx/venvs/inkcut/lib/python*/site-packages/inkcut
+APP_ICON_DIR=$HOME/.local/share/icons
 
 # Verify values of variables with user
 echo "Current configuration:"
 echo ""
 echo "Name of container: $CONTAINER_NAME"
-echo "Home directory of container: $INKCUTBOX_HOME"
+echo "Home directory of container: $CONTAINER_HOME"
 echo ""
 read -p "Are you ready to proceed with these names as shown above? (yes/no): " input_user
 case $input_user in
 	[Yy]|[Yy][Ee][Ss])
     	echo ""
         echo "Name of container: $CONTAINER_NAME"
-        echo "Home directory of container: $INKCUTBOX_HOME"
+        echo "Home directory of container: $CONTAINER_HOME"
 	;;
     [Nn]|[Nn][Oo])
         echo ""
@@ -28,26 +29,26 @@ case $input_user in
     			read -p "Enter desired container name: " CONTAINER_NAME
     			echo ""
     			echo "new container name: $CONTAINER_NAME"
-    	        echo "Home directory of container: $INKCUTBOX_HOME"
+    	        echo "Home directory of container: $CONTAINER_HOME"
     		    ;;
     	        "Container home directory" )
-    			read -p "Enter desired home directory (full absolute path): " INKCUTBOX_HOME
+    			read -p "Enter desired home directory (full absolute path): " CONTAINER_HOME
     			echo ""
         	    echo "Name of container (& directory): $CONTAINER_NAME"
-    			echo "new container home path: $INKCUTBOX_HOME"
+    			echo "new container home path: $CONTAINER_HOME"
     		    ;;
     	        "Both name & home directory" )
     			read -p "Enter desired container name: " CONTAINER_NAME
-    			read -p "Enter desired home directory (full absolute path): " INKCUTBOX_HOME
+    			read -p "Enter desired home directory (full absolute path): " CONTAINER_HOME
     			echo ""
     			echo "new container name: $CONTAINER_NAME"
-    			echo "new container home path: $INKCUTBOX_HOME"
+    			echo "new container home path: $CONTAINER_HOME"
     		    ;;
                 * )
                 echo ""
                 echo "Invalid option selected"
                 echo "Name of container: $CONTAINER_NAME"
-                echo "Home directory of container: $INKCUTBOX_HOME"
+                echo "Home directory of container: $CONTAINER_HOME"
                 ;;
     	    esac
             read -p "Are you ready to proceed with these variables as defined above? (yes/no): " input_user
@@ -60,7 +61,7 @@ case $input_user in
                 echo ""
                 echo "Resetting variables to default values"
                 CONTAINER_NAME=inkcutBox
-                INKCUTBOX_HOME=$HOME/$CONTAINER_NAME
+                CONTAINER_HOME=$HOME/$CONTAINER_NAME
                 # Let's ask again
                 echo ""
                 echo "Which would you like to change?"
@@ -75,10 +76,10 @@ case $input_user in
     ;;
 esac
 
-DBX_DEFN_INI=$(cat << EOF
+MANIFEST_INI=$(cat << EOF
 [$CONTAINER_NAME]
 image=docker.io/library/alpine:3.22
-home=$INKCUTBOX_HOME
+home=$CONTAINER_HOME
 pull=true
 additional_packages="gcc cups-dev musl-dev linux-headers"
 additional_packages="python3-dev pipx py3-qt5"
@@ -87,24 +88,12 @@ exported_bins_path="\$HOME/.local/bin"
 EOF
 )
 
-# # Create '$CONTAINER_NAME.ini'; container definition file
-# cat >$INKCUTBOX_HOME/$CONTAINER_NAME.ini <<EOL
-# [$CONTAINER_NAME]
-# image=docker.io/library/alpine:3.22
-# home=$INKCUTBOX_HOME
-# pull=true
-# additional_packages="gcc cups-dev musl-dev linux-headers"
-# additional_packages="python3-dev pipx py3-qt5"
-# exported_bins="/usr/bin/pipx"
-# exported_bins_path="\$HOME/.local/bin"
-# EOL
-
 # Verify container-assembly & filesystem criteria
 echo ""
 echo "distrobox-assemble definition file:"
-echo "$INKCUTBOX_HOME/$CONTAINER_NAME.ini" 
+echo "$CONTAINER_HOME/$CONTAINER_NAME.ini" 
 echo ""
-echo "$DBX_DEFN_INI"
+echo "$MANIFEST_INI"
 echo ""
 
 read -p "Are you ready to proceed with the installation? (yes/no): " input_user
@@ -119,12 +108,14 @@ case $input_user in
 esac
 
 # create directory to isolate our distrobox $HOME files
-mkdir -p $INKCUTBOX_HOME
+mkdir -p $CONTAINER_HOME
 # create distrobox.ini file
-echo "$DBX_DEFN_INI" > $INKCUTBOX_HOME/$CONTAINER_NAME.ini
+echo "$MANIFEST_INI" > $CONTAINER_HOME/$CONTAINER_NAME.ini
 # Assemble the container per the variables & declarative ini file
-distrobox-assemble create --file $INKCUTBOX_HOME/$CONTAINER_NAME.ini
+distrobox-assemble create --file $CONTAINER_HOME/$CONTAINER_NAME.ini
 # Install inkcut into the distrobox container using pipx
+echo ""
+echo "pipx install inkcut --system-site-packages"
 pipx install inkcut --system-site-packages
 
 echo ""
@@ -150,9 +141,7 @@ case $input_user in
 esac
 
 # copy source icon for system use
-distrobox-enter --name inkcutBox -- sh -c \ 
-'cp $PIPX_HOME/$PIPX_INKCUT/res/media/inkcut.svg \
-/home/$USER/.local/share/icons'
+distrobox-enter --name $CONTAINER_NAME -- cp $PIPX_INKCUT_SRC/res/media/inkcut.svg $APP_ICON_DIR
 
 # Create 'inkcut.desktop' (configured as shown below)
 cat >$HOME/.local/share/applications/inkcut.desktop <<EOL
@@ -161,8 +150,8 @@ Name=Inkcut
 GenericName=Terminal entering Inkcut
 Comment=Terminal entering Inkcut
 Categories=Distrobox;System;Utility
-Exec=/usr/bin/distrobox-enter inkcutBox -- sh -c '\$HOME/.local/bin/inkcut'
-Icon=$HOME/.local/share/icons/inkcut.svg
+Exec=/usr/bin/distrobox-enter $CONTAINER_NAME -- sh -c '\$HOME/.local/bin/inkcut'
+Icon=$APP_ICON_DIR/inkcut.svg
 Keywords=distrobox;
 NoDisplay=false
 Terminal=false
@@ -170,8 +159,8 @@ Type=Application
 EOL
 
 # Clear/reset all variables
-unset INKCUTBOX_HOME
-unset PIPX_HOME
-unset PIPX_INKCUT
-unset DBX_DEFN_INI
 unset CONTAINER_NAME
+unset CONTAINER_HOME
+unset MANIFEST_INI
+unset PIPX_INKCUT_SRC
+unset APP_ICON_DIR

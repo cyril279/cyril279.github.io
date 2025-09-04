@@ -3,8 +3,8 @@ set -e #exit if processes fail
 # define variables
 CONTAINER_NAME=inkcutBox # Name of distrobox & of distrobox definition file
 CONTAINER_HOME=$HOME/$CONTAINER_NAME #Path where $HOME of distrobox will be located
-PIPX_HOME=$CONTAINER_HOME/.local/share
-PIPX_INKCUT=venvs/inkcut/lib/python*/site-packages/inkcut
+PIPX_INKCUT_SRC=$INKCUTBOX_HOME/.local/share/pipx/venvs/inkcut/lib/python*/site-packages/inkcut
+APP_ICON_DIR=$HOME/.local/share/icons
 #
 MANIFEST_INI=$(cat << EOF
 [$CONTAINER_NAME]
@@ -53,6 +53,8 @@ echo "$MANIFEST_INI" > $CONTAINER_HOME/$CONTAINER_NAME.ini
 # Assemble the container per the variables & declarative ini file
 distrobox-assemble create --file $CONTAINER_HOME/$CONTAINER_NAME.ini
 # Install inkcut into the distrobox container using pipx
+echo ""
+echo "pipx install inkcut --system-site-packages"
 pipx install inkcut --system-site-packages
 echo ""
 echo "Take a moment to verify that the following command launches inkcut"
@@ -73,7 +75,7 @@ case $input_user in
     ;;
 esac
 # copy source icon for system use
-distrobox-enter --name $CONTAINER_NAME -- cp $PIPX_HOME/$PIPX_INKCUT/res/media/inkcut.svg /home/$USER/.local/share/icons
+distrobox-enter --name $CONTAINER_NAME -- cp $PIPX_INKCUT_SRC/res/media/inkcut.svg $APP_ICON_DIR/
 # Create 'inkcut.desktop' (configured as shown below)
 cat >$HOME/.local/share/applications/inkcut.desktop <<EOL
 [Desktop Entry]
@@ -82,7 +84,7 @@ GenericName=Terminal entering Inkcut
 Comment=Terminal entering Inkcut
 Categories=Distrobox;System;Utility
 Exec=/usr/bin/distrobox-enter $CONTAINER_NAME -- sh -c '\$HOME/.local/bin/inkcut'
-Icon=$HOME/.local/share/icons/inkcut.svg
+Icon=$APP_ICON_DIR/inkcut.svg
 Keywords=distrobox;
 NoDisplay=false
 Terminal=false
@@ -91,6 +93,6 @@ EOL
 # Clear/reset all variables
 unset CONTAINER_HOME
 unset CONTAINER_NAME
-unset PIPX_HOME
-unset PIPX_INKCUT
+unset PIPX_INKCUT_SRC
+unset APP_ICON_DIR
 unset MANIFEST_INI
