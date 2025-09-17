@@ -146,7 +146,7 @@ Toolbox works VERY similarly, and would be fine to use as well.
 I chose alpine as the container OS because it's small, and starts with a minimal set of packages installed.  
 This is a low-needs project, so the low-profile OS is perfect.
 
-'''
+```
 # alt launch commands
 distrobox-enter --name inkcutBox -- sh -c '$HOME/.local/bin/inkcut'
 /usr/bin/distrobox-enter --name inkcutBox -- sh -c '$HOME/.local/bin/inkcut'
