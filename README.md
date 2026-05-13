@@ -4,6 +4,7 @@ Document repository of... breadcrumbs?
 - [docker/docker-compose](serverConfigDocker.md)  
 - [fileshare](fileshare/README.md)  
 - [mdadm](mdadm.md)  
+- [quadlets](serverConfigQuadlets.md)  
 - [Transmission (server)](serverConfigTransmission.md)  
 - [Tvheadend](serverConfigTVH.md)  
 
@@ -17,6 +18,7 @@ Document repository of... breadcrumbs?
 - [config-fstab](fstab.md)  
 - [config-general](config.md)  
 - [hardware/firmware](hardware/README.md)
+- [server-General (immutable)](serverConfigImmutable.md)
 - [server-General](serverConfigGeneral.md)  
 - [Transmission (docker)](serverConfigDocker.md#transmission)  
 - [Tvheadend (docker)](serverConfigDocker.md#tvheadend)  
