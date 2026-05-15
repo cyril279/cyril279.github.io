@@ -28,6 +28,27 @@ overall process:
      ^^ Attempts to `enable` the service are currently resulting in the following error:  
      ```Failed to enable unit: Unit /blah/blah/blah.service is transient or generated```
 
+### The user way (unprivileged is safest)
+Assuming that:  
+1. "vernon" is our unprivileged user dedicated to system tasks  
+2. `service.container` files are stored at `/srv/serverus/containers`  
+
+- The `service.container` files MUST contain:  
+  ```ini
+  [Install]
+  # Start by default on boot
+  WantedBy=default.target
+  ```  
+- The `service.container` files get symlinked to:  
+  `/srv/serverus/.config/containers/systemd` (instead of /etc/containers/...)  
+- User must have privileges granted by a privileged user  
+  `loginctl enable-linger vernon`  
+- Reload & start the service  
+  `systemctl --user daemon-reload`  
+  `systemctl --user start {serviceName}.service`  
+- Enable podman auto-updates via systemd timer  
+  `systemctl --user enable --now podman-auto-update.timer`  
+
 ## Configs (Working):
 ### Jellyfin
 ```sh
@@ -46,7 +67,7 @@ Image=docker.io/jellyfin/jellyfin:latest
 AutoUpdate=registry
 ContainerName=jellyfin
 Environment=PUID=1011 
-Environment=PGID=1011
+Environment=PGID=100
 Environment=TZ=America/Denver
 Volume=/srv/cfg/containers/jellyfin-config:/config:Z
 Volume=/srv/cfg/containers/jellyfin-cache:/cache:Z
@@ -73,7 +94,7 @@ WantedBy=default.target
 
 ### Transmission
 ```sh
-vi /srv/containers/transmission.container  
+vi /srv/serverus/containers/transmission.container  
 ```
 contents:  
 ```ini
@@ -89,9 +110,9 @@ ContainerName=transmission
 PublishPort=9091:9091
 PublishPort=51419:51419
 PublishPort=51419:51419/udp
-Volume=/srv/application/transmission/config:/config
-Volume=/srv/media:/media
-Volume=/srv/watch:/watch
+Volume=/srv/serverus/containers/transmission-config:/config:Z
+Volume=/srv/media:/media:z
+Volume=/srv/watch:/watch:z
 Environment=PUID=1011
 Environment=PGID=1011
 Environment=TZ=America/Denver
@@ -103,6 +124,10 @@ Environment=HOST_WHITELIST=serverus
 Restart=always
 TimeoutStartSec=900
 TimeoutStopSec=70
+
+[Install]
+# Start by default on boot
+WantedBy=default.target 
 ```
 
 ## Configs (unconfirmed):
