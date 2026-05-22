@@ -137,16 +137,19 @@ Config straight from Bazzite!  (but looks to be missing some bits)
 https://docs.bazzite.gg/Installing_and_Managing_Software/Quadlet/?h=samba#samba-server  
 ```ini
 [Container]
+ContainerName=samba
 Environment=ACCOUNT_username=password
+Environment=UID_username=1011
+#Environment=GROUPS_username=users
 # Protected share with write access
-Environment="SAMBA_VOLUME_CONFIG_protected=[My Share]; path=/shares/protected; valid users = username; guest ok = no; read only = no; browseable = yes"
+Environment="SAMBA_VOLUME_CONFIG_dublife=[DubLife]; path=/srv; valid users = username; guest ok = no; read only = no; browseable = yes"
 # Open share with readonly access
-Environment="SAMBA_VOLUME_CONFIG_guest=[Guest Share]; path=/shares/guest; guest ok = yes; browseable = yes"
+Environment="SAMBA_VOLUME_CONFIG_media=[Media Share]; path=/srv/media; guest ok = yes; read only = no; browseable = yes"
 Image=ghcr.io/servercontainers/samba:smbd-only-latest
 AutoUpdate=registry
 Network=host
-Volume=/path/to/protected:/shares/protected:z
-Volume=/path/to/guest:/shares/guest:z
+Volume=/path/to/protected:/shares/dublife:z
+Volume=/path/to/guest:/shares/media:z
 
 # Remove if you don't want autostart
 [Install]
