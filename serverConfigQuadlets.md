@@ -52,7 +52,7 @@ Assuming that:
 ## Configs (Working):
 ### Jellyfin
 ```sh
-vi /srv/containers/jellyfin.container  
+vi /srv/serverus/containers/jellyfin.container  
 ```
 contents:  
 
@@ -69,8 +69,8 @@ ContainerName=jellyfin
 Environment=PUID=1011 
 Environment=PGID=100
 Environment=TZ=America/Denver
-Volume=/srv/cfg/containers/jellyfin-config:/config:Z
-Volume=/srv/cfg/containers/jellyfin-cache:/cache:Z
+Volume=/srv/serverus/containers/jellyfin-config:/config:Z
+Volume=/srv/serverus/containers/jellyfin-cache:/cache:Z
 Volume=/srv/media/video:/data/video:z
 Volume=/srv/media/music:/data/music:z
 Volume=/srv/media/pictures:/data/pictures:z
