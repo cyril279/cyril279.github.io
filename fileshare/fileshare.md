@@ -96,7 +96,7 @@ dnf install samba samba-client samba-common
 **Configure**  
 (backup original conf file)  
 /etc/samba/smb.conf  
-```conf
+```ini
 netbios name = dubserv
 hosts allow = 127.0.0.1 192.168.9.0/24
 workgroup = WORKGROUP
@@ -119,6 +119,8 @@ add/configure share entry(ies)
     writable = yes
     read only = no
 ```
+### _/etc/samba/smb.conf:_  
+
 **Configure firewall to allow samba service**  
 ```sh
 firewall-cmd --permanent --add-service=samba

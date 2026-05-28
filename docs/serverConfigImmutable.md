@@ -14,28 +14,16 @@ Layer nothing, container everything. This is the way.
     c. Add line `UUID=<foundUUID> /srv auto defaults 0 0` to fstab to mount raid array to `/srv`  
     d. `sudo mount -a` to test auto mounting of raid array  
 2. Setup server apps  
-    a. find `service.container` files at `/srv/container/`.  
-        - [jellyfin unit contents](serverConfigQuadlets.md#jellyfin)  
-        - [transmission unit contents](serverConfigQuadlets.md#transmission)  
-    b. symbolically link `.container` (quadlet) files from `/srv/containers/` to `/etc/containers/systemd/`  
-    c. `systemctl daemon-reload`   
-    d. `systemctl start <serviceName>`  
+    [configure & start/enable containers](serverConfigQuadlets.md)  
+    (Transmission, Jellyfin, TVHeadend, etc)  
 2. Setup network shares  
     a. Samba quadlet?  
     b. ~~NFS quadlet?~~  Bazzite says don't bother.  
     Essentially just use what works for all, and that's SMB.
 
 ## Configs
-- [Quadlets](serverConfigQuadlets.md)
+- [Quadlets](serverConfigQuadlets.md#configs-working)
 
 # WIP
-
-### Use named-volumes for cache and config  
-- reduced permissions issues
-- reduced directories on the filesystem
-- better portability (not convinced of this one)
-
-### Finish
-- setup Kodi
 
 ### Setup SMB share

@@ -1,9 +1,30 @@
 # Hardware/Firmware (archived info)
 
+- [BlueTooth Audio (Proprietary profiles, sample-rates)](#audiobt)
 - [Colorspace](#colorspace)
 - [Set default device output (Audio/Video)](#set-default-device-output)
 - [xorg.mouse](#xorgmouse)
 - [PC: Dell Inspiron 14z 5423](#dell-inspiron-14z-5423)
+
+## AudioBT  
+Bluetooth audio tweaks for increased functionality
+
+### BT profiles
+[This fork] of pulseaudio-bluetooth-modules adds LDAC, APTX, APTX-HD, AAC support, extended configuration for SBC
+
+OpenSUSE packages
+https://build.opensuse.org/package/show/home:sonaj96/pulseaudio-modules-bt
+https://software.opensuse.org/package/pulseaudio-modules-bt?search_term=pulseaudio-modules-bt
+
+To verify what you are using:
+
+>When you pair your headphones, choose AD2P profile in sound settings. Then you can check if aptX is used:
+`pactl list | grep a2dp_codec`
+The response should look something like this:
+`bluetooth.a2dp_codec = "APTX"`
+The rest of codecs should behave similarly.
+
+[This fork]:https://github.com/EHfive/pulseaudio-modules-bt
 
 ## Colorspace
 Force tv-RGB output via GPU: [[ original ](colorspace.md)] [[ Brad-remix ](colorspace_brad.md)]

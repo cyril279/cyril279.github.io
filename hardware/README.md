@@ -1,7 +1,6 @@
 # Hardware/Firmware
 
 - [68 keys](68keys.md)
-- [BlueTooth Audio (Proprietary profiles, sample-rates)](#audiobt)
 - [Hauppauge HVR2250 firmware installation](#hauppauge-hvr2250-firmware-installation)
 - [Printing/Cups](cups.md)
 - [Cutter/Plotter via linux](#cutterplotter-via-linux)
@@ -9,26 +8,6 @@
 - [Bootable USB media for bare-metal & firmware updates](bootableUSB.md)
 - [Harmony, FLIRC, Kodi, and the shutdown dance](HARMONY-FLIRC-KODI.md)
 - [Archived information](archive.md)
-
-## AudioBT  
-Bluetooth audio tweaks for increased functionality
-
-### BT profiles
-[This fork] of pulseaudio-bluetooth-modules adds LDAC, APTX, APTX-HD, AAC support, extended configuration for SBC
-
-OpenSUSE packages
-https://build.opensuse.org/package/show/home:sonaj96/pulseaudio-modules-bt
-https://software.opensuse.org/package/pulseaudio-modules-bt?search_term=pulseaudio-modules-bt
-
-To verify what you are using:
-
->When you pair your headphones, choose AD2P profile in sound settings. Then you can check if aptX is used:
-`pactl list | grep a2dp_codec`
-The response should look something like this:
-`bluetooth.a2dp_codec = "APTX"`
-The rest of codecs should behave similarly.
-
-[This fork]:https://github.com/EHfive/pulseaudio-modules-bt
 
 ### Pipewire: Add sample-rates  
 (bluetooth devices sometimes need this)  
@@ -43,7 +22,7 @@ Uncomment and add/edit desired sample rates.
 https://www.linuxtv.org/wiki/index.php/Hauppauge_WinTV-HVR-2250## HVR2250 firmware installation
 
 You already have the firmware files extracted at:  
-`/storage/share/Downloads/hauppauge 2250/`  
+`/srv/share/Downloads/hauppauge 2250/`  
 
 so from that directory:  
 `cp *fw /lib/firmware`
