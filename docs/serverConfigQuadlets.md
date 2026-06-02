@@ -3,7 +3,9 @@ Quadlets are a native Podman feature that allow users to manage containers as sy
 They function by using declarative configuration files (ending in .container, .pod, etc.)  
 The podman-system-generator automatically converts these high-level declarative files into standard systemd .service files during boot or when systemctl daemon-reload is executed.  
 
-### Docker (nope)
+### [(( jump to configs ))](#configs-working)
+
+### Docker (un-needed)
 Because Quadlets integrate directly with the systemd init system, they eliminate the need for Docker’s daemon or wrapper tools like podman-compose.  
 This allows management of container lifecycles (auto-start on boot, restart on failure, logging) using native Linux service management commands like systemctl,  
 making Docker a completely optional dependency.  
@@ -15,24 +17,16 @@ making Docker a completely optional dependency.
 
 ### Drawbacks:
 - One needs to understand how service files work (which I struggle with)  
-- The guides (and all of the momentum) are all aimed at docker, so 
-
-search.brave.com: "how to use quadlet to create systemd service"
-overall process:
-1.	Create the quadlet file
-2.	Place the file in: /etc/containers/systemd/
-3.	Reload & start the service  
-    - systemctl daemon-reload  
-    - systemctl start whatever.service  
-    - systemctl enable whatever.service  
-     ^^ Attempts to `enable` the service are currently resulting in the following error:  
-     ```Failed to enable unit: Unit /blah/blah/blah.service is transient or generated```
+- Most guides are aimed at docker, although the conversion from docker-compose file to service.container is not difficult
 
 ### The user way (unprivileged is safest)
-Assuming that:  
-1. "vernon" is our unprivileged user dedicated to system tasks  
-2. `service.container` files are stored at `/srv/serverus/containers`  
+#### System setup
+- 'vernon': Unprivileged user dedicated to system tasks  
+- `/srv/serverus`: vernon's home directory
+- `/srv/serverus/containers`: Directory dedicated to user/local container files  
+  (`service.container` files, `container-config` directories, etc)  
 
+#### Process
 - The `service.container` files MUST contain:  
   ```ini
   [Install]
@@ -40,10 +34,10 @@ Assuming that:
   WantedBy=default.target
   ```  
 - The `service.container` files get symlinked to:  
-  `/srv/serverus/.config/containers/systemd` (instead of /etc/containers/...)  
+  `/srv/serverus/.config/containers/systemd`  
 - User must have privileges granted by a privileged user  
   `loginctl enable-linger vernon`  
-- Reload & start the service  
+- Reload the user-defined services to the daemon & start the service  
   `systemctl --user daemon-reload`  
   `systemctl --user start {serviceName}.service`  
 - Enable podman auto-updates via systemd timer  
