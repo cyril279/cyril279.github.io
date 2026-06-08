@@ -5,6 +5,7 @@ Document repository of... breadcrumbs?
 - [fileshare](fileshare/README.md)  
 - [mdadm](docs/mdadm.md)  
 - [quadlets](docs/serverConfigQuadlets.md)  
+- [systemd-boot](docs/systemd-boot.md)
 - [Tvheadend](docs/serverConfigTVH.md)  
 
 ### Configuration
@@ -64,4 +65,4 @@ Method/Config | Reason Archived
 [PantheNOT](docs/pantheNOT/README.md) | Un-used, not worth the trouble
 
 # Bookmarks
-[markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)  
+[markdown extension for browser](https://github.com/simov/markdown-viewer) (best markdown find to date!)
