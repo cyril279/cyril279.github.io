@@ -51,7 +51,15 @@ distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyri
 ```sh
 distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/utilsMuController.ini
 ```
-[workbench.ini](workbench.ini)
+[workbench.ini (git, gitg, vim, tree, usbutils)](workbench.ini)
 ```sh
 distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/workbench.ini
+```
+[distrobox.ini](distrobox.ini)
+```sh
+# name = inkcutBox | tinygo | utilsMuController | workbench
+distrobox-assemble create --name <name> --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/distrobox.ini
+
+# or build all of the entries in the distrobox.ini file
+distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/distrobox.ini
 ```
