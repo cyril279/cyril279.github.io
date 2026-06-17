@@ -31,7 +31,7 @@ so from that directory:
 ### InkCut!  
 https://codelv.com/projects/inkcut/  
 
-[>>Containerize the installation<<](inkcutContainerized.md)
+[>> Installation via container image <<](https://github.com/cyril279/docker-inkcut/blob/main/README.md)  
 
 ### Cutter Setup: PII-60
 

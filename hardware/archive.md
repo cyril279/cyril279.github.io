@@ -1,10 +1,13 @@
 # Hardware/Firmware (archived info)
 
-- [BlueTooth Audio (Proprietary profiles, sample-rates)](#audiobt)
-- [Colorspace](#colorspace)
-- [Set default device output (Audio/Video)](#set-default-device-output)
-- [xorg.mouse](#xorgmouse)
-- [PC: Dell Inspiron 14z 5423](#dell-inspiron-14z-5423)
+Doc/Topic | Reason archived  
+-- | --  
+[BlueTooth Audio (Proprietary profiles, sample-rates)](#audiobt) | pipewire is the new pulseaudio  
+[Colorspace](#colorspace) | New(er) graphics hardware so no longer needed  
+[inkcut + distrobox](inkcutContainerized.md) | [inkcut (preassembled image) + distrobox](https://github.com/cyril279/docker-inkcut/blob/main/README.md)  
+[Set default device output (Audio/Video)](#set-default-device-output) | pipewire is the new pulseaudio  
+[xorg.mouse](#xorgmouse) | We wayland now  
+[PC: Dell Inspiron 14z 5423](#dell-inspiron-14z-5423) | Retired that summ-umma beeetz  
 
 ## AudioBT  
 Bluetooth audio tweaks for increased functionality

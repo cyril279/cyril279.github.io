@@ -1,4 +1,9 @@
-# Inkcut + Distrobox
+# Inkcut (preassembled image) + Distrobox
+2026/06 revisit  
+WAY less fiddly, no you don't need to know anything about docker.  
+[>> Installation via container image <<](https://github.com/cyril279/docker-inkcut/blob/main/README.md)  
+
+# Inkcut + Distrobox (deprecated)
 2025/08 revisit   
 - Distribution agnostic  
 - Immutable-distro friendly  
@@ -7,9 +12,8 @@
 See [notes](#notes) for details
 
 ## Overview:
-1. [Create the container](#create-the-container) (into which inkcut will be installed)  
-    - Define & Assemble the container  
-    - Install inkcut  
+1. [Define & Assemble the container](#define--assemble-the-container) (into which inkcut will be installed)  
+2. [Install inkcut into the container](#install-inkcut)  
 2. [Create an inkcut.desktop file](#launching-inkcut-from-the-host)  
 Make InkCut conveniently launchable from host machine
 2. [Modify USB-serial permissions](#usb-serial-permissions)  
@@ -21,21 +25,19 @@ Address 'permission-denied' when sending data to the cutter
 ### Define & Assemble the container
 ```sh
 # create directory to isolate our distrobox shenanigans
-mkdir $HOME/inkcutBox && cd $_
+mkdir $HOME/.local/share/distrobox/inkcutBox && cd $_
 ```
 ```conf
 # Create 'inkcutBox.ini'; container definition file
 cat >$HOME/inkcutBox/inkcutBox.ini <<EOL
 [inkcutBox]
 image=docker.io/library/alpine:3.22
-home=$HOME/inkcutBox
+home=$HOME/.local/share/distrobox/inkcutBox
 pull=true
 additional_packages="gcc cups-dev musl-dev linux-headers"
 additional_packages="python3-dev pipx py3-qt5"
 additional_flags="--env PIPX_HOME=$HOME/inkcutBox/.local/share"
 additional_flags="--env PIPX_INKCUT=venvs/inkcut/lib/python*/site-packages/inkcut"
-exported_bins="/usr/bin/pipx"
-exported_bins_path="$HOME/.local/bin"
 EOL
 ```
 ```sh
@@ -43,15 +45,14 @@ EOL
 distrobox-assemble create --file inkcutBox.ini
 ```
 The above command:
-- Creates a distrobox container based on Alpine linux 3.22  
-(distrobox home located at $HOME/inkcutBox)
+- Creates a distrobox container from Alpine linux 3.22  
+(intentionally-isolated distrobox home located at $HOME/.local/share/distrobox/inkcutBox)
 - Installs additional packages that are needed to build & install inkcut within the container
-- Exports pipx so that it can be called from the host-OS
 
 ### Install inkcut
 ```sh
 # Install inkcut, allowing access to the system site-packages dir
-pipx install inkcut --system-site-packages
+distrobox-enter inkcutBox -- sh -c 'pipx install inkcut --system-site-packages'
 ```
 
 ### Test proper creation by attempting to launch inkcut
