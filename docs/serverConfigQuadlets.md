@@ -22,8 +22,7 @@ making Docker a completely optional dependency.
 ### The user way (unprivileged is safest)
 #### System setup
 - 'containers': Unprivileged user dedicated to system tasks  
-- `/home/containers`: containers's home directory
-- `/home/containers/...`: Directory dedicated to user/local container files  
+- `/home/containers`: containers's home directory; dedicated to user/local container files  
   (`service.container` files, `container-config` directories, etc)  
 
 #### filesystem structure
