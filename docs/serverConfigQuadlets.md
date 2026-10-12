@@ -21,10 +21,51 @@ making Docker a completely optional dependency.
 
 ### The user way (unprivileged is safest)
 #### System setup
-- 'vernon': Unprivileged user dedicated to system tasks  
-- `/srv/serverus`: vernon's home directory
-- `/srv/serverus/containers`: Directory dedicated to user/local container files  
+- 'containers': Unprivileged user dedicated to system tasks  
+- `/home/containers`: containers's home directory
+- `/home/containers/...`: Directory dedicated to user/local container files  
   (`service.container` files, `container-config` directories, etc)  
+
+#### filesystem structure
+```
+/home/containers/ # constant write config data on ssd or nvme
+  ├── .config/
+  │   └── containers/
+  │       └── systemd/ # symbolically link the unit files directory
+  │           ├── immich -> ../../../immich/quadlets
+  │           ├── jellyfin -> ../../../jellyfin/quadlets
+  │           └── transmission -> ../../../transmission/quadlets
+  │
+  ├── immich/
+  │    ├── backups/
+  │    ├── postgres/
+  │    ├── model-cache/
+  │    └── quadlets/
+  │        ├── immich.pod
+  │        ├── immich-server.container
+  │        ├── immich-machine-learning.container
+  │        ├── immich-database.container
+  │        ├── immich-valkey.container
+  │        └── immich.env
+  │
+  ├── jellyfin/
+  │    ├── backups/
+  │    ├── cache/
+  │    ├── config/
+  │    └── quadlets/
+  │        └── jellyfin.container
+  │
+  └── transmission/
+       ├── backups/
+       ├── config/
+       └── quadlets/
+           └── transmission.container
+
+
+/srv/media/ # for storage data on spinning platter disks
+  ├── pictures/          existing photo collection
+  └── immich/            media uploaded and managed by Immich
+```
 
 #### Process
 - The `service.container` files MUST contain:  
@@ -34,9 +75,9 @@ making Docker a completely optional dependency.
   WantedBy=default.target
   ```  
 - The `service.container` files get symlinked to:  
-  `/srv/serverus/.config/containers/systemd`  
+  `/home/containers/.config/containers/systemd`  
 - User must have privileges granted by a privileged user  
-  `loginctl enable-linger vernon`  
+  `loginctl enable-linger containers`  
 - Reload the user-defined services to the daemon & start the service  
   `systemctl --user daemon-reload`  
   `systemctl --user start {serviceName}.service`  
@@ -46,7 +87,7 @@ making Docker a completely optional dependency.
 ## Configs (Working):
 ### Jellyfin
 ```sh
-vi /srv/serverus/containers/jellyfin.container  
+vi /home/containers/jellyfin/quadlets/jellyfin.container  
 ```
 contents:  
 
@@ -57,14 +98,14 @@ Wants=network-online.target
 After=network-online.target
 
 [Container]
-Image=docker.io/jellyfin/jellyfin:latest
+Image=docker.io/jellyfin/jellyfin:12.1
 AutoUpdate=registry
 ContainerName=jellyfin
 Environment=PUID=1011 
 Environment=PGID=100
 Environment=TZ=America/Denver
-Volume=/srv/serverus/containers/jellyfin-config:/config:Z
-Volume=/srv/serverus/containers/jellyfin-cache:/cache:Z
+Volume=/home/containers/jellyfin/config:/config:Z
+Volume=/home/containers/jellyfin/cache:/cache:Z
 Volume=/srv/media/video:/data/video:z
 Volume=/srv/media/music:/data/music:z
 Volume=/srv/media/pictures:/data/pictures:z
@@ -88,7 +129,7 @@ WantedBy=default.target
 
 ### Transmission
 ```sh
-vi /srv/serverus/containers/transmission.container  
+vi /home/containers/transmission/quadlets/transmission.container  
 ```
 contents:  
 ```ini
@@ -104,7 +145,7 @@ ContainerName=transmission
 PublishPort=9091:9091
 PublishPort=51419:51419
 PublishPort=51419:51419/udp
-Volume=/srv/serverus/containers/transmission-config:/config:Z
+Volume=/home/containers/transmission/config:/config:Z
 Volume=/srv/media:/media:z
 Volume=/srv/watch:/watch:z
 Environment=PUID=1011
