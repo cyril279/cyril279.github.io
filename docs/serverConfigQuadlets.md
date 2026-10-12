@@ -21,10 +21,50 @@ making Docker a completely optional dependency.
 
 ### The user way (unprivileged is safest)
 #### System setup
-- 'vernon': Unprivileged user dedicated to system tasks  
-- `/srv/serverus`: vernon's home directory
-- `/srv/serverus/containers`: Directory dedicated to user/local container files  
+- 'containers': Unprivileged user dedicated to system tasks  
+- `/home/containers`: containers's home directory; dedicated to user/local container files  
   (`service.container` files, `container-config` directories, etc)  
+
+#### filesystem structure
+```
+/home/containers/ # constant write config data on ssd or nvme
+  ├── .config/
+  │   └── containers/
+  │       └── systemd/ # symbolically link the unit files directory
+  │           ├── immich -> ../../../immich/quadlets
+  │           ├── jellyfin -> ../../../jellyfin/quadlets
+  │           └── transmission -> ../../../transmission/quadlets
+  │
+  ├── immich/
+  │    ├── backups/
+  │    ├── postgres/
+  │    ├── model-cache/
+  │    └── quadlets/
+  │        ├── immich.pod
+  │        ├── immich-server.container
+  │        ├── immich-machine-learning.container
+  │        ├── immich-database.container
+  │        ├── immich-valkey.container
+  │        └── immich.env
+  │
+  ├── jellyfin/
+  │    ├── backups/
+  │    ├── cache/
+  │    ├── config/
+  │    └── quadlets/
+  │        └── jellyfin.container
+  │
+  └── transmission/
+       ├── backups/
+       ├── config/
+       └── quadlets/
+           └── transmission.container
+
+
+/srv/media/ # for storage data on spinning platter disks
+  ├── pictures/          existing photo collection
+  └── immich/            media uploaded and managed by Immich
+```
 
 #### Process
 - The `service.container` files MUST contain:  
@@ -34,94 +74,32 @@ making Docker a completely optional dependency.
   WantedBy=default.target
   ```  
 - The `service.container` files get symlinked to:  
-  `/srv/serverus/.config/containers/systemd`  
+  `/home/containers/.config/containers/systemd`  
 - User must have privileges granted by a privileged user  
-  `loginctl enable-linger vernon`  
+  `loginctl enable-linger containers`  
 - Reload the user-defined services to the daemon & start the service  
   `systemctl --user daemon-reload`  
   `systemctl --user start {serviceName}.service`  
 - Enable podman auto-updates via systemd timer  
   `systemctl --user enable --now podman-auto-update.timer`  
 
+Some services need a password, and instead of typing the password into one of the quadlet INI's, we will store it as a "podman secret"  
+```sh
+printf 'password' | podman secret create immich_db_pass -
+```
+Then add a line in the particular service that needs the password (ex:)   
+```ini
+Secret=immich_db_pass,type=env,target=POSTGRES_PASSWORD
+```
+
 ## Configs (Working):
-### Jellyfin
+[Jellyfin](https://github.com/cyril279/cyril279.github.io/blob/master/configs/jellyfin.container)  
+
+[Transmission](https://github.com/cyril279/cyril279.github.io/blob/master/configs/transmission.container)  
+
+[immich-pod](https://github.com/cyril279/cyril279.github.io/tree/master/configs/immich)  
 ```sh
-vi /srv/serverus/containers/jellyfin.container  
-```
-contents:  
-
-```ini
-[Unit]
-Description=Podman - Jellyfin
-Wants=network-online.target
-After=network-online.target
-
-[Container]
-Image=docker.io/jellyfin/jellyfin:latest
-AutoUpdate=registry
-ContainerName=jellyfin
-Environment=PUID=1011 
-Environment=PGID=100
-Environment=TZ=America/Denver
-Volume=/srv/serverus/containers/jellyfin-config:/config:Z
-Volume=/srv/serverus/containers/jellyfin-cache:/cache:Z
-Volume=/srv/media/video:/data/video:z
-Volume=/srv/media/music:/data/music:z
-Volume=/srv/media/pictures:/data/pictures:z
-Volume=/srv/media/books:/data/books:z
-PublishPort=8096:8096/tcp
-PublishPort=7359:7359/udp
-PublishPort=1900:1900/udp
-StopTimeout=60
-
-[Service]
-Restart=always
-TimeoutStartSec=900
-TimeoutStopSec=70
-# Inform systemd of additional exit status
-SuccessExitStatus=0 143
-
-[Install]
-# Start by default on boot
-WantedBy=default.target   
-```
-
-### Transmission
-```sh
-vi /srv/serverus/containers/transmission.container  
-```
-contents:  
-```ini
-[Unit]
-Description=Transmission BitTorrent Client
-After=network-online.target
-Wants=network-online.target
-
-[Container]
-Image=lscr.io/linuxserver/transmission:latest
-AutoUpdate=registry
-ContainerName=transmission
-PublishPort=9091:9091
-PublishPort=51419:51419
-PublishPort=51419:51419/udp
-Volume=/srv/serverus/containers/transmission-config:/config:Z
-Volume=/srv/media:/media:z
-Volume=/srv/watch:/watch:z
-Environment=PUID=1011
-Environment=PGID=1011
-Environment=TZ=America/Denver
-Environment=WHITELIST=127.0.0.1,192.168.9.*
-Environment=PEERPORT=51419
-Environment=HOST_WHITELIST=serverus
-
-[Service]
-Restart=always
-TimeoutStartSec=900
-TimeoutStopSec=70
-
-[Install]
-# Start by default on boot
-WantedBy=default.target 
+printf 'password' | podman secret create immich_db_pass -
 ```
 
 ## Configs (unconfirmed):

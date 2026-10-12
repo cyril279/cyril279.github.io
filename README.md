@@ -5,15 +5,14 @@ Document repository of... breadcrumbs?
 - [fileshare](fileshare/README.md)  
 - [mdadm](docs/mdadm.md)  
 - [quadlets](docs/serverConfigQuadlets.md)  
-- [systemd-boot](docs/systemd-boot.md)
+- [systemd-boot](docs/systemd-boot.md)  
 - [Tvheadend](docs/serverConfigTVH.md)  
 
 ### Configuration
 - [config-fstab](docs/fstab.md)  
 - [config-general](docs/config.md)  
-- [hardware/firmware](hardware/README.md)
-- [server-General (immutable)](docs/serverConfigImmutable.md)
-- [server-General](docs/serverConfigGeneral.md)  
+- [hardware/firmware](hardware/README.md)  
+- [server-General (immutable)](docs/serverConfigImmutable.md)  
 - [workbench (distrobox)](docs/configDistrobox.md)  
 
 # 2026/06
@@ -22,7 +21,8 @@ Much of the archived info is only retained because I still own hardware that _co
 The increased ease is a direct result of two main things:
 
 ### My preferences & usage patterns are well established  
-I have been daily-driving linux since 2016, and am well settled on the kind of interface and experience that I prefer, so now spend my computing time actually _using_ the PC and not distro-hopping, tweaking & re-configuring, babysitting updates or troubleshooting upgrades.
+I have been daily-driving linux since 2016, and am well settled in my preference of interface and experience.  
+I now spend my computing-time actually _using_ the PC and not distro-hopping, tweaking & re-configuring, babysitting updates or troubleshooting upgrades.
 
 ### 'Declaritive configuration' for the win
 From whatever distro/spin (immutable is a must these days), I add whatever apps/services that are needed via quadlets, flatpaks, and/or distrobox.  
@@ -33,8 +33,8 @@ There is definitely a learning curve to gettting the non-native/containerized me
 Spin/Pattern/Distro    |   Base/DE	|	Benefits |	Drawbacks
 --:|:-|:--:|:--
 **[U-Blue/Dakota!! :)](https://github.com/projectbluefin/dakota)** 2026/06 (testdriving)|   GnomeOS/Gnome | immutable,rollback,rolling,auto-update,current    | Container-life, for better and for worse
-**[U-Blue/Bazzite/Bluefin](https://universal-blue.org/)** 2026/06 (current,serverus)|   Fedora-Silverblue/Gnome |	immutable,rollback,rolling,auto-update,current	| Container-life, for better and for worse
-**[MicroOS](https://en.opensuse.org/Portal:MicroOS)/[Aeon](https://en.opensuse.org/Portal:Aeon)** 2024/07 (current,laptop) |   tumbleweed/Gnome |	immutable,snapper,rolling,auto-update,current	| Container-life uncomplicates the base installation at the cost of complicating app installation/operation
+**[U-Blue/Bazzite/Bluefin](https://universal-blue.org/)** 2026/06 (current,kodibox)|   Fedora-Silverblue/Gnome |	immutable,rollback,rolling,auto-update,current	| Container-life, for better and for worse
+**[MicroOS](https://en.opensuse.org/Portal:MicroOS)/[Aeon](https://en.opensuse.org/Portal:Aeon)** 2024/07 (current,serverus&laptop) |   tumbleweed/Gnome |	immutable,snapper,rolling,auto-update,current	| Container-life uncomplicates the base installation at the cost of complicating app installation/operation
 **[tumbleweed](https://get.opensuse.org/tumbleweed/)** 2019/02	|   Gnome |	zypper,yast,snapper,rolling,Nvidia repo,current	| yast/SUSE approach inherently introduces: 1) SUSE’s own way of doing things 2) a duplication of existing DE tools 3) less DE intregration
 **Fedora** 2016/11	|   Gnome |	dnf,DE-transparent,Nvidia repo,current	| short support life, but not rolling. Consistent trouble upgrading versions
 **Manjaro** 2016/08	|	Arch |   Out-of-the-box brilliance, insane package/DE availability, DE-transparent, Nvidia easiest, current	| feels a little unbridled for me. I like the (perceived) protections of the enterprise-backed distros.
@@ -54,6 +54,7 @@ Method/Config | Reason Archived
 [Kodi](docs/kodi-gen.md) | Flatpak is good-enough, no longer need to build from source
 [nvidia](docs/nvidia.md) | Switched to linux-friendly Radeon where discrete card is used
 [Open CASCADE JT Assistant](docs/jtviewer.md) | IDEK (haven't used in a while)
+[server-General](docs/serverConfigGeneral.md) | Immutable + Quadlets -> faster & easier
 [Transmission (server)](docs/serverConfigTransmission.md) | Configured via Quadlet
 [Transmission (docker)](docs/serverConfigDocker.md#transmission) | Configured via Quadlet
 [Tvheadend (docker)](docs/serverConfigDocker.md#tvheadend) |  Configured via Quadlet

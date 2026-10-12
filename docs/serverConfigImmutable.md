@@ -5,8 +5,8 @@ Layer nothing, container everything. This is the way.
 ## The blueprint
 1. Add user as an unprivileged "supervisor/keeper" for podman services
     ```sh
-    sudo useradd -u 1011 -d /srv/serverus vernon
-    sudo passwd vernon
+    sudo useradd -m -u 1011 containers
+    sudo passwd containers
     ```
 2. Mount raid array to `/srv`  
     a. `lsblk` to find md# of raid array  
