@@ -93,10 +93,14 @@ Secret=immich_db_pass,type=env,target=POSTGRES_PASSWORD
 ```
 
 ## Configs (Working):
-[Jellyfin](../configs/jellyfin.container)
-[Transmission](../configs/transmission.container)
-[immich-pod](../configs/immich/)
+[Jellyfin](https://github.com/cyril279/cyril279.github.io/blob/master/configs/jellyfin.container)  
 
+[Transmission](https://github.com/cyril279/cyril279.github.io/blob/master/configs/transmission.container)  
+
+[immich-pod](https://github.com/cyril279/cyril279.github.io/tree/master/configs/immich)  
+```sh
+printf 'password' | podman secret create immich_db_pass -
+```
 
 ## Configs (unconfirmed):
 
