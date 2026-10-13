@@ -83,86 +83,20 @@ making Docker a completely optional dependency.
 - Enable podman auto-updates via systemd timer  
   `systemctl --user enable --now podman-auto-update.timer`  
 
+Some services need a password, and instead of typing the password into one of the quadlet INI's, we will store it as a "podman secret"  
+```sh
+printf 'password' | podman secret create immich_db_pass -
+```
+Then add a line in the particular service that needs the password (ex:)   
+```ini
+Secret=immich_db_pass,type=env,target=POSTGRES_PASSWORD
+```
+
 ## Configs (Working):
-### Jellyfin
-```sh
-vi /home/containers/jellyfin/quadlets/jellyfin.container  
-```
-contents:  
+[Jellyfin](../configs/jellyfin.container)
+[Transmission](../configs/transmission.container)
+[immich-pod](../configs/immich/)
 
-```ini
-[Unit]
-Description=Podman - Jellyfin
-Wants=network-online.target
-After=network-online.target
-
-[Container]
-Image=docker.io/jellyfin/jellyfin:12.1
-AutoUpdate=registry
-ContainerName=jellyfin
-Environment=PUID=1011 
-Environment=PGID=100
-Environment=TZ=America/Denver
-Volume=/home/containers/jellyfin/config:/config:Z
-Volume=/home/containers/jellyfin/cache:/cache:Z
-Volume=/srv/media/video:/data/video:z
-Volume=/srv/media/music:/data/music:z
-Volume=/srv/media/pictures:/data/pictures:z
-Volume=/srv/media/books:/data/books:z
-PublishPort=8096:8096/tcp
-PublishPort=7359:7359/udp
-PublishPort=1900:1900/udp
-StopTimeout=60
-
-[Service]
-Restart=always
-TimeoutStartSec=900
-TimeoutStopSec=70
-# Inform systemd of additional exit status
-SuccessExitStatus=0 143
-
-[Install]
-# Start by default on boot
-WantedBy=default.target   
-```
-
-### Transmission
-```sh
-vi /home/containers/transmission/quadlets/transmission.container  
-```
-contents:  
-```ini
-[Unit]
-Description=Transmission BitTorrent Client
-After=network-online.target
-Wants=network-online.target
-
-[Container]
-Image=lscr.io/linuxserver/transmission:latest
-AutoUpdate=registry
-ContainerName=transmission
-PublishPort=9091:9091
-PublishPort=51419:51419
-PublishPort=51419:51419/udp
-Volume=/home/containers/transmission/config:/config:Z
-Volume=/srv/media:/media:z
-Volume=/srv/watch:/watch:z
-Environment=PUID=1011
-Environment=PGID=1011
-Environment=TZ=America/Denver
-Environment=WHITELIST=127.0.0.1,192.168.9.*
-Environment=PEERPORT=51419
-Environment=HOST_WHITELIST=serverus
-
-[Service]
-Restart=always
-TimeoutStartSec=900
-TimeoutStopSec=70
-
-[Install]
-# Start by default on boot
-WantedBy=default.target 
-```
 
 ## Configs (unconfirmed):
 

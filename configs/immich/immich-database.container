@@ -1,0 +1,27 @@
+[Unit]
+Description=Immich PostgreSQL Database
+
+[Container]
+ContainerName=immich-database
+#Secret=immich_db_pass,type=env,target=POSTGRES_PASSWORD
+Pod=immich.pod
+
+Image=ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
+
+EnvironmentFile=/home/containers/immich/quadlets/immich.env
+Environment=POSTGRES_INITDB_ARGS=--data-checksums
+
+Volume=/home/containers/immich/postgres:/var/lib/postgresql/data:Z
+
+HealthCmd=pg_isready -U postgres -d immich
+HealthInterval=10s
+HealthTimeout=5s
+HealthRetries=5
+HealthStartPeriod=30s
+
+[Service]
+Restart=always
+TimeoutStartSec=300
+
+[Install]
+WantedBy=immich-pod.service

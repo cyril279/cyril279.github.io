@@ -1,0 +1,27 @@
+[Unit]
+Description=Immich Server
+Requires=immich-database.service
+Requires=immich-valkey.service
+After=immich-database.service
+After=immich-valkey.service
+
+[Container]
+ContainerName=immich-server
+Secret=immich_db_pass,type=env,target=DB_PASSWORD
+Pod=immich.pod
+
+Image=ghcr.io/immich-app/immich-server:v3
+
+EnvironmentFile=/home/containers/immich/quadlets/immich.env
+
+Volume=/srv/media/immich:/data:z
+Volume=/srv/media/pictures:/external/pictures:ro,z
+Volume=/etc/localtime:/etc/localtime:ro
+
+[Service]
+Restart=always
+RestartSec=10
+TimeoutStartSec=600
+
+[Install]
+WantedBy=immich-pod.service

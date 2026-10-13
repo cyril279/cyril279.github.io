@@ -1,0 +1,36 @@
+[Unit]
+Description=Podman - Jellyfin
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=docker.io/jellyfin/jellyfin:12.1
+AutoUpdate=registry
+ContainerName=jellyfin
+Environment=PUID=1011 
+Environment=PGID=100
+Environment=TZ=America/Denver
+Volume=/home/containers/jellyfin/config:/config:Z
+Volume=/home/containers/jellyfin/cache:/cache:Z
+Volume=/srv/media/video:/data/video:z
+Volume=/srv/media/music:/data/music:z
+Volume=/srv/media/pictures:/data/pictures:z
+Volume=/srv/media/books:/data/books:z
+PublishPort=8096:8096/tcp
+PublishPort=7359:7359/udp
+PublishPort=1900:1900/udp
+AddDevice=/dev/dri:/dev/dri
+GroupAdd=keep-groups
+SecurityLabelDisable=true
+StopTimeout=60
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+TimeoutStopSec=70
+# Inform systemd of additional exit status
+SuccessExitStatus=0 143
+
+[Install]
+# Start by default on boot
+WantedBy=default.target   

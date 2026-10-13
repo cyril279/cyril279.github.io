@@ -1,0 +1,21 @@
+[Unit]
+Description=Immich Valkey
+
+[Container]
+ContainerName=immich-valkey
+Pod=immich.pod
+
+Image=docker.io/valkey/valkey:9@sha256:418652cfb58ef879d4978c33553735d7147016032d5aefaa14c828e611eb9dfd
+
+HealthCmd=redis-cli ping
+HealthInterval=10s
+HealthTimeout=5s
+HealthRetries=5
+HealthStartPeriod=10s
+
+[Service]
+Restart=always
+TimeoutStartSec=300
+
+[Install]
+WantedBy=immich-pod.service

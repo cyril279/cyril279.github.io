@@ -1,0 +1,26 @@
+[Unit]
+Description=Transmission BitTorrent Client
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+Image=lscr.io/linuxserver/transmission:latest
+AutoUpdate=registry
+ContainerName=transmission
+#User=1011
+#Group=1011
+PublishPort=9091:9091
+PublishPort=51419:51419
+PublishPort=51419:51419/udp
+Volume=/home/containers/transmission/config:/config:Z
+Volume=/srv/media:/media:z
+Volume=/srv/watch:/watch:z
+Environment=PUID=1011
+Environment=PGID=1013
+Environment=TZ=America/Denver
+Environment=WHITELIST=127.0.0.1,192.168.9.*
+Environment=PEERPORT=51419
+Environment=HOST_WHITELIST=serverus
+
+[Install]
+WantedBy=default.target

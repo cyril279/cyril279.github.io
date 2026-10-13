@@ -1,0 +1,19 @@
+[Unit]
+Description=Immich Machine Learning
+
+[Container]
+ContainerName=immich-machine-learning
+Pod=immich.pod
+
+Image=ghcr.io/immich-app/immich-machine-learning:v3
+
+EnvironmentFile=/home/containers/immich/quadlets/immich.env
+
+Volume=/home/containers/immich/model-cache:/cache:Z
+
+[Service]
+Restart=always
+TimeoutStartSec=600
+
+[Install]
+WantedBy=immich-pod.service
