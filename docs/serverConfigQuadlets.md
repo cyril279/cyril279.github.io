@@ -95,6 +95,8 @@ Secret=immich_db_pass,type=env,target=POSTGRES_PASSWORD
 ## Configs (Working):
 [Jellyfin](https://github.com/cyril279/cyril279.github.io/blob/master/configs/jellyfin.container)  
 
+[Samba](https://github.com/cyril279/cyril279.github.io/blob/master/configs/samba.container)
+
 [Transmission](https://github.com/cyril279/cyril279.github.io/blob/master/configs/transmission.container)  
 
 [immich-pod](https://github.com/cyril279/cyril279.github.io/tree/master/configs/immich)  
