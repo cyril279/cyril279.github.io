@@ -39,27 +39,23 @@ distrobox-assemble create --file https://path/to/raw/thatFile.ini
 ```
 
 # Configs
-[inkcutbox.ini](inkcutbox.ini)
+[inkcutbox.ini](../configs/inkcutbox.ini)
 ```sh
-distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/inkcutbox.ini
+distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/configs/inkcutbox.ini
 ```
-[tinygo.ini](tinygo.ini)  
+[tinygo.ini](../configs/tinygo.ini)  
 ```sh
-distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/tinygo.ini
+distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/configs/tinygo.ini
 ```
-[utilsMuController.ini (tio, openOCD, bossa-cli & esptool](utilsMuController.ini)
+[utilsMuController.ini (tio, openOCD, bossa-cli & esptool](../configs/utilsMuController.ini)
 ```sh
-distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/utilsMuController.ini
+distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/configs/utilsMuController.ini
 ```
-[workbench.ini (git, gitg, vim, tree, usbutils)](workbench.ini)
+[workbench.ini (git, gitg, vim, tree, usbutils)](../configs/workbench.ini)
 ```sh
-distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/workbench.ini
+distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/configs/workbench.ini
 ```
-[distrobox.ini](distrobox.ini)
+[zmk.ini](../configs/zmk.ini)
 ```sh
-# name = inkcutBox | tinygo | utilsMuController | workbench
-distrobox-assemble create --name <name> --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/distrobox.ini
-
-# or build all of the entries in the distrobox.ini file
-distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/docs/distrobox.ini
+distrobox-assemble create --file https://raw.githubusercontent.com/cyril279/cyril279.github.io/refs/heads/master/configs/zmk.ini
 ```
